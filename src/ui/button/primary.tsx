@@ -12,6 +12,7 @@ const Primary: FC<ButtonPropType> = ({
   children,
   className,
   disabled,
+
   ...rest
 }) => {
   return (

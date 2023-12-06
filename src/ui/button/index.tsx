@@ -10,7 +10,7 @@ type ButtonPropType = {
 const Button: FC<ButtonPropType> = ({
   children,
   className,
-  onClick,
+  onClick = () => {},
   disabled = false,
 }) => {
   return (

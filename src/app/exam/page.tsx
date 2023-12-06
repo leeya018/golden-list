@@ -19,6 +19,7 @@ import { WordsMode } from "@/util"
 import WordView from "@/components/wordView"
 import WordExam from "@/components/wordExam"
 import appStore from "@/mobx/appStore"
+import examStore from "@/mobx/examStore"
 
 const ExamPage = observer(() => {
   const [mode, setMode] = useState<string>(WordsMode.show)
@@ -33,10 +34,11 @@ const ExamPage = observer(() => {
       {/*  words */}
       <div className="w-full border-2 flex  mx-auto h-full">
         <ul
-          className="  flex 
+          className="overflow-y-auto  flex 
             flex-wrap items-start justify-center gap-2"
         >
-          {[...appStore.words].map((word, key) => (
+          <div>{examStore.getScore()}</div>
+          {appStore.words.map((word, key) => (
             <WordExam key={key} word={word} />
           ))}
         </ul>

@@ -1,17 +1,21 @@
 import { makeAutoObservable } from "mobx"
 
 class Exam {
-  score = 0
+  correct = 0
+  mistake = 0
   constructor() {
     makeAutoObservable(this)
   }
 
-  setScore = (sc) => {
-    this.score = sc
+  increaseCorrect = () => {
+    this.correct = this.correct + 1
   }
-
-  increaseScore = () => {
-    this.score = this.score + 1
+  increaseMistake = () => {
+    this.mistake = this.mistake + 1
+  }
+  getScore = () => {
+    if (this.correct + this.mistake === 0) return 0
+    return (this.correct / 20) * 100
   }
 }
 
