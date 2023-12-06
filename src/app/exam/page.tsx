@@ -15,17 +15,37 @@ import WordList from "@/components/wordList"
 import PrimaryButton from "@/ui/button/primary"
 import WordTest from "@/components/wordTest"
 import ModeChoose from "@/components/modeChoose"
-import { WordsMode } from "@/util"
+import { ExamQuestionsAmount, WordsMode, modals } from "@/util"
 import WordView from "@/components/wordView"
 import WordExam from "@/components/wordExam"
 import appStore from "@/mobx/appStore"
 import examStore from "@/mobx/examStore"
+import { ModalStore } from "@/mobx/modalStore"
+import SuccessModal from "@/ui/modal/success"
+import useSound from "@/hooks/useSound"
 
 const ExamPage = observer(() => {
-  const [mode, setMode] = useState<string>(WordsMode.show)
+  const { playSound, stopSound } = useSound("/sounds/win.wav")
+  useEffect(() => {
+    if (examStore.correct + examStore.mistake === ExamQuestionsAmount) {
+      ModalStore.openModal(modals.success)
+      playSound()
+    }
+  }, [examStore.correct, examStore.mistake])
 
   return (
     <div className="w-full h-[100vh] ">
+      {modals.success === ModalStore.modalName && (
+        <SuccessModal
+          onClose={() => {
+            stopSound()
+
+            ModalStore.closeModal()
+          }}
+          title={"Good Exam"}
+          message={"your score is : " + examStore.getScore()}
+        />
+      )}
       {/* nav */}
       <Nav />
       {/* categories */}
@@ -37,7 +57,6 @@ const ExamPage = observer(() => {
           className="overflow-y-auto  flex 
             flex-wrap items-start justify-center gap-2"
         >
-          <div>{examStore.getScore()}</div>
           {appStore.words.map((word, key) => (
             <WordExam key={key} word={word} />
           ))}

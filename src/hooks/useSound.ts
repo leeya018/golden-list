@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { Howl } from "howler"
 
-const useSound = (fileName) => {
+const useSound = (fileName: string) => {
   // Memoize the Howl instance to prevent re-creation on every render
   const sound = useMemo(() => {
     return new Howl({

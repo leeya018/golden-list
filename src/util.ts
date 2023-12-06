@@ -120,3 +120,5 @@ export const NavItems = {
   exam: "exam",
   other: "other",
 }
+
+export const ExamQuestionsAmount = 20
