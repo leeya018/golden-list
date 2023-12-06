@@ -4,11 +4,17 @@ type ButtonPropType = {
   children: React.ReactNode
   onClick: any
   className: string
+  disabled: boolean
 }
 
-const Button: FC<ButtonPropType> = ({ children, className, onClick }) => {
+const Button: FC<ButtonPropType> = ({
+  children,
+  className,
+  onClick,
+  disabled = false,
+}) => {
   return (
-    <button className={className} onClick={onClick}>
+    <button disabled={disabled} className={className} onClick={onClick}>
       {children}
     </button>
   )

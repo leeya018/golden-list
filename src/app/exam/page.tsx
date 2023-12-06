@@ -31,12 +31,12 @@ const ExamPage = observer(() => {
       <CategoryList />
 
       {/*  words */}
-      <div className="w-full border-2 flex  mx-2 h-full">
+      <div className="w-full border-2 flex  mx-auto h-full">
         <ul
-          className="overflow-y-auto  flex 
-         justify-start items-start  flex-wrap"
+          className="  flex 
+            flex-wrap items-start justify-center gap-2"
         >
-          {appStore.words.map((word, key) => (
+          {[...appStore.words].map((word, key) => (
             <WordExam key={key} word={word} />
           ))}
         </ul>

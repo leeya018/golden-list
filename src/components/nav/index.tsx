@@ -58,8 +58,7 @@ const NavItem: FC<NavItemProps> = observer(({ name }) => {
       className={`${
         name === navStore.nav ? "underline" : ""
       } cursor-pointer p-2 m-2 capitalize
-      duration-200
-      hover:underline`}
+      duration-200 hover:underline`}
       href={`/${name}`}
       onClick={() => navStore.setNav(`${name}`)}
     >

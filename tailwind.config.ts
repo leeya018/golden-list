@@ -10,12 +10,14 @@ const config: Config = {
   theme: {
     colors: {
       "color-gray": "#F0F2F5",
+      "color-disabled-gray": "#a5a9ad",
       "color-orange": "#FF663A",
       "color-hover-gray": "#E8E9EA",
       "color-blue": "#0FB7E2",
       "color-yellow": "#e3ea07",
       "color-red": "#ea0707",
       "color-black": "#070000",
+      "color-black1": "#070000",
       "color-brown": "#604040",
       "color-green": "#58C99C",
       "color-icon-green": "#58C99C",

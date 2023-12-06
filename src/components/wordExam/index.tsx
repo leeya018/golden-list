@@ -8,8 +8,6 @@ import appStore from "@/mobx/appStore"
 import examStore from "@/mobx/examStore"
 
 const WordExam: FC<WordExamProps> = observer(({ word }) => {
-  const [hints, setHints] = useState(0)
-  const [isShowTranslate, setIsShowTranslate] = useState(false)
   const [myGuess, setMyGuess] = useState("")
 
   const isEqual = (trans1: string, trans2: string) => {
@@ -21,6 +19,7 @@ const WordExam: FC<WordExamProps> = observer(({ word }) => {
   }
 
   const handleConfirm = () => {
+    if (!myGuess) return
     if (isEqual(myGuess, word.translate)) {
       examStore.increaseScore()
     }
@@ -66,7 +65,11 @@ const WordExam: FC<WordExamProps> = observer(({ word }) => {
         >
           <span className="pr-2">Typing : </span> <div> {word.type}</div>
         </div>
-        <PrimaryButton onClick={handleConfirm} className=" top-1 right-1 ">
+        <PrimaryButton
+          onClick={handleConfirm}
+          className={`top-1 right-1 `}
+          disabled={!myGuess}
+        >
           Confirm
         </PrimaryButton>
       </div>

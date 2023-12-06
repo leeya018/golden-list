@@ -67,9 +67,8 @@ const WordTest: FC<WordTestProps> = observer(({ word, setWords, words }) => {
         >
           <PrimaryButton
             onClick={updateHints}
-            className={`${
-              isLimHints() ? "bg-color-gray text-color-black" : ""
-            }  top-1 right-1`}
+            disabled={isLimHints()}
+            className={`top-1 right-1`}
           >
             Hint me
           </PrimaryButton>
