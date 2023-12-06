@@ -9,157 +9,16 @@ import { WordsMode, modals } from "@/util"
 import { observer } from "mobx-react-lite"
 import { FC, useState, useEffect } from "react"
 import { FcApproval } from "react-icons/fc"
+import appStore from "@/mobx/appStore"
 
-const wordsData_old = [
-  {
-    id: "t09wlum0t3920239",
-    name: "что",
-    translate: "what",
-    type: "shto",
-    hint: "drink the water",
-    knows: 0,
-  },
-  {
-    id: "t09wlum0t3920231",
-    name: "Как вы",
-    translate: "how are you",
-    type: "kak dila",
-    hint: "חרא של דיל",
-    knows: 0,
-  },
-  {
-    id: "t09wlum0t3920232",
-    name: "почему",
-    translate: "why",
-    type: "pachimu",
-    hint: "pahsa is doing a muuuu",
-    knows: 0,
-  },
-  {
-    id: "t09wlum0t3920233",
-    name: "черный",
-    translate: "black",
-    type: "chernyy",
-    hint: "שירים של ני",
-    knows: 0,
-  },
-  {
-    id: "t09wlum0t3920234",
-    name: "красный",
-    translate: "red",
-    type: "krasnyy",
-    hint: "karas to the knee make the blood red",
-    knows: 0,
-  },
-  {
-    id: "t09wlum0t3920235",
-    name: "синий",
-    translate: "blue",
-    type: "siniy",
-    hint: "sini is not yellow , its blue",
-    knows: 0,
-  },
-  {
-    id: "t09wlum0t3920236",
-    name: "фиолетовый",
-    translate: "purple",
-    type: "fioletovyy",
-    hint: "violet with a v",
-    knows: 0,
-  },
-]
-const wordsData = [
-  {
-    name: "Ресторан",
-    translate: "Restaurant",
-    type: "Restoran",
-    knows: 0,
-    hint: "similar",
-    id: Math.random(),
-  },
-
-  {
-    name: "Меню",
-    translate: "Menu",
-    type: "Menyu",
-    knows: 0,
-    hint: "similar",
-    id: Math.random(),
-  },
-  {
-    name: "Официант",
-    translate: "Waiter",
-    type: "Ofitsiant",
-    knows: 0,
-    hint: "office",
-    id: Math.random(),
-  },
-  {
-    name: "Официантка",
-    translate: "Waitress",
-    type: "Ofitsiantka",
-    knows: 0,
-    hint: "office ka",
-    id: Math.random(),
-  },
-  {
-    name: "Заказ",
-    translate: "Order",
-    type: "Zakaz",
-    knows: 0,
-    hint: "zaaka to order",
-    id: Math.random(),
-  },
-  {
-    name: "Столик",
-    translate: "Table",
-    type: "Stolik",
-    knows: 0,
-    hint: "stool",
-    id: Math.random(),
-  },
-  {
-    name: "Счёт",
-    translate: "Bill",
-    type: "Schyot",
-    knows: 0,
-    hint: "bill is not stia",
-    id: Math.random(),
-  },
-  {
-    name: "Чаевые",
-    translate: "Tip",
-    type: "Chaevye",
-    knows: 0,
-    hint: "chai is a v for getting the tip",
-    id: Math.random(),
-  },
-  {
-    name: "Блюдо",
-    translate: "Dish",
-    type: "Blyudo",
-    knows: 0,
-    hint: "not dish can be hold with no hands",
-    id: Math.random(),
-  },
-  {
-    name: "Напиток",
-    translate: "Drink",
-    type: "Napitok",
-    knows: 0,
-    hint: "drink you take with napkin with tok tok",
-    id: Math.random(),
-  },
-]
 const TestPage = observer(() => {
-  const [words, setWords] = useState(wordsData)
   const [chosenWord, setChosenWord] = useState<Word | undefined>(undefined)
   const [mode, setMode] = useState(WordsMode.show)
 
   console.log(chosenWord)
   useEffect(() => {
     console.log(chosenWord)
-    console.log(words)
+    console.log(appStore.words)
     return () => {}
   }, [chosenWord])
   return (
@@ -197,7 +56,7 @@ const TestPage = observer(() => {
         words to learn:
       </h1>
       <div className="flex flex-wrap justify-center items-start   gap-2 w-full mb-5">
-        {words
+        {appStore.words
           .sort((w1, w2) => w1.knows - w2.knows)
           .map((w, key) => (
             <li className="list-none" key={key}>
@@ -213,7 +72,7 @@ const TestPage = observer(() => {
         <WordView word={chosenWord as Word} />
       )}
       {chosenWord && WordsMode.test === mode && (
-        <WordTest word={chosenWord as Word} setWords={setWords} words={words} />
+        <WordTest word={chosenWord as Word} />
       )}
       {/* <h1 className="flex justify-center p-2 font-bold text-lg underline">
         words I know:

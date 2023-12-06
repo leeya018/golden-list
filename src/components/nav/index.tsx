@@ -1,9 +1,15 @@
+import React, { FC } from "react"
 import filterStore from "@/mobx/filterStore"
 import { observer } from "mobx-react-lite"
 import Image from "next/image"
 import { use, useEffect, useRef, useState } from "react"
 import { HiMagnifyingGlass } from "react-icons/hi2"
 
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import navStore from "@/mobx/navStore"
+import { NavItems } from "@/util"
+import { NavItemProps } from "./hooks/interfaces"
 // nav
 const Nav = observer(({}) => {
   return (
@@ -21,18 +27,11 @@ const Nav = observer(({}) => {
             src={"/images/golden.png"}
           />
         </div>
-
-        <div
-          className="cursor-pointer p-2 m-2
-           duration-200
-          hover:underline"
-        >
-          Exam
-        </div>
-        <div>Find A</div>
-        <div>Find A</div>
-        <div>Find A</div>
-        <div>Find A</div>
+        <NavItem name={`${NavItems.home}`} />
+        <NavItem name={`${NavItems.exam}`} />
+        <NavItem name={`${NavItems.other}`} />
+        <NavItem name={`${NavItems.other}`} />
+        <NavItem name={`${NavItems.other}`} />
       </div>
       <div className="flex items-center justify-around gap-5 text-xl ">
         {/* filter */}
@@ -52,6 +51,22 @@ const Nav = observer(({}) => {
 })
 
 export default Nav
+
+const NavItem: FC<NavItemProps> = observer(({ name }) => {
+  return (
+    <Link
+      className={`${
+        name === navStore.nav ? "underline" : ""
+      } cursor-pointer p-2 m-2 capitalize
+      duration-200
+      hover:underline`}
+      href={`/${name}`}
+      onClick={() => navStore.setNav(`${name}`)}
+    >
+      {name}
+    </Link>
+  )
+})
 
 const Filter = observer(({}) => {
   const [showMagnify, setShowMagnify] = useState(true)

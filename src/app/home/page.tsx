@@ -18,7 +18,7 @@ import ModeChoose from "@/components/modeChoose"
 import { WordsMode } from "@/util"
 import WordView from "@/components/wordView"
 
-const MainPage = observer(() => {
+const HomePage = observer(() => {
   const [mode, setMode] = useState<string>(WordsMode.show)
 
   const [chosenWord, setChosenWord] = useState<Word | null>(null)
@@ -121,4 +121,4 @@ const MainPage = observer(() => {
   )
 })
 
-export default MainPage
+export default HomePage

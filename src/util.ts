@@ -115,3 +115,8 @@ export const WordsMode = {
   test: "test",
   show: "show",
 }
+export const NavItems = {
+  home: "home",
+  exam: "exam",
+  other: "other",
+}
