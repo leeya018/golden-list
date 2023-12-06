@@ -15,6 +15,7 @@ export const modals = {
   viewStick: "viewStick",
   success: "success",
   confirmDeleteCategory: "confirmDeleteCategory",
+  viewWord: "viewWord",
 }
 
 export const getResponse = (message: string, data = "") => {
@@ -109,3 +110,8 @@ export const sleep = (time: number) =>
       resolve("done")
     }, time)
   )
+
+export const WordsMode = {
+  test: "test",
+  show: "show",
+}

@@ -11,6 +11,7 @@ const firebaseConfigDev = {
   storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET_DEV,
   messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID_DEV,
   appId: process.env.NEXT_PUBLIC_APP_ID_DEV,
+  measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID_DEV,
   // measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID,
 }
 // const firebaseConfigProd = {
