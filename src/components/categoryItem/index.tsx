@@ -1,9 +1,17 @@
 import { observer } from "mobx-react-lite"
 import { FC, useState, useEffect } from "react"
 import { CategoryItemProps } from "./hooks/interfaces"
+import { Category } from "@/api/categories/interfaces"
 
 const CategoryItem: FC<CategoryItemProps> = observer(
-  ({ category, setChosenCategory, chosenCategory }) => {
+  ({ category, setChosenCategory, chosenCategory, setCategories }) => {
+    const shuffle = () => {
+      return array
+        .map((a) => ({ sort: Math.random(), value: a }))
+        .sort((a, b) => a.name - b.name)
+        .map((a) => a.value)
+    }
+
     return (
       <li
         className={`${

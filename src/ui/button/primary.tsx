@@ -3,7 +3,7 @@ import Button from "."
 
 type ButtonPropType = {
   children: React.ReactNode
-  rest: any
+  onClick: (param: any) => void
   className: string
 }
 

@@ -16,14 +16,16 @@ const WordList: FC<WordItemProps> = observer(
    overflow-x-hidden w-full flex flex-col 
   items-center justify-start gap-2 "
           >
-            {[...words].map((word, key) => (
-              <WordListItem
-                key={key}
-                word={word}
-                chosenWord={chosenWord}
-                setChosenWord={setChosenWord}
-              />
-            ))}
+            {[...words]
+              .sort((w1, w2) => w1.knows - w2.knows)
+              .map((word, key) => (
+                <WordListItem
+                  key={key}
+                  word={word}
+                  chosenWord={chosenWord}
+                  setChosenWord={setChosenWord}
+                />
+              ))}
           </ul>
         </div>
       </div>
