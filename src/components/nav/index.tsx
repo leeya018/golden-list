@@ -15,7 +15,7 @@ import useNav from "./hooks/useNav"
 const Nav = observer(({}) => {
   const { user, logOut } = useNav()
   return (
-    <div className="w-full px-10 py-5 flex items-center justify-between ">
+    <div className="w-full py-5 flex items-center justify-between ">
       <div className=" flex items-center  justify-around gap-5 text-xl font-bold">
         <div className="relative">
           <div className="font-bold text-2xl  absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -31,7 +31,7 @@ const Nav = observer(({}) => {
         </div>
         <NavItem name={`${NavNames.home}`} />
         <NavItem name={`${NavNames.exam}`} />
-        <NavItem name={`${NavNames.other}`} />
+        <NavItem name={`${NavNames.settings}`} />
         <NavItem name={`${NavNames.other}`} />
         <NavItem name={`${NavNames.other}`} />
       </div>

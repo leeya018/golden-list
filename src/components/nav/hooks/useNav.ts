@@ -11,7 +11,7 @@ const useNav = () => {
 
   useEffect(() => {
     if (!user) {
-      router.push(`/${NavNames.login}`)
+      // router.push(`/${NavNames.login}`)
     }
   }, [user])
 

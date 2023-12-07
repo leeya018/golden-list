@@ -39,7 +39,7 @@ const Home = observer(() => {
           title={"Add Stick"}
         />
       )}
-      <NavLeft />
+
       <div className="basis-5/6  flex flex-col gap-2">
         <Filter />
         <CategoriesTable />

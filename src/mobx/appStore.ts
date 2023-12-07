@@ -8,32 +8,7 @@ import Error from "next/error"
 import { UserAuth } from "@/context/AuthContext"
 
 class App {
-  categories = [
-    {
-      id: "m9c28l893l9vck4ll34cnmy",
-      name: "categoryA",
-      date: Timestamp.now(),
-      bgColor: "bg-color-red",
-    },
-    {
-      id: "m9c28l893l9vck4ll37cnmy",
-      name: "categoryB",
-      date: Timestamp.now(),
-      bgColor: "bg-color-red",
-    },
-    {
-      id: "m9c28l893l9vck4ll32cnmy",
-      name: "categoryC",
-      date: Timestamp.now(),
-      bgColor: "bg-color-red",
-    },
-    {
-      id: "m9c28l893l9vck4ll31cnmy",
-      name: "categoryD",
-      date: Timestamp.now(),
-      bgColor: "bg-color-red",
-    },
-  ]
+  categories: Category[] = []
   words = [
     {
       id: "89sl89234lkjt984jkltc8934",
@@ -177,7 +152,58 @@ class App {
       console.log(toJS(this.categories))
       messageStore.setMessage("Get categories successfully", 200)
     } catch (error: any) {
-      messageStore.setMessage("Failed to get categories", 400)
+      messageStore.setMessage(error.message, 400)
+    }
+  }
+  addCategory = async (user: any, name: string, bgColor: string) => {
+    try {
+      const newCategory = { name, date: Timestamp.now(), bgColor }
+
+      const docId = await API.addCategory(user, newCategory)
+      const addedCategory = { id: docId, ...newCategory }
+      this.categories = [addedCategory, ...this.categories]
+      console.log(toJS(docId))
+      messageStore.setMessage("category added successfully", 200)
+    } catch (error: any) {
+      messageStore.setMessage(error.message, 400)
+    }
+  }
+  removeCategory = async (user: any, categoryId: string) => {
+    try {
+      const docId = await API.removeCategory(user, categoryId)
+      if (!docId) {
+        messageStore.setMessage("Cannot remove the category " + categoryId, 200)
+      }
+      messageStore.setMessage("category removed successfully", 200)
+
+      this.categories = this.categories.filter((c) => c.id !== categoryId)
+    } catch (error: any) {
+      messageStore.setMessage(error.message, 400)
+    }
+  }
+  editCategory = async (
+    user: any,
+    categoryId: string,
+    categoryName: string,
+    bgColor: string
+  ) => {
+    try {
+      const docId = await API.editCategory(
+        user,
+        categoryId,
+        categoryName,
+        bgColor
+      )
+      if (!docId) {
+        messageStore.setMessage("Cannot edit the category " + categoryId, 200)
+      }
+      messageStore.setMessage("category edited successfully", 200)
+
+      this.categories = this.categories.map((c) =>
+        c.id === docId ? { ...c, name: categoryName, bgColor } : c
+      )
+    } catch (error: any) {
+      messageStore.setMessage(error.message, 400)
     }
   }
 }

@@ -20,20 +20,11 @@ import { Category } from "@/api/categories/interfaces"
 import useCategoriesTable from "./hooks/useCategoriesTable"
 import { Order } from "./hooks/interfaces"
 import ConfirmDeleteModal from "@/ui/modal/category/confirmDelete"
+import appStore from "@/mobx/appStore"
 
 const CategoriesTable: FC = observer(() => {
-  const {
-    router,
-    chosenCategory,
-    setChosenCategory,
-    categories,
-    setCategories,
-    isLoading,
-    setIsLoading,
-    user,
-    sortingObj,
-    setSortingObj,
-  } = useCategoriesTable()
+  const { router, user, sortingObj, setSortingObj, setIsLoading, isLoading } =
+    useCategoriesTable()
 
   const getAbbreviations = (name: string) => {
     return name
@@ -42,51 +33,14 @@ const CategoriesTable: FC = observer(() => {
       .join(" ")
   }
 
-  const editCategory = async (
-    categoryId: string,
-    categoryName: string,
-    bgColor: string
-  ) => {
-    const updatedCategories = categories.map((category) => {
-      if (category.id === categoryId) {
-        return { ...category, name: categoryName, bgColor }
-      }
-      return category
-    })
-    setCategories(updatedCategories)
-  }
-  const addCategory = async (name: string, bgColor: string) => {
-    const docId: string | undefined = await API.addCategory(user, name, bgColor)
-    if (!docId) {
-      throw new Error(`docId of category in not found`)
-    }
-    const newCategory: Category = {
-      id: docId,
-      name,
-      date: Timestamp.now(),
-      bgColor,
-    }
-    const newCategories = [newCategory, ...categories]
-    setCategories(newCategories)
-  }
-  const removeCategory = async (categoryId: string) => {
-    await API.removeCategory(user, categoryId)
-    const updatedCategories = categories.filter((category) => {
-      if (category.id !== categoryId) {
-        return category
-      }
-    })
-    setCategories(updatedCategories)
-  }
-
   return (
     <div className="h-full px-5">
       {ModalStore.modalName === modals.confirmDeleteCategory && (
         <ConfirmDeleteModal
           onCancel={ModalStore.closeModal}
-          onClick={removeCategory}
+          onClick={(id: string) => appStore.removeCategory(user, id)}
           title={"Remove Category"}
-          chosenCategory={chosenCategory}
+          chosenCategory={appStore.chosenCategory}
         />
       )}
       {ModalStore.modalName === modals.addCategory && (
@@ -94,7 +48,9 @@ const CategoriesTable: FC = observer(() => {
           onCancel={() => {
             ModalStore.closeModal()
           }}
-          onClick={addCategory}
+          onClick={(name, chosenColor) =>
+            appStore.addCategory(user, name, chosenColor)
+          }
           title={"Add Category"}
         />
       )}
@@ -103,9 +59,12 @@ const CategoriesTable: FC = observer(() => {
           onCancel={() => {
             ModalStore.closeModal()
           }}
-          onEdit={editCategory}
+          onEdit={(id: string, name: string, chosenColor: string) => {
+            console.log(id, name, chosenColor)
+            appStore.editCategory(user, id, name, chosenColor)
+          }}
           onRemove={() => ModalStore.openModal(modals.confirmDeleteCategory)}
-          chosenCategory={chosenCategory}
+          chosenCategory={appStore.chosenCategory}
           title={"Edit Category"}
         />
       )}
@@ -136,10 +95,10 @@ const CategoriesTable: FC = observer(() => {
                   sortingObj["name"] === Order.asc ? Order.desc : Order.asc
                 setSortingObj({ ...sortingObj, name: newStoring })
                 const sortedCategories = sortCategoriesByName(
-                  categories,
+                  appStore.categories,
                   newStoring
                 )
-                setCategories(sortedCategories)
+                appStore.setCategories(sortedCategories)
               }}
             >
               <div>name</div>
@@ -153,10 +112,10 @@ const CategoriesTable: FC = observer(() => {
                   sortingObj["date"] === Order.asc ? Order.desc : Order.asc
                 setSortingObj({ ...sortingObj, date: newStoring })
                 const sortedCategories = sortCategoriesByDate(
-                  categories,
+                  appStore.categories,
                   newStoring
                 )
-                setCategories(sortedCategories)
+                appStore.setCategories(sortedCategories)
               }}
             >
               <div>date</div>
@@ -167,7 +126,7 @@ const CategoriesTable: FC = observer(() => {
           </tr>
         </thead>
         <tbody className="w-full">
-          {categories
+          {appStore.categories
             .filter((category) => category.name.includes(filterStore.search))
             .map((category) => {
               return (
@@ -177,7 +136,7 @@ const CategoriesTable: FC = observer(() => {
                   key={category.id}
                   onClick={() => {
                     setIsLoading(true)
-                    router.push(`categories/${category.id}/sticks`)
+                    // router.push(`categories/${category.id}/sticks`)
                   }}
                 >
                   <td className="pl-5 py-4 flex items-center gap-3 ">
@@ -197,7 +156,7 @@ const CategoriesTable: FC = observer(() => {
                     <BiEditAlt
                       onClick={(e: Event) => {
                         e.stopPropagation()
-                        setChosenCategory(category)
+                        appStore.setChosenCategory(category)
                         ModalStore.openModal(modals.editCategory)
                       }}
                       className="mr-2 p-2 cursor-pointer hover:scale-150 ease-in-out duration-200"

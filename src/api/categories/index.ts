@@ -31,22 +31,18 @@ export const editCategory = async (
   // console.log({ user.uid, categoryId, categoryName })
   const docRef = doc(db, `users/${user.uid}/categories`, categoryId)
   await setDoc(docRef, { name: categoryName, bgColor }, { merge: true })
+  return docRef.id
 }
 
-export const addCategory = async (user: any, name: string, bgColor: string) => {
-  const newCategory = { name, date: new Date(), bgColor }
-  try {
-    const categoryCollectionRef = collection(db, `users/${user.uid}/categories`)
-    const docRef = await addDoc(categoryCollectionRef, newCategory)
-    console.log(docRef.id)
-    return docRef.id
-  } catch (error) {
-    const e = error as Error
-    console.log(e.message)
-  }
+export const addCategory = async (user: any, newCategory: any) => {
+  const categoryCollectionRef = collection(db, `users/${user.uid}/categories`)
+  const docRef = await addDoc(categoryCollectionRef, newCategory)
+  console.log(docRef.id)
+  return docRef.id
 }
 
 export const removeCategory = async (user: any, categoryId: string) => {
   const docRef = doc(db, `users/${user.uid}/categories`, categoryId)
   await deleteDoc(docRef)
+  return docRef.id
 }

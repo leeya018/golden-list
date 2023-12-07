@@ -5,6 +5,7 @@ import { UserAuth } from "@/context/AuthContext"
 import { Category } from "@/api/categories/interfaces"
 import { useRouter } from "next/navigation"
 import { getCategories } from "@/api/categories"
+import appStore from "@/mobx/appStore"
 
 const useCategoriesTable = () => {
   const [sortingObj, setSortingObj] = useState<TableObj>({
@@ -14,14 +15,6 @@ const useCategoriesTable = () => {
   const { user } = UserAuth()
 
   const [isLoading, setIsLoading] = useState<Boolean>(true)
-  const [categories, setCategories] = useState<Category[]>([])
-  const [chosenCategory, setChosenCategory] = useState<Category>({
-    id: "",
-    name: "",
-    date: Timestamp.now(),
-    bgColor: "",
-  })
-
   const router = useRouter()
 
   useEffect(() => {
@@ -31,7 +24,7 @@ const useCategoriesTable = () => {
       setIsLoading(true)
       getCategories(user)
         .then((dbCategories) => {
-          setCategories(dbCategories)
+          appStore.setCategories(dbCategories)
           setIsLoading(false)
         })
         .catch((error) => {
@@ -41,10 +34,6 @@ const useCategoriesTable = () => {
   }, [user])
   return {
     router,
-    chosenCategory,
-    setChosenCategory,
-    categories,
-    setCategories,
     isLoading,
     setIsLoading,
     user,

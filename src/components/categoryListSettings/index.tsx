@@ -3,7 +3,7 @@ import { FC, useState, useEffect } from "react"
 
 import { FaChevronLeft } from "react-icons/fa6"
 import { FaChevronRight } from "react-icons/fa6"
-import { CategoriesProps } from "./hooks/interfaces"
+import { CategoryItemSettingsProps } from "./hooks/interfaces"
 import CategoryItem from "../categoryItem"
 import filterStore from "@/mobx/filterStore"
 import appStore from "@/mobx/appStore"
@@ -11,8 +11,9 @@ import PrimaryButton from "@/ui/button/primary"
 import { ModalStore } from "@/mobx/modalStore"
 import { modals } from "@/util"
 import AddModal from "@/ui/modal/category/add"
+import { MdEdit } from "react-icons/md"
 
-const CategoryList: FC = observer(({}) => {
+const CategoryListSettings: FC = observer(({}) => {
   return (
     <div className="w-full flex items-center ">
       {ModalStore.modalName === modals.addCategory && (
@@ -40,7 +41,7 @@ const CategoryList: FC = observer(({}) => {
               .includes(filterStore.search.toLocaleLowerCase())
           )
           .map((category, key) => (
-            <CategoryItem key={key} category={category} />
+            <CategoryItemSettings key={key} category={category} />
           ))}
         <FaChevronRight />
       </ul>
@@ -48,4 +49,29 @@ const CategoryList: FC = observer(({}) => {
   )
 })
 
-export default CategoryList
+export default CategoryListSettings
+
+const CategoryItemSettings: FC<CategoryItemSettingsProps> = observer(
+  ({ category }) => {
+    return (
+      <li
+        className={`${
+          appStore.chosenCategory?.id === category.id
+            ? "bg-color-gray-category"
+            : ""
+        } rounded-full p-5  hover:bg-color-gray-category cursor-pointer`}
+        onClick={() => {
+          appStore.setChosenCategory(category)
+        }}
+      >
+        <div className="text-lg font-semibold flex items-center justify-center">
+          {category.name}
+        </div>
+        <MdEdit
+          size={45}
+          onClick={() => ModalStore.openModal(modals.editCategory)}
+        />
+      </li>
+    )
+  }
+)

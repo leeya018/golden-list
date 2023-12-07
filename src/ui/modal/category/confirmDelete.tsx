@@ -7,6 +7,7 @@ import { Timestamp } from "firebase/firestore"
 import { ModalStore } from "@/mobx/modalStore"
 import CloseButton from "@/ui/button/close"
 import { Category } from "@/api/categories/interfaces"
+import { toJS } from "mobx"
 
 type ModalProps = {
   onCancel: any
@@ -19,6 +20,10 @@ const ConfirmDeleteModal: FC<ModalProps> = observer(
     const [chosenColor, setChosenColor] = useState<string>("")
 
     const handleClick = () => {
+      console.log(toJS(chosenCategory))
+      console.log(chosenCategory.id)
+      console.log(toJS(chosenCategory).id)
+      // console.log("remove : " + chosenCategory.id)
       onClick(chosenCategory.id)
       onCancel()
     }

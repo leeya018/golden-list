@@ -6,6 +6,7 @@ import Modal from ".."
 import { Timestamp } from "firebase/firestore"
 import { ModalStore } from "@/mobx/modalStore"
 import CloseButton from "@/ui/button/close"
+import { UserAuth } from "@/context/AuthContext"
 type Category = {
   id: string
   name: string

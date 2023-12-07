@@ -114,6 +114,7 @@ export const NavNames = {
   home: "home",
   exam: "exam",
   login: "login",
+  settings: "settings",
   other: "other",
 }
 

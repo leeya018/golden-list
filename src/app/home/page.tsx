@@ -43,7 +43,7 @@ const HomePage = observer(() => {
       {/* mode */}
       <ModeChoose mode={mode} setMode={setMode} />
       {/*  words */}
-      <div className="w-full border-2 flex  mx-5 h-full">
+      <div className="w-full border-2 flex  h-full">
         <WordList />
 
         {appStore.chosenWord &&

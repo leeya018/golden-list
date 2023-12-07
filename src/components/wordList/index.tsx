@@ -37,7 +37,7 @@ const WordListItem: FC<WordListItemProps> = observer(({ word }) => {
   return (
     <li
       onClick={() => handleWordClick(word)}
-      className={` flex flex-col border-2 w-full mx-2 gap-2 p-5 rounded-md  cursor-pointer 
+      className={`flex flex-col border-2 w-full  gap-2 p-5 rounded-md  cursor-pointer 
           ease-in-out duration-200 hover:bg-color-purple hover:bg-opacity-10 ${
             appStore.chosenWord?.id === word.id
               ? "bg-color-purple hover:bg-opacity-100"
