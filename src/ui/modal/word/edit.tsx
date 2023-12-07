@@ -4,39 +4,38 @@ import ColorList from "@/ui/ColorList"
 import { observer } from "mobx-react-lite"
 import Modal from ".."
 import CloseButton from "@/ui/button/close"
-
-import { Timestamp } from "firebase/firestore"
 import { ModalStore } from "@/mobx/modalStore"
-type Stick = {
-  id: string
-  name: string
-  date: Timestamp
-}
+import LabelInputItem from "@/ui/labelInputItem"
+import { Word } from "@/api/words/interfaces"
+import useWordModal from "./hooks/useWordModal"
+
 type ModalProps = {
   onCancel: any
   onEdit: any
   onRemove: any
   title: string
-  chosenStick: Stick
+  chosenWord: Word
 }
 const EditModal: FC<ModalProps> = observer(
-  ({ onCancel, onRemove, onEdit, title, chosenStick }) => {
-    const [chosenColor, setChosenColor] = useState<string>("")
-    const [name, setName] = useState<string>("")
-
-    useEffect(() => {
-      setName(chosenStick?.name)
-    }, [chosenStick])
+  ({ onCancel, onRemove, onEdit, title, chosenWord }) => {
+    const {
+      name,
+      setName,
+      translate,
+      setTranslate,
+      type,
+      setType,
+      hint,
+      setHint,
+    } = useWordModal(chosenWord)
 
     const handleClick = () => {
       if (!name) return
-      onEdit(chosenStick.id, name)
+      onEdit(chosenWord.id, name, translate, type, hint)
       onCancel()
     }
     const handleRemove = () => {
-      if (!name) return
-      onRemove(chosenStick.id)
-      onCancel()
+      onRemove()
     }
     return (
       <Modal>
@@ -48,20 +47,26 @@ const EditModal: FC<ModalProps> = observer(
           </div>
           {/* inputs */}
           <div className="flex flex-col items-center justify-center mt-5">
-            <div className="flex flex-col items-start justify-center gap-1">
-              <label className="font-semibold text-color-text-gray" htmlFor="">
-                Name
-              </label>
-              <textarea
+            <div className="flex flex-col items-center mt-5">
+              <LabelInputItem
                 onChange={(e) => setName(e.target.value)}
                 value={name}
-                rows={5}
-                cols={50}
-                className="rounded-md p-2 border-2 
-               border-color-text-gray pl-2
-                placeholder:text-color-hover-gray 
-                font-semibold placeholder:pl-2"
-                placeholder="Add Stick Description"
+                title="Name"
+              />
+              <LabelInputItem
+                onChange={(e) => setTranslate(e.target.value)}
+                value={translate}
+                title="Translate"
+              />
+              <LabelInputItem
+                onChange={(e) => setType(e.target.value)}
+                value={type}
+                title="Hint"
+              />
+              <LabelInputItem
+                onChange={(e) => setHint(e.target.value)}
+                value={hint}
+                title="Hint"
               />
             </div>
           </div>

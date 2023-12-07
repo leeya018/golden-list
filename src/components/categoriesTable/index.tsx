@@ -11,7 +11,12 @@ import Box from "@mui/material/Box"
 import { observer } from "mobx-react-lite"
 import filterStore from "@/mobx/filterStore"
 import { ModalStore } from "@/mobx/modalStore"
-import { modals, sortCategoriesByDate, sortCategoriesByName } from "@/util"
+import {
+  NavNames,
+  modals,
+  sortCategoriesByDate,
+  sortCategoriesByName,
+} from "@/util"
 import * as API from "@/api/categories"
 import { BiEditAlt } from "react-icons/bi"
 import AddModal from "@/ui/modal/category/add"
@@ -136,7 +141,7 @@ const CategoriesTable: FC = observer(() => {
                   key={category.id}
                   onClick={() => {
                     setIsLoading(true)
-                    // router.push(`categories/${category.id}/sticks`)
+                    router.push(`/${NavNames.settings}/${category.id}/words`)
                   }}
                 >
                   <td className="pl-5 py-4 flex items-center gap-3 ">

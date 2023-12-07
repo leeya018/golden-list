@@ -21,15 +21,8 @@ const useCategoriesTable = () => {
     if (user) {
       console.log("object")
       console.log(user)
+      appStore.getCategories(user)
       setIsLoading(true)
-      getCategories(user)
-        .then((dbCategories) => {
-          appStore.setCategories(dbCategories)
-          setIsLoading(false)
-        })
-        .catch((error) => {
-          setIsLoading(false)
-        })
     }
   }, [user])
   return {

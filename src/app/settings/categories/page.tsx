@@ -33,12 +33,7 @@ const HomePage = observer(() => {
       {/* alerts */}
       <Alerts />
       {/* nav */}
-      <button
-        className="cursor-pointer"
-        onClick={() => appStore.getCategories(user)}
-      >
-        add{" "}
-      </button>
+
       <Nav />
       {/* categories */}
       {/* <CategoryListSettings /> */}

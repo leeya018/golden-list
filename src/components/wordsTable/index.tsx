@@ -10,29 +10,21 @@ import { BiEditAlt } from "react-icons/bi"
 import { FaPlusSquare } from "react-icons/fa"
 import filterStore from "@/mobx/filterStore"
 import { ModalStore } from "@/mobx/modalStore"
-import { modals, sortSticksByDate, sortSticksByName } from "@/util"
-import AddModal from "@/ui/modal/stick/add"
-import EditModal from "@/ui/modal/stick/edit"
-import ViewModal from "@/ui/modal/stick/view"
+import { modals, sortWordsByDate, sortWordsByName } from "@/util"
+import AddModal from "@/ui/modal/word/add"
+import EditModal from "@/ui/modal/word/edit"
+import ViewModal from "@/ui/modal/word/view"
 import { Order, StickTableProps } from "./hooks/interfaces"
-import useStickTable from "./hooks/useStickTable"
-import * as API from "@/api/sticks"
-import { Stick } from "@/api/sticks/interfaces"
+import useWordTable from "./hooks/useWordTable"
+import * as API from "@/api/words"
+import { Word } from "@/api/words/interfaces"
 import { Timestamp } from "firebase/firestore"
+import appStore from "@/mobx/appStore"
+import ConfirmDeleteModal from "@/ui/modal/word/confirmDelete"
 
-const SticksTable: FC<StickTableProps> = observer(({ categoryId }) => {
-  const {
-    user,
-    setSticks,
-    sticks,
-    chosenStick,
-    setIsLoading,
-    router,
-    sortingObj,
-    isLoading,
-    setChosenStick,
-    setSortingObj,
-  } = useStickTable(categoryId)
+const WordsTable: FC<StickTableProps> = observer(({ categoryId }) => {
+  const { user, setIsLoading, router, sortingObj, isLoading, setSortingObj } =
+    useWordTable(categoryId)
 
   const getAbbreviations = (name: string) => {
     return name
@@ -42,73 +34,47 @@ const SticksTable: FC<StickTableProps> = observer(({ categoryId }) => {
       .join(" ")
   }
 
-  const addStick = async (categoryId: string, name: string) => {
-    const docId: string | undefined = await API.addStick(user, categoryId, name)
-    if (!docId) {
-      throw new Error("could not find the docId")
-    }
-    const newStick: Stick = {
-      id: docId,
-      name,
-      answers: [],
-      date: Timestamp.now(),
-    }
-    const allSticks: Stick[] = [newStick, ...sticks]
-    setSticks(allSticks)
-  }
-
-  const removeStick = async (stickId: string) => {
-    await API.removeStick(user, categoryId, stickId)
-    const updatedSticks = sticks.filter((stick) => {
-      if (stick.id !== stickId) {
-        return stick
-      }
-    })
-    setSticks(updatedSticks)
-  }
-
-  const editStick = async (stickId: string, name: string) => {
-    await API.editStick(user, categoryId, stickId, name)
-    const updatedSticks = sticks.map((stick) => {
-      if (stick.id === stickId) {
-        return { ...stick, name }
-      }
-      return stick
-    })
-    setSticks(updatedSticks)
-  }
-
   return (
     <div className=" h-full ">
-      {ModalStore.modalName === modals.addStick && (
+      {ModalStore.modalName === modals.confirmDeleteWord && (
+        <ConfirmDeleteModal
+          onCancel={() => {
+            ModalStore.closeModal()
+          }}
+          onClick={(wordId: string) =>
+            appStore.removeWord(user, categoryId, wordId)
+          }
+          title="Remove Word"
+          chosenWord={appStore.chosenWord}
+        />
+      )}
+      {ModalStore.modalName === modals.addWord && (
         <AddModal
           onCancel={() => {
             ModalStore.closeModal()
           }}
-          onClick={(stickName: string) => addStick(categoryId, stickName)}
-          title={"Add Stick"}
+          onClick={(...rest) => appStore.addWord(user, categoryId, ...rest)}
+          title={"Add Word"}
         />
       )}
-      {ModalStore.modalName === modals.editStick && (
+      {ModalStore.modalName === modals.editWord && (
         <EditModal
           onCancel={() => {
             ModalStore.closeModal()
           }}
-          onEdit={(stickId: string, stickName: string) =>
-            editStick(stickId, stickName)
-          }
-          onRemove={(stickId: string) => removeStick(stickId)}
-          chosenStick={chosenStick}
-          title={"Edit Stick"}
+          onEdit={(...rest) => appStore.editWord(user, categoryId, ...rest)}
+          onRemove={() => ModalStore.openModal(modals.confirmDeleteWord)}
+          chosenWord={appStore?.chosenWord}
+          title={"Edit Word"}
         />
       )}
-      {ModalStore.modalName === modals.viewStick && (
+      {ModalStore.modalName === modals.viewWord && (
         <ViewModal
           onCancel={() => {
             ModalStore.closeModal()
           }}
-          chosenStick={chosenStick}
-          title={"View Stick"}
+          chosenWord={appStore.chosenWord}
+          title={"View Word"}
         />
       )}
 
@@ -117,19 +83,10 @@ const SticksTable: FC<StickTableProps> = observer(({ categoryId }) => {
           <h1 className="font-bold   text-2xl  flex items-center">Sticks </h1>
           <FaPlusSquare
             size={25}
-            onClick={() => ModalStore.openModal(modals.addStick)}
+            onClick={() => ModalStore.openModal(modals.addWord)}
             className="cursor-pointer text-color-blue"
           />
         </div>
-        <button
-          onClick={() => {
-            setIsLoading(true)
-            router.push(`/categories/${categoryId}/practice`)
-          }}
-          className="border-color-blue border-2 bg-color-blue text-color-white rounded-md py-2 px-4 cursor-pointer"
-        >
-          PRACTICE
-        </button>
       </div>
       <table
         className="flex-1 max-h-full table-auto 
@@ -152,8 +109,8 @@ const SticksTable: FC<StickTableProps> = observer(({ categoryId }) => {
                 const newStoring =
                   sortingObj["name"] === Order.asc ? Order.desc : Order.asc
                 setSortingObj({ ...sortingObj, name: newStoring })
-                const sortedSticks = sortSticksByName(sticks, newStoring)
-                setSticks(sortedSticks)
+                const sortedWords = sortWordsByName(appStore.words, newStoring)
+                appStore.setWords(sortedWords)
               }}
             >
               <div>name</div>
@@ -166,8 +123,8 @@ const SticksTable: FC<StickTableProps> = observer(({ categoryId }) => {
                 const newStoring =
                   sortingObj["date"] === Order.asc ? Order.desc : Order.asc
                 setSortingObj({ ...sortingObj, date: newStoring })
-                const sortedSticks = sortSticksByDate(sticks, newStoring)
-                setSticks(sortedSticks)
+                const sortedWords = sortWordsByDate(appStore.words, newStoring)
+                appStore.setWords(sortedWords)
               }}
             >
               <div>date</div>
@@ -178,17 +135,17 @@ const SticksTable: FC<StickTableProps> = observer(({ categoryId }) => {
           </tr>
         </thead>
         <tbody className="w-full flex-1 overflow-y-scroll ">
-          {sticks &&
-            sticks
-              .filter((stick) => stick.name.includes(filterStore.search))
-              .map((stick) => {
+          {appStore.words &&
+            appStore.words
+              .filter((word) => word.name.includes(filterStore.search))
+              .map((word) => {
                 return (
                   <tr
                     className="py-4  border-b-2 border-color-text-gray cursor-pointer hover:bg-opacity-90 hover:bg-color-hover-gray hover:ease-in-out duration-200"
-                    key={stick.id}
+                    key={word.id}
                     onClick={() => {
-                      setChosenStick(stick)
-                      ModalStore.openModal(modals.viewStick)
+                      appStore.setChosenWord(word)
+                      ModalStore.openModal(modals.viewWord)
                     }}
                   >
                     <td className="pl-5 py-4 flex items-center gap-3 ">
@@ -197,24 +154,24 @@ const SticksTable: FC<StickTableProps> = observer(({ categoryId }) => {
                        border-color-icon-white bg-color-icon-green flex
                          justify-center items-center "
                       >
-                        {getAbbreviations(stick?.name)}
+                        {getAbbreviations(word?.name)}
                       </div>
                       <div>
-                        {stick.name.length < 30
-                          ? stick.name
-                          : stick.name.slice(0, 30) + "..."}
+                        {word.name.length < 30
+                          ? word.name
+                          : word.name.slice(0, 30) + "..."}
                       </div>
                     </td>
                     <td className="py-4">
-                      {moment(stick.date.toDate()).format("DD-MM-YYYY")}
+                      {moment(word.date?.toDate()).format("DD-MM-YYYY")}
                     </td>
                     {/* edit section */}
                     <td>
                       <BiEditAlt
                         onClick={(e: Event) => {
                           e.stopPropagation()
-                          setChosenStick(stick)
-                          ModalStore.openModal(modals.editStick)
+                          appStore.setChosenWord(word)
+                          ModalStore.openModal(modals.editWord)
                         }}
                         className=" cursor-pointer 
                         hover:scale-150 ease-in-out duration-200"
@@ -229,4 +186,4 @@ const SticksTable: FC<StickTableProps> = observer(({ categoryId }) => {
     </div>
   )
 })
-export default SticksTable
+export default WordsTable

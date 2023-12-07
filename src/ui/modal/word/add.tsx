@@ -1,29 +1,34 @@
 import Image from "next/image"
 import React, { FC, useEffect, useState } from "react"
-import ColorList from "@/ui/ColorList"
 import { observer } from "mobx-react-lite"
 import Modal from ".."
 import { Timestamp } from "firebase/firestore"
 import CloseButton from "@/ui/button/close"
 import { ModalStore } from "@/mobx/modalStore"
+import LabelInputItem from "@/ui/labelInputItem"
+import useWordModal from "./hooks/useWordModal"
 
-type Category = {
-  id: string
-  name: string
-  date: Timestamp
-}
 type ModalProps = {
   onCancel: any
   onClick: any
   title: string
 }
+
 const AddModal: FC<ModalProps> = observer(({ onCancel, onClick, title }) => {
-  const [chosenColor, setChosenColor] = useState<string>("")
-  const [name, setName] = useState<string>("")
+  const {
+    name,
+    setName,
+    translate,
+    setTranslate,
+    type,
+    setType,
+    hint,
+    setHint,
+  } = useWordModal(null)
 
   const handleClick = () => {
     if (!name) return
-    onClick(name)
+    onClick(name, translate, type, hint)
     onCancel()
   }
   return (
@@ -36,22 +41,26 @@ const AddModal: FC<ModalProps> = observer(({ onCancel, onClick, title }) => {
         </div>
         {/* inputs */}
         <div className="flex flex-col items-center mt-5">
-          <div className="flex flex-col items-start gap-1">
-            <label className="font-semibold text-color-text-gray" htmlFor="">
-              Name
-            </label>
-            <textarea
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-              rows={5}
-              cols={50}
-              className="rounded-md p-2 border-2 
-               border-color-text-gray pl-2
-                placeholder:text-color-hover-gray 
-                font-semibold placeholder:pl-2"
-              placeholder="Add Stick Description"
-            />
-          </div>
+          <LabelInputItem
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+            title="Name"
+          />
+          <LabelInputItem
+            onChange={(e) => setTranslate(e.target.value)}
+            value={translate}
+            title="Translate"
+          />
+          <LabelInputItem
+            onChange={(e) => setType(e.target.value)}
+            value={type}
+            title="Hint"
+          />
+          <LabelInputItem
+            onChange={(e) => setHint(e.target.value)}
+            value={hint}
+            title="Hint"
+          />
         </div>
         {/* buttons */}
         <div className="relative bottom-0 flex items-center justify-end gap-2 font-semibold mt-auto">

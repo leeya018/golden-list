@@ -5,17 +5,17 @@ import {
 } from "./components/categoriesTable/hooks/interfaces"
 import { Category } from "./api/categories/interfaces"
 import moment from "moment"
-import { Stick } from "./api/sticks/interfaces"
+import { Word } from "./api/words/interfaces"
 
 export const modals = {
   addCategory: "addCategory",
   editCategory: "editCategory",
-  addStick: "addStick",
-  editStick: "editStick",
-  viewStick: "viewStick",
+  addWord: "addWord",
+  editWord: "editWord",
+  viewWord: "viewWord",
   success: "success",
   confirmDeleteCategory: "confirmDeleteCategory",
-  viewWord: "viewWord",
+  confirmDeleteWord: "confirmDeleteWord",
 }
 
 export const getResponse = (message: string, data = "") => {
@@ -74,8 +74,8 @@ export const sortCategoriesByDate = (categories: Category[], order: string) => {
 }
 
 //  sticks sorts
-export const sortSticksByName = (sticks: Stick[], order: string) => {
-  const sortedSticks = sticks.sort((c1: Stick, c2: Stick) => {
+export const sortWordsByName = (words: Word[], order: string) => {
+  const sortedSticks = words.sort((c1: Word, c2: Word) => {
     if (c1.name < c2.name) {
       if (order == Order.asc) return -1
       else return 1
@@ -88,8 +88,8 @@ export const sortSticksByName = (sticks: Stick[], order: string) => {
   })
   return sortedSticks
 }
-export const sortSticksByDate = (sticks: Stick[], order: string) => {
-  const sortedSticks = sticks.sort((c1: Stick, c2: Stick) => {
+export const sortWordsByDate = (words: Word[], order: string) => {
+  const sortedSticks = words.sort((c1: Word, c2: Word) => {
     if (order == Order.asc) {
       return moment(c1.date.toDate()).diff(moment(c2.date.toDate()))
     }
@@ -114,7 +114,7 @@ export const NavNames = {
   home: "home",
   exam: "exam",
   login: "login",
-  settings: "settings",
+  settings: "settings/categories",
   other: "other",
 }
 
