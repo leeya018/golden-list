@@ -9,7 +9,7 @@ import Image from "next/image"
 
 import { observer } from "mobx-react-lite"
 import { useRouter } from "next/navigation"
-import { NavItems } from "@/util"
+import { NavNames } from "@/util"
 
 function login() {
   const router = useRouter()
@@ -22,7 +22,7 @@ function login() {
     if (user) {
       setIsLoading(true)
 
-      router.push(`/${NavItems.home}`)
+      router.push(`/${NavNames.home}`)
     }
   }, [user])
 

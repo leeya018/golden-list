@@ -1,8 +1,8 @@
-import { NavItems } from "@/util"
+import { NavNames } from "@/util"
 import { makeAutoObservable } from "mobx"
 
 class Nav {
-  nav: string = NavItems.home
+  nav: string = NavNames.home
   constructor() {
     makeAutoObservable(this)
   }

@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation"
 import { collection, doc, setDoc } from "firebase/firestore"
 import { User } from "@/api/users/interfaces"
 import * as API from "@/api/users"
+import { NavNames } from "@/util"
 
 const AuthContext = createContext<AuthReturnType | undefined>(undefined)
 
@@ -31,19 +32,24 @@ export const AuthContextProvider = ({ children }: AuthContextProviderType) => {
 
   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider()
-    signInWithPopup(auth, provider).then(async (UserCredentialImp) => {
-      const { email, displayName, uid } = UserCredentialImp.user
-      const newUser: User = { email, displayName, userId: uid }
-      await API.addUser(newUser)
-      router.push("/")
-    })
+    signInWithPopup(auth, provider)
+      .then(async (UserCredentialImp) => {
+        const { email, displayName, uid } = UserCredentialImp.user
+        const newUser: User = { email, displayName, userId: uid }
+        await API.addUser(newUser)
+        router.push(`/${NavNames.home}`)
+      })
+      .catch((err) => {
+        console.log(err.message)
+        throw err
+      })
   }
 
   const logOut = () => {
     setIsLoading(true)
 
     signOut(auth)
-    router.push("/login")
+    router.push(`/${NavNames.login}`)
   }
 
   return (

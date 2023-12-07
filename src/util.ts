@@ -99,11 +99,6 @@ export const sortSticksByDate = (sticks: Stick[], order: string) => {
   return sortedSticks
 }
 
-export const NavNames = {
-  home: "home",
-  settings: "settings",
-}
-
 export const sleep = (time: number) =>
   new Promise((resolve) =>
     setTimeout(() => {
@@ -115,7 +110,7 @@ export const WordsMode = {
   test: "test",
   show: "show",
 }
-export const NavItems = {
+export const NavNames = {
   home: "home",
   exam: "exam",
   login: "login",

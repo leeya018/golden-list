@@ -18,13 +18,19 @@ import ModeChoose from "@/components/modeChoose"
 import { WordsMode } from "@/util"
 import WordView from "@/components/wordView"
 import appStore from "@/mobx/appStore"
+import { UserAuth } from "@/context/AuthContext"
+import * as API from "@/api/categories"
 
 const HomePage = observer(() => {
   const [mode, setMode] = useState<string>(WordsMode.show)
 
+  const { user } = UserAuth()
   return (
     <div className="w-full h-[100vh] ">
       {/* nav */}
+      <button onClick={() => API.addCategory(user, "new one ", "rnd")}>
+        add{" "}
+      </button>
       <Nav />
       {/* categories */}
       <CategoryList />

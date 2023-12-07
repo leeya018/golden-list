@@ -8,12 +8,12 @@ import { HiMagnifyingGlass } from "react-icons/hi2"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import navStore from "@/mobx/navStore"
-import { NavItems } from "@/util"
+import { NavNames } from "@/util"
 import { NavItemProps } from "./hooks/interfaces"
 import useNav from "./hooks/useNav"
 // nav
 const Nav = observer(({}) => {
-  const { user } = useNav()
+  const { user, logOut } = useNav()
   return (
     <div className="w-full px-10 py-5 flex items-center justify-between ">
       <div className=" flex items-center  justify-around gap-5 text-xl font-bold">
@@ -29,11 +29,11 @@ const Nav = observer(({}) => {
             src={"/images/golden.png"}
           />
         </div>
-        <NavItem name={`${NavItems.home}`} />
-        <NavItem name={`${NavItems.exam}`} />
-        <NavItem name={`${NavItems.other}`} />
-        <NavItem name={`${NavItems.other}`} />
-        <NavItem name={`${NavItems.other}`} />
+        <NavItem name={`${NavNames.home}`} />
+        <NavItem name={`${NavNames.exam}`} />
+        <NavItem name={`${NavNames.other}`} />
+        <NavItem name={`${NavNames.other}`} />
+        <NavItem name={`${NavNames.other}`} />
       </div>
       <div className="flex items-center justify-around gap-5 text-xl ">
         {/* filter */}
@@ -48,6 +48,7 @@ const Nav = observer(({}) => {
             className="rounded-full "
             src={user?.photoURL}
           />
+          <button onClick={logOut}>logout</button>
         </div>
       </div>
     </div>

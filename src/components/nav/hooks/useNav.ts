@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { UserAuth } from "@/context/AuthContext"
-import { NavItems, NavNames } from "@/util"
+import { NavNames } from "@/util"
 import { useRouter } from "next/navigation"
 
 const useNav = () => {
@@ -11,7 +11,7 @@ const useNav = () => {
 
   useEffect(() => {
     if (!user) {
-      router.push(`/${NavItems.login}`)
+      router.push(`/${NavNames.login}`)
     }
   }, [user])
 
