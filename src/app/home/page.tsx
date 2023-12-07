@@ -20,6 +20,7 @@ import WordView from "@/components/wordView"
 import appStore from "@/mobx/appStore"
 import { UserAuth } from "@/context/AuthContext"
 import * as API from "@/api/categories"
+import Alerts from "@/ui/Alerts"
 
 const HomePage = observer(() => {
   const [mode, setMode] = useState<string>(WordsMode.show)
@@ -27,8 +28,13 @@ const HomePage = observer(() => {
   const { user } = UserAuth()
   return (
     <div className="w-full h-[100vh] ">
+      {/* alerts */}
+      <Alerts />
       {/* nav */}
-      <button onClick={() => API.addCategory(user, "new one ", "rnd")}>
+      <button
+        className="cursor-pointer"
+        onClick={() => appStore.getCategories(user)}
+      >
         add{" "}
       </button>
       <Nav />

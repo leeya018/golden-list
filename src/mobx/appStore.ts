@@ -1,7 +1,11 @@
 import { Category } from "@/api/categories/interfaces"
 import { Word } from "@/api/words/interfaces"
 import { Timestamp } from "firebase/firestore"
-import { makeAutoObservable } from "mobx"
+import { makeAutoObservable, toJS } from "mobx"
+import * as API from "@/api/categories"
+import { messageStore } from "./messageStore"
+import Error from "next/error"
+import { UserAuth } from "@/context/AuthContext"
 
 class App {
   categories = [
@@ -166,6 +170,15 @@ class App {
 
   setWords = (wrds: Word[]) => {
     this.words = wrds
+  }
+  getCategories = async (user: any) => {
+    try {
+      this.categories = await API.getCategories(null)
+      console.log(toJS(this.categories))
+      messageStore.setMessage("Get categories successfully", 200)
+    } catch (error: any) {
+      messageStore.setMessage("Failed to get categories", 400)
+    }
   }
 }
 
