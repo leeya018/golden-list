@@ -118,6 +118,7 @@ export const WordsMode = {
 export const NavItems = {
   home: "home",
   exam: "exam",
+  login: "login",
   other: "other",
 }
 

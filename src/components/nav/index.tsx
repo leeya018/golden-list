@@ -10,8 +10,10 @@ import Link from "next/link"
 import navStore from "@/mobx/navStore"
 import { NavItems } from "@/util"
 import { NavItemProps } from "./hooks/interfaces"
+import useNav from "./hooks/useNav"
 // nav
 const Nav = observer(({}) => {
+  const { user } = useNav()
   return (
     <div className="w-full px-10 py-5 flex items-center justify-between ">
       <div className=" flex items-center  justify-around gap-5 text-xl font-bold">
@@ -36,13 +38,15 @@ const Nav = observer(({}) => {
       <div className="flex items-center justify-around gap-5 text-xl ">
         {/* filter */}
         <Filter />
-        <div className="flex justify-center items-center ">
+        <div className="flex justify-center gap-3 items-center ">
+          <div className="font-semibold">{user?.displayName}</div>
+
           <Image
             alt="me image"
             width={70}
             height={70}
             className="rounded-full "
-            src={"/images/me.jpg"}
+            src={user?.photoURL}
           />
         </div>
       </div>

@@ -3,7 +3,6 @@
 import CategoriesTable from "@/components/categoriesTable"
 import Filter from "@/components/filter"
 import AddModal from "@/ui/modal/category/add"
-import NavLeft from "@/components/navLeft"
 import { modals } from "@/util"
 import { ModalStore } from "@/mobx/modalStore"
 import { addDoc, collection, doc, setDoc } from "firebase/firestore"
