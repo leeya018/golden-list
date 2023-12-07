@@ -11,7 +11,7 @@ type ButtonPropType = {
 const Primary: FC<ButtonPropType> = ({
   children,
   className,
-  disabled,
+  disabled = false,
 
   ...rest
 }) => {

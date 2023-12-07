@@ -8,6 +8,4 @@ export type WordItemProps = {
 }
 export type WordListItemProps = {
   word: Word
-  setChosenWord: (word: Word) => void
-  chosenWord: Word
 }

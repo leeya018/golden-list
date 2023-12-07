@@ -4,9 +4,10 @@ import PrimaryButton from "@/ui/button/primary"
 import { WordTestProps } from "./hooks/interfaces"
 
 import { FcApproval } from "react-icons/fc"
+import appStore from "@/mobx/appStore"
 
 const LIM_HINTS = 2
-const WordTest: FC<WordTestProps> = observer(({ word, setWords, words }) => {
+const WordTest: FC = observer(({}) => {
   const [hints, setHints] = useState(0)
   const [isShowTranslate, setIsShowTranslate] = useState(false)
   const [myGuess, setMyGuess] = useState("")
@@ -15,19 +16,19 @@ const WordTest: FC<WordTestProps> = observer(({ word, setWords, words }) => {
     setHints(0)
     setIsShowTranslate(false)
     setMyGuess("")
-  }, [word.id])
+  }, [appStore.chosenWord?.id])
 
   useEffect(() => {
-    if (isEqual(myGuess, word.translate)) {
-      const updatedWords = words.map((w) => {
-        if (word.id === w.id) {
+    if (isEqual(myGuess, appStore.chosenWord?.translate as string)) {
+      const updatedWords = appStore.words.map((w) => {
+        if (appStore.chosenWord?.id === w.id) {
           return { ...w, knows: w.knows + 1 }
         }
         return w
       })
       console.log({ updatedWords })
 
-      setWords(updatedWords)
+      appStore.setWords(updatedWords)
     }
   }, [myGuess])
 
@@ -57,7 +58,7 @@ const WordTest: FC<WordTestProps> = observer(({ word, setWords, words }) => {
        flex flex-col items-center  justify-start
     border-2 rounded-md shadow-sm p-5 m-5"
       >
-        {isEqual(myGuess, word.translate) && (
+        {isEqual(myGuess, appStore.chosenWord?.translate as string) && (
           <FcApproval className="absolute bottom-1 right-1" size={85} />
         )}
 
@@ -73,7 +74,7 @@ const WordTest: FC<WordTestProps> = observer(({ word, setWords, words }) => {
             Hint me
           </PrimaryButton>
 
-          <div className="font-bold text-2xl">{word.name}</div>
+          <div className="font-bold text-2xl">{appStore.chosenWord?.name}</div>
           <div className=" top-1 left-1">hints:({hints})</div>
         </div>
         <div
@@ -98,7 +99,7 @@ const WordTest: FC<WordTestProps> = observer(({ word, setWords, words }) => {
           </PrimaryButton>
           {isShowTranslate && (
             <div className="text-xl font-semibold text-color-green w-full  flex justify-center items-center ">
-              {word.translate}{" "}
+              {appStore.chosenWord?.translate}{" "}
             </div>
           )}
         </div>
@@ -110,7 +111,7 @@ const WordTest: FC<WordTestProps> = observer(({ word, setWords, words }) => {
             font-semibold placeholder:pl-2 flex justify-start w-full items-center"
         >
           <span className="pr-2">Typeing : </span>{" "}
-          {hints > 0 && <div> {word.type}</div>}
+          {hints > 0 && <div> {appStore.chosenWord?.type}</div>}
         </div>
         <div
           className="rounded-md mt-8 p-2  
@@ -119,7 +120,7 @@ const WordTest: FC<WordTestProps> = observer(({ word, setWords, words }) => {
             font-semibold placeholder:pl-2 flex justify-start w-full items-center"
         >
           <span className="pr-2">Hint : </span>{" "}
-          {hints > 1 && <div> {word.hint}</div>}
+          {hints > 1 && <div> {appStore.chosenWord?.hint}</div>}
         </div>
       </div>
     </div>
