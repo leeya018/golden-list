@@ -11,6 +11,9 @@ const WordList: FC = observer(() => {
         <h1 className="font-semibold text-xl text-center mb-2 p-1">
           words list
         </h1>
+        {appStore.words.length === 0 && (
+          <div className="w-full text-center">List is Empty</div>
+        )}
         <ul
           className="px-2 flex-1 overflow-y-auto
    overflow-x-hidden w-full flex flex-col 

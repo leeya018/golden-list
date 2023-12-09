@@ -15,7 +15,7 @@ import WordList from "@/components/wordList"
 import PrimaryButton from "@/ui/button/primary"
 import WordTest from "@/components/wordTest"
 import ModeChoose from "@/components/modeChoose"
-import { WordsMode } from "@/util"
+import { WordsMode, modals } from "@/util"
 import WordView from "@/components/wordView"
 import appStore from "@/mobx/appStore"
 import { UserAuth } from "@/context/AuthContext"
@@ -23,6 +23,9 @@ import * as API from "@/api/categories"
 import Alerts from "@/ui/Alerts"
 import Filter from "@/components/filter"
 import CategoriesTable from "@/components/categoriesTable"
+import AddModal from "@/ui/modal/word/add"
+import { ModalStore } from "@/mobx/modalStore"
+import CategoryList from "@/components/categoryList"
 
 const HomePage = observer(() => {
   const [mode, setMode] = useState<string>(WordsMode.show)

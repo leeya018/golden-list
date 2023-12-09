@@ -138,6 +138,7 @@ class App {
 
   setChosenCategory = (cat: Category) => {
     this.chosenCategory = cat
+    this.chosenWord = null
   }
 
   setCategories = (cats: Category[]) => {
@@ -212,6 +213,9 @@ class App {
   getWords = async (user: any, categoryId: string) => {
     try {
       this.words = await API_WORDS.getWords(user, categoryId)
+      if (this.words.length > 0) {
+        this.chosenWord = this.words[0]
+      }
       console.log(toJS(this.words))
       messageStore.setMessage("Get words successfully", 200)
     } catch (error: any) {

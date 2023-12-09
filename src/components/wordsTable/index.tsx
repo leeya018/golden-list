@@ -80,7 +80,7 @@ const WordsTable: FC<StickTableProps> = observer(({ categoryId }) => {
 
       <div className="flex items-center justify-between gap-2 mx-2 mb-5 flex-1">
         <div className="flex items-center gap-2 ">
-          <h1 className="font-bold   text-2xl  flex items-center">Sticks </h1>
+          <h1 className="font-bold   text-2xl  flex items-center">Words </h1>
           <FaPlusSquare
             size={25}
             onClick={() => ModalStore.openModal(modals.addWord)}

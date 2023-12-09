@@ -3,6 +3,7 @@ import { FC, useState, useEffect } from "react"
 import { CategoryItemProps } from "./hooks/interfaces"
 import { Category } from "@/api/categories/interfaces"
 import appStore from "@/mobx/appStore"
+import { UserAuth } from "@/context/AuthContext"
 
 const CategoryItem: FC<CategoryItemProps> = observer(({ category }) => {
   // const shuffle = () => {
@@ -11,6 +12,8 @@ const CategoryItem: FC<CategoryItemProps> = observer(({ category }) => {
   //     .sort((a, b) => a.name - b.name)
   //     .map((a) => a.value)
   // }
+
+  const { user } = UserAuth()
 
   return (
     <li
@@ -21,6 +24,7 @@ const CategoryItem: FC<CategoryItemProps> = observer(({ category }) => {
       } rounded-full px-4 py-2 hover:bg-color-gray-category cursor-pointer`}
       onClick={() => {
         appStore.setChosenCategory(category)
+        appStore.getWords(user, category.id)
       }}
     >
       <div className="text-lg font-semibold flex items-center justify-center">

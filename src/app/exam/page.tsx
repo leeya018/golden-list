@@ -27,7 +27,7 @@ import useSound from "@/hooks/useSound"
 const ExamPage = observer(() => {
   const { playSound, stopSound } = useSound("/sounds/win.wav")
   useEffect(() => {
-    if (examStore.correct + examStore.mistake === ExamQuestionsAmount) {
+    if (examStore.correct + examStore.mistake === appStore.words.length) {
       ModalStore.openModal(modals.success)
       playSound()
     }

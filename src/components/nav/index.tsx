@@ -32,8 +32,6 @@ const Nav = observer(({}) => {
         <NavItem name={`${NavNames.home}`} />
         <NavItem name={`${NavNames.exam}`} />
         <NavItem name={`${NavNames.settings}`} />
-        <NavItem name={`${NavNames.other}`} />
-        <NavItem name={`${NavNames.other}`} />
       </div>
       <div className="flex items-center justify-around gap-5 text-xl ">
         {/* filter */}
@@ -58,6 +56,7 @@ const Nav = observer(({}) => {
 export default Nav
 
 const NavItem: FC<NavItemProps> = observer(({ name }) => {
+  console.log(name, navStore.nav)
   return (
     <Link
       className={`${

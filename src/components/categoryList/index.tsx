@@ -1,38 +1,43 @@
 import { observer } from "mobx-react-lite"
-import { FC, useState, useEffect } from "react"
+import { FC, useRef, useEffect, useState } from "react"
 
 import { FaChevronLeft } from "react-icons/fa6"
 import { FaChevronRight } from "react-icons/fa6"
-import { CategoriesProps } from "./hooks/interfaces"
+
+import useCategories from "./hooks/useCategories"
 import CategoryItem from "../categoryItem"
 import filterStore from "@/mobx/filterStore"
 import appStore from "@/mobx/appStore"
-import PrimaryButton from "@/ui/button/primary"
-import { ModalStore } from "@/mobx/modalStore"
-import { modals } from "@/util"
-import AddModal from "@/ui/modal/category/add"
 
 const CategoryList: FC = observer(({}) => {
-  return (
-    <div className="w-full flex items-center ">
-      {ModalStore.modalName === modals.addCategory && (
-        <AddModal
-          onCancel={() => {
-            ModalStore.closeModal()
-          }}
-          onClick={appStore.addCategory}
-          title={"Add Stick"}
-        />
-      )}
+  const { isLoading, setIsLoading, user } = useCategories()
 
-      <PrimaryButton
-        onClick={() => ModalStore.openModal(modals.addCategory)}
-        className={`justify-normal`}
+  const elRef = useRef()
+
+  // const handleScroll = (event) => {
+  //   event.current.scrollLeft - 40
+  // }
+  const scrollLeft = () => {
+    elRef.current.scrollTo({
+      left: elRef.current.scrollLeft - 40,
+      behavior: "smooth",
+    })
+  }
+  const scrollRight = () => {
+    elRef.current.scrollTo({
+      left: elRef.current.scrollLeft + 40,
+      behavior: "smooth",
+    })
+  }
+  return (
+    <div className="w-full flex justify-center items-center">
+      <FaChevronLeft className="cursor-pointer" onClick={scrollLeft} />
+      <ul
+        // onScroll={handleScroll}
+        ref={elRef}
+        className="w-[50%] flex justify-center items-center 
+      gap-5   overflow-x-hidden mx-10"
       >
-        Add Category
-      </PrimaryButton>
-      <ul className="w-full flex justify-center items-center gap-5 ">
-        <FaChevronLeft />
         {appStore.categories
           .filter((c) =>
             c.name
@@ -42,8 +47,8 @@ const CategoryList: FC = observer(({}) => {
           .map((category, key) => (
             <CategoryItem key={key} category={category} />
           ))}
-        <FaChevronRight />
       </ul>
+      <FaChevronRight className="cursor-pointer" onClick={scrollRight} />
     </div>
   )
 })

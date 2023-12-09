@@ -18,12 +18,12 @@ const Alerts = observer(() => {
     <div
       className={`${
         status === 0 ? "hidden" : "absolute"
-      }   top-0 left-0 right-0 z-50 w-screen flex justify-center  items-center h-20`}
+      }   top-0 left-0 right-0 z-50 w-screen flex justify-center  items-center h-10`}
     >
       <div
         className={`${
           isSuccess(status) ? "bg-color-green" : "bg-color-red"
-        } w-full flex justify-center items-center`}
+        } w-full flex justify-center items-center h-full`}
       >
         {message}
       </div>
