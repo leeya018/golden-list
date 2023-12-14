@@ -4,6 +4,7 @@ import { FC, useState, useEffect } from "react"
 import { Word } from "@/api/words/interfaces"
 import { WordsMode } from "@/util"
 import { ModeChooseProps } from "./hooks/interfaces"
+import InputRadio from "@/ui/input/radio"
 
 const ModeChoose: FC<ModeChooseProps> = observer(({ mode, setMode }) => {
   return (
@@ -15,24 +16,14 @@ const ModeChoose: FC<ModeChooseProps> = observer(({ mode, setMode }) => {
         className="radio flex items-center gap-1 cursor-pointer"
         onClick={() => setMode(WordsMode.show)}
       >
-        <input
-          checked={WordsMode.show === mode}
-          type="radio"
-          className="w-5 h-5 cursor-pointer"
-          name={WordsMode.show}
-        />
+        <InputRadio checked={WordsMode.show === mode} name={WordsMode.show} />
         {WordsMode.show}
       </label>
       <label
         className="radio flex items-center gap-1 cursor-pointer"
         onChange={() => setMode(WordsMode.test)}
       >
-        <input
-          checked={WordsMode.test === mode}
-          type="radio"
-          name={WordsMode.test}
-          className="w-5 h-5 cursor-pointer"
-        />
+        <InputRadio checked={WordsMode.test === mode} name={WordsMode.test} />
         {WordsMode.test}
       </label>
     </div>

@@ -1,5 +1,5 @@
 import Image from "next/image"
-import React, { FC, useEffect, useState } from "react"
+import React, { FC, useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import Modal from ".."
 import { Timestamp } from "firebase/firestore"
@@ -26,9 +26,12 @@ const AddModal: FC<ModalProps> = observer(({ onCancel, onClick, title }) => {
     setHint,
   } = useWordModal(null)
 
+  const inputRef = useRef<any>(null)
+
   const handleClick = () => {
     if (!name) return
-    onClick(name, translate, type, hint)
+    const typeA = type ? type : name
+    onClick(name, translate, typeA, hint)
     onCancel()
   }
   return (
@@ -42,6 +45,7 @@ const AddModal: FC<ModalProps> = observer(({ onCancel, onClick, title }) => {
         {/* inputs */}
         <div className="flex flex-col items-center mt-5">
           <LabelInputItem
+            inputRef={inputRef}
             onChange={(e) => setName(e.target.value)}
             value={name}
             title="Name"
@@ -52,14 +56,14 @@ const AddModal: FC<ModalProps> = observer(({ onCancel, onClick, title }) => {
             title="Translate"
           />
           <LabelInputItem
-            onChange={(e) => setType(e.target.value)}
-            value={type}
-            title="Hint"
-          />
-          <LabelInputItem
             onChange={(e) => setHint(e.target.value)}
             value={hint}
             title="Hint"
+          />
+          <LabelInputItem
+            onChange={(e) => setType(e.target.value)}
+            value={type}
+            title="Type"
           />
         </div>
         {/* buttons */}
