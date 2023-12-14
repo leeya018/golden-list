@@ -32,6 +32,7 @@ const Nav = observer(({}) => {
         <NavItem name={`${NavNames.home}`} />
         <NavItem name={`${NavNames.exam}`} />
         <NavItem name={`${NavNames.settings}`} />
+        <NavItem name={`${NavNames.gpt}`} />
       </div>
       <div className="flex items-center justify-around gap-5 text-xl ">
         {/* filter */}

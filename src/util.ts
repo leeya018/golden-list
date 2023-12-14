@@ -121,7 +121,14 @@ export const NavNames = {
   exam: "exam",
   login: "login",
   settings: "settings/categories",
+  gpt: "gpt",
   other: "other",
 }
 
 export const ExamQuestionsAmount = 20
+
+export const getUrl = () => {
+  return process.env.NODE_ENV === "development"
+    ? process.env.NEXT_PUBLIC_BASIC_URL
+    : process.env.NEXT_PUBLIC_BASIC_URL_PRODUCTION
+}
