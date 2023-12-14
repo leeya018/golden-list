@@ -15,7 +15,14 @@ const useCategories = () => {
     if (user) {
       console.log("object")
       console.log(user)
-      appStore.getCategories(user)
+      appStore.getCategories(user).then(() => {
+        if (appStore.categories.length > 0) {
+          const firstCat = appStore.categories[0]
+          appStore.setChosenCategory(firstCat)
+          appStore.getWords(user, firstCat.id)
+        }
+      })
+
       setIsLoading(true)
     }
   }, [user])

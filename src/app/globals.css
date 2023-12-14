@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  @apply border-2;
+}
 body {
   @apply overflow-hidden mx-10;
+}
+.boardItem {
+  @apply relative cursor-pointer flex items-center
+  justify-center h-44;
 }

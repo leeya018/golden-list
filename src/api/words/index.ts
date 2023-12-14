@@ -40,25 +40,16 @@ export const addWord = async (user: any, categoryId: string, word: Word) => {
   }
 }
 
-export const editWord = async (
-  user: any,
-  categoryId: string,
-  wordId: string,
-  name: string,
-  translate: string,
-  type: string,
-  hint: string
-) => {
+export const editWord = async (user: any, categoryId: string, word: Word) => {
+  if (!word.id) throw new Error("word has no id")
   const docRef = doc(
     db,
     `users/${user.uid}/categories/${categoryId}/words`,
-    wordId
+    word.id
   )
-  await setDoc(
-    docRef,
-    { name, date: Timestamp.now(), translate, type, hint },
-    { merge: true }
-  )
+  let updatedWord = { ...word }
+  updatedWord.date = Timestamp.now()
+  await setDoc(docRef, word, { merge: true })
   return docRef.id
 }
 export const removeWord = async (

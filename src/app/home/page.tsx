@@ -15,7 +15,7 @@ import WordList from "@/components/wordList"
 import PrimaryButton from "@/ui/button/primary"
 import WordTest from "@/components/wordTest"
 import ModeChoose from "@/components/modeChoose"
-import { WordsMode, modals } from "@/util"
+import { WordsMode, WordsPracticeMode, modals } from "@/util"
 import WordView from "@/components/wordView"
 import appStore from "@/mobx/appStore"
 import { UserAuth } from "@/context/AuthContext"
@@ -24,11 +24,19 @@ import Alerts from "@/ui/Alerts"
 import { ModalStore } from "@/mobx/modalStore"
 import AddModal from "@/ui/modal/word/add"
 import Confetti from "@/ui/confetti"
+import ModeChoosePractice from "@/components/modeChoose/practice"
+import WordBoard from "@/components/wordBoard"
+import selectModeStore from "@/mobx/selectModeStore"
 
 const HomePage = observer(() => {
-  const [mode, setMode] = useState<string>(WordsMode.show)
+  // const [mode, setMode] = useState<string>(WordsMode.practice)
+  // // const [practiceMode, setPracticeMode] = useState<string>(
+  // //   WordsPracticeMode.click
+  // // )
 
+  const { mainMode, practiceMode } = selectModeStore
   const { user } = UserAuth()
+
   return (
     <div className="w-full h-[100vh] ">
       {/* alerts */}
@@ -41,15 +49,23 @@ const HomePage = observer(() => {
       <CategoryList />
 
       {/* mode */}
-      <ModeChoose mode={mode} setMode={setMode} />
+      <ModeChoose />
+      {/* mode practice */}
+      {mainMode === WordsMode.practice && <ModeChoosePractice />}
+      {/*  words in practice */}
+      {mainMode === WordsMode.practice && (
+        <WordBoard practiceMode={practiceMode} />
+      )}
       {/*  words */}
-      <div className="w-full border-2 flex  h-full">
-        <div id="container"></div>
-        <WordList />
+      {mainMode !== WordsMode.practice && (
+        <div className="w-full border-2 flex  h-full">
+          <div id="container"></div>
+          <WordList />
 
-        {appStore.chosenWord &&
-          (mode === WordsMode.test ? <WordTest /> : <WordView />)}
-      </div>
+          {mainMode === WordsMode.test && appStore.chosenWord && <WordTest />}
+          {mainMode === WordsMode.show && appStore.chosenWord && <WordView />}
+        </div>
+      )}
     </div>
   )
 })

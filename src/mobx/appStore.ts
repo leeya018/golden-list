@@ -152,6 +152,7 @@ class App {
     try {
       this.categories = await API.getCategories(user)
       console.log(toJS(this.categories))
+
       messageStore.setMessage("Get categories successfully", 200)
     } catch (error: any) {
       messageStore.setMessage(error.message, 400)
@@ -261,34 +262,16 @@ class App {
       messageStore.setMessage(error.message, 400)
     }
   }
-  editWord = async (
-    user: any,
-    categoryId: string,
-    wordId: string,
-    name: string,
-    translate: string,
-    type: string,
-    hint: string
-  ) => {
+  editWord = async (user: any, categoryId: string, word: Word) => {
     // const editedWord = { wordId, name, translate, type, hint }
     try {
-      const docId = await API_WORDS.editWord(
-        user,
-        categoryId,
-        wordId,
-        name,
-        translate,
-        type,
-        hint
-      )
+      const docId = await API_WORDS.editWord(user, categoryId, word)
       if (!docId) {
-        messageStore.setMessage("Cannot edit the word " + wordId, 400)
+        messageStore.setMessage("Cannot edit the word " + word.id, 400)
       }
-      messageStore.setMessage("category edited successfully", 200)
 
-      this.words = this.words.map((c) =>
-        c.id === wordId ? { ...c, name, translate, type, hint } : c
-      )
+      this.words = this.words.map((w) => (w.id === word.id ? word : w))
+      messageStore.setMessage("word edited successfully", 200)
     } catch (error: any) {
       messageStore.setMessage(error.message, 400)
     }

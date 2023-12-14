@@ -7,5 +7,5 @@ export type Word = {
   type: string
   hint: string
   knows: number
-  date: Timestamp
+  date?: Timestamp
 }

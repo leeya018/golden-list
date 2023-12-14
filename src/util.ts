@@ -109,6 +109,12 @@ export const sleep = (time: number) =>
 export const WordsMode = {
   test: "test",
   show: "show",
+  practice: "practice",
+}
+export const WordsPracticeMode = {
+  click: "click",
+  focus: "focus",
+  hover: "hover",
 }
 export const NavNames = {
   home: "home",

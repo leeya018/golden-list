@@ -18,7 +18,7 @@ const CategoryList: FC = observer(({}) => {
   //   event.current.scrollLeft - 40
   // }
   const scrollLeft = () => {
-    elRef.current.scrollTo({
+    elRef.current?.scrollTo({
       left: elRef.current.scrollLeft - 40,
       behavior: "smooth",
     })
