@@ -29,7 +29,10 @@ const TopBoardItem: FC<TopBoardItemProps> = observer(
           onMouseEnter={(e) => e.stopPropagation()}
           className="absolute top-1 right-1 hover:scale-105"
           size={25}
-          onClick={() => editWord(word, 1)}
+          onClick={(e) => {
+            e.stopPropagation()
+            editWord(word, 1)
+          }}
         />
         <div className="absolute top-1 left-1">{word.knows}</div>
         {practiceMode !== WordsPracticeMode.hover && (

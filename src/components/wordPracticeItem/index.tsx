@@ -11,8 +11,10 @@ const WordPracticeItem: FC<WordPracticeItemProps> = observer(
     return (
       <div
         {...rest}
-        className="relative cursor-pointer flex items-center
-        justify-center h-44 border-2 rounded-md"
+        className={`${
+          isShow && "bg-color-disabled-gray"
+        } relative cursor-pointer flex items-center
+        justify-center h-44 border-2 rounded-md  `}
       >
         {isShowTop && (
           <TopBoardItem
@@ -26,7 +28,9 @@ const WordPracticeItem: FC<WordPracticeItemProps> = observer(
         <div className={`${isShow ? "hidden" : "flex"} text-xl font-semibold `}>
           {word.name}
         </div>
-        <div className={`${isShow ? "flex" : "hidden"} text-xl font-semibold `}>
+        <div
+          className={`${isShow ? "flex" : "hidden"} text-xl  font-semibold `}
+        >
           {word.translate}
         </div>
       </div>
