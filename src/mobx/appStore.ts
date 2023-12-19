@@ -139,6 +139,7 @@ class App {
   setChosenCategory = (cat: Category) => {
     this.chosenCategory = cat
     this.chosenWord = null
+    this.words = []
   }
 
   setCategories = (cats: Category[]) => {

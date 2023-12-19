@@ -42,16 +42,17 @@ const TopBoardItem: FC<TopBoardItemProps> = observer(
               e.stopPropagation()
               increaseHint()
             }}
+            onMouseDown={(e) => e.stopPropagation()}
           >
             hint me ({hints})
           </div>
         )}
-        {practiceMode !== WordsPracticeMode.hover && word.hint && (
+        {practiceMode !== WordsPracticeMode.hover && word.hint && !isMyHint && (
           <div
             className="absolute bottom-1 right-1"
             onClick={(e) => {
               e.stopPropagation()
-              setIsMyHint((prev) => !prev)
+              setIsMyHint(true)
             }}
           >
             my hint

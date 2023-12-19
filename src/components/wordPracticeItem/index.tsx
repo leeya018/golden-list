@@ -13,8 +13,8 @@ const WordPracticeItem: FC<WordPracticeItemProps> = observer(
         {...rest}
         className={`${
           isShow && "bg-color-disabled-gray"
-        } relative cursor-pointer flex items-center
-        justify-center h-44 border-2 rounded-md  `}
+        } relative cursor-pointer flex flex-col items-center
+         h-44 border-2 rounded-md  `}
       >
         {isShowTop && (
           <TopBoardItem
@@ -25,14 +25,27 @@ const WordPracticeItem: FC<WordPracticeItemProps> = observer(
             isMyHint={isMyHint}
           />
         )}
-        <div className={`${isShow ? "hidden" : "flex"} text-xl font-semibold `}>
+        <div
+          className={`${
+            isShow ? "hidden" : "flex"
+          } mt-10 text-xl font-semibold `}
+        >
           {word.name}
         </div>
         <div
-          className={`${isShow ? "flex" : "hidden"} text-xl  font-semibold `}
+          className={`${
+            isShow ? "flex" : "hidden"
+          } text-xl mt-10  font-semibold `}
         >
           {word.translate}
         </div>
+
+        <div className={` text-xl font-semibold bg-color-blue `}>
+          {chosenSlice}
+        </div>
+        {isMyHint && (
+          <div className={` text-md font-semibold `}>{word.hint}</div>
+        )}
       </div>
     )
   }
