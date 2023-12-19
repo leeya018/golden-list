@@ -4,7 +4,6 @@ import Input from "."
 type InputPropType = {
   checked: boolean
   onChange: () => void
-  name: string
   className?: string
 }
 

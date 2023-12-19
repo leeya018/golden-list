@@ -29,7 +29,9 @@ import WordBoard from "@/components/wordBoard"
 import selectModeStore from "@/mobx/selectModeStore"
 import axios from "axios"
 import { WordGptProps } from "./hooks/interfaces"
-import InputCheckbox from "@/ui/input/checbox"
+import InputCheckbox from "@/ui/inputBox/checbox"
+import WordGpt from "./word"
+import PrimaryInput from "@/ui/input/primary"
 
 const data = [
   {
@@ -49,14 +51,9 @@ const data = [
   },
 ]
 const GptPage = observer(() => {
-  // const [mode, setMode] = useState<string>(WordsMode.practice)
-  // // const [practiceMode, setPracticeMode] = useState<string>(
-  // //   WordsPracticeMode.click
-  // // )
-
-  const { mainMode, practiceMode } = selectModeStore
   const { user } = UserAuth()
   const [gptWords, setGptWords] = useState([])
+  const [wordsAmount, setWordsAmount] = useState(5)
   const [chosenGptWords, setChosenGptWords] = useState([])
   console.log(chosenGptWords)
 
@@ -90,8 +87,10 @@ const GptPage = observer(() => {
   const askGptApi = async () => {
     try {
       if (!appStore.chosenCategory?.name) throw new Error("categoryId is null")
+      if (wordsAmount === 0)
+        throw new Error("word amount must be greater than 0")
       const question = `
-    Here are 5 common portuguese (portugal) words related to the ${appStore.chosenCategory.name} category and put it in array with items :{
+    Here are ${wordsAmount} common portuguese (portugal) words related to the ${appStore.chosenCategory.name} category and put it in array with items :{
     name: (the word),
     translate: (the translation),
     type : (the way you should read it en english)
@@ -140,10 +139,23 @@ const GptPage = observer(() => {
       <div className="w-full h-screen flex justify-between">
         <WordList />
 
-        <div className="flex flex-col items-center gap-2  w-full">
-          <PrimaryButton onClick={askGptApi} className={`justify-normal`}>
-            get words
-          </PrimaryButton>
+        <div className="flex flex-col items-start gap-2  w-full">
+          <div className="flex gap-2">
+            <PrimaryInput
+              className="w-24"
+              type={"number"}
+              onChange={(e) => setWordsAmount(parseInt(e.target.value))}
+              value={wordsAmount}
+              placeHolder={"wordsAmount"}
+            />
+            <PrimaryButton
+              onClick={askGptApi}
+              className={`justify-normal`}
+              disabled={wordsAmount <= 0}
+            >
+              get words
+            </PrimaryButton>
+          </div>
           {chosenGptWords.length > 0 && (
             <PrimaryButton onClick={addWords} className={`justify-normal`}>
               add words
@@ -170,32 +182,3 @@ const GptPage = observer(() => {
 })
 
 export default GptPage
-
-const WordGpt: FC<WordGptProps> = observer(
-  ({ word, removeFromChosen, addToChosen, gptWords }) => {
-    const [isChecked, setIsChecked] = useState(false)
-
-    useEffect(() => {
-      setIsChecked(false)
-    }, [gptWords])
-
-    const handleChange = (word: any) => {
-      const newIsChecked = !isChecked
-
-      if (newIsChecked) addToChosen(word)
-      else removeFromChosen(word)
-      setIsChecked(newIsChecked)
-    }
-    return (
-      <div className=" flex justify-center items-center  flex-col h-44 gap-2">
-        <InputCheckbox
-          checked={isChecked}
-          onChange={() => handleChange(word)}
-        />
-        <div className="text-lg font-bold"> {word.name}</div>
-        <div> {word.translate}</div>
-        <div> {word.type}</div>
-      </div>
-    )
-  }
-)

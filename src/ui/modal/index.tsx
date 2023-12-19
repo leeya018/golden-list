@@ -10,7 +10,7 @@ type ModalProps = {
 const Modal: FC<ModalProps> = observer(({ children }) => {
   return (
     <div
-      // onClick={() => ModalStore.closeModal()}
+      onClick={() => ModalStore.closeModal()}
       className="absolute inset-0 bg-color-black  z-50 h-full w-full border-2 bg-color-text-gray bg-opacity-30
        flex items-center justify-center
      "

@@ -4,7 +4,7 @@ import { FC, useState, useEffect } from "react"
 import { Word } from "@/api/words/interfaces"
 import { WordsPracticeMode } from "@/util"
 import { ModeChooseProps } from "./hooks/interfaces"
-import InputRadio from "@/ui/input/radio"
+import InputRadio from "@/ui/inputBox/radio"
 import LabelInputRadio from "@/ui/labelInput/radio"
 import selectModeStore from "@/mobx/selectModeStore"
 
