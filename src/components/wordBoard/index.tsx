@@ -15,6 +15,9 @@ import useWordBoard from "./hooks/useWordBoard"
 import { WordsPracticeMode } from "@/util"
 import useWordBoardItem from "./hooks/useWordBoardItem"
 import selectModeStore from "@/mobx/selectModeStore"
+import WordPracticeItemClick from "../wordPracticeItem/click"
+import WordPracticeItemFocus from "../wordPracticeItem/focus"
+import WordPracticeItemHover from "../wordPracticeItem/hover"
 const arr = [
   {
     id: "89sl89234lkjt984jkltc8934",
@@ -147,13 +150,13 @@ const WordBoard: FC<WordBoardProps> = observer(({ practiceMode }) => {
           .map((word, key) => (
             <>
               {practiceMode === WordsPracticeMode.click && (
-                <WordBoardItemClick key={key} word={word} />
+                <WordPracticeItemClick key={key} word={word} />
               )}
               {practiceMode === WordsPracticeMode.focus && (
-                <WordBoardItemFocus key={key} word={word} />
+                <WordPracticeItemFocus key={key} word={word} />
               )}
               {practiceMode === WordsPracticeMode.hover && (
-                <WordBoardItemHover key={key} word={word} />
+                <WordPracticeItemHover key={key} word={word} />
               )}
             </>
           ))}
@@ -163,129 +166,3 @@ const WordBoard: FC<WordBoardProps> = observer(({ practiceMode }) => {
 })
 
 export default WordBoard
-
-const TopBoardItem: FC<TopBoardItemProps> = observer(
-  ({ word, hints, increaseHint, isMyHint, setIsMyHint }) => {
-    const { user } = useWordBoard()
-    const { mainMode, practiceMode } = selectModeStore
-
-    const editWord = (word: Word, num: number) => {
-      console.log({ num })
-      if (!appStore.chosenCategory?.id)
-        throw new Error("You must choose a category")
-      let categoryId = appStore.chosenCategory.id
-      let dupWord = { ...word }
-      dupWord.knows = word.knows + 1
-      appStore.editWord(user, categoryId, dupWord)
-    }
-    return (
-      <>
-        <IoAddOutline
-          onMouseEnter={(e) => e.stopPropagation()}
-          className="absolute top-1 right-1 hover:scale-105"
-          size={25}
-          onClick={() => editWord(word, 1)}
-        />
-        <div className="absolute top-1 left-1">{word.knows}</div>
-        {practiceMode !== WordsPracticeMode.hover && (
-          <div
-            className="absolute bottom-1 left-1"
-            onClick={(e) => {
-              e.stopPropagation()
-              increaseHint()
-            }}
-          >
-            hint me ({hints})
-          </div>
-        )}
-        {practiceMode !== WordsPracticeMode.hover && word.hint && (
-          <div
-            className="absolute bottom-1 right-1"
-            onClick={(e) => {
-              e.stopPropagation()
-              setIsMyHint((prev) => !prev)
-            }}
-          >
-            my hint
-          </div>
-        )}
-      </>
-    )
-  }
-)
-
-const WordBoardItemClick: FC<WordBoardItemProps> = observer(({ word }) => {
-  const [isShow, setIsShow] = useState(false)
-  const { chosenSlice, hints, increaseHint, setIsMyHint, isMyHint } =
-    useWordBoardItem(word)
-
-  return (
-    <div
-      onClick={() => setIsShow((prev) => !prev)}
-      className="boardItem flex flex-col border-2 rounded-md"
-    >
-      <TopBoardItem
-        word={word}
-        hints={hints}
-        increaseHint={increaseHint}
-        setIsMyHint={setIsMyHint}
-        isMyHint={isMyHint}
-      />
-      <div className={`${isShow ? "hidden" : "flex"} text-xl font-semibold `}>
-        {word.name}
-      </div>
-      <div className={`${isShow ? "flex" : "hidden"} text-xl font-semibold `}>
-        {word.translate}
-      </div>
-      <div className={` text-xl font-semibold `}>{chosenSlice}</div>
-      {isMyHint && <div className={` text-xl font-semibold `}>{word.hint}</div>}
-    </div>
-  )
-})
-const WordBoardItemFocus: FC<WordBoardItemProps> = observer(({ word }) => {
-  const [isFocus, setIsFocus] = useState(false)
-  const { chosenSlice, hints, increaseHint, setIsMyHint, isMyHint } =
-    useWordBoardItem(word)
-  return (
-    <div
-      onMouseDown={() => setIsFocus(true)}
-      onMouseUp={() => setIsFocus(false)}
-      className="boardItem"
-    >
-      <TopBoardItem
-        word={word}
-        hints={hints}
-        increaseHint={increaseHint}
-        setIsMyHint={setIsMyHint}
-        isMyHint={isMyHint}
-      />
-      <div className={`${isFocus ? "hidden" : "flex"} text-xl font-semibold `}>
-        {word.name}
-      </div>
-      <div className={`${isFocus ? "flex" : "hidden"} text-xl font-semibold `}>
-        {word.translate}
-      </div>
-      <div className={` text-xl font-semibold `}>{chosenSlice}</div>
-      {isMyHint && <div className={` text-xl font-semibold `}>{word.hint}</div>}
-    </div>
-  )
-})
-const WordBoardItemHover: FC<WordBoardItemProps> = observer(({ word }) => {
-  const [isHover, setIsHover] = useState(false)
-
-  return (
-    <div
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-      className="boardItem"
-    >
-      <TopBoardItem word={word} />
-      <div className={`${isHover ? "hidden" : "flex"} text-xl font-semibold `}>
-        {word.name}
-      </div>
-      <div className={`${isHover ? "flex" : "hidden"} text-xl font-semibold `}>
-        {word.translate}
-      </div>
-    </div>
-  )
-})

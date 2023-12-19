@@ -5,7 +5,7 @@ type ButtonPropType = {
   children: React.ReactNode
   onClick: (param: any) => void
   className: string
-  disabled: boolean
+  disabled?: boolean
 }
 
 const Primary: FC<ButtonPropType> = ({
