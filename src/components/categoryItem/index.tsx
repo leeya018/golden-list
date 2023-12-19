@@ -6,22 +6,13 @@ import appStore from "@/mobx/appStore"
 import { UserAuth } from "@/context/AuthContext"
 
 const CategoryItem: FC<CategoryItemProps> = observer(({ category }) => {
-  // const shuffle = () => {
-  //   return array
-  //     .map((a) => ({ sort: Math.random(), value: a }))
-  //     .sort((a, b) => a.name - b.name)
-  //     .map((a) => a.value)
-  // }
-
   const { user } = UserAuth()
 
   return (
     <li
       className={`${
-        appStore.chosenCategory?.id === category.id
-          ? "bg-color-gray-category"
-          : ""
-      } rounded-full px-4 py-2 hover:bg-color-gray-category cursor-pointer`}
+        appStore.chosenCategory?.id === category.id ? "bg-color-purple " : ""
+      } rounded-full px-4 py-2 duration-200 hover:bg-color-purple hover:bg-opacity-50 cursor-pointer`}
       onClick={() => {
         appStore.setChosenCategory(category)
         appStore.getWords(user, category.id)
