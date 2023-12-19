@@ -16,7 +16,7 @@ const WordPracticeItemHover: FC<WordPracticeItemActionProps> = observer(
       <WordPracticeItem
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
-        isHover={isHover}
+        isShow={isHover}
         word={word}
         isShowTop={false}
       />

@@ -13,6 +13,7 @@ const WordPracticeItemClick: FC<WordPracticeItemActionProps> = observer(
       <WordPracticeItem
         onClick={() => setIsShow((prev) => !prev)}
         word={word}
+        isShow={isShow}
         isShowTop={true}
       />
     )

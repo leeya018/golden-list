@@ -9,8 +9,7 @@ export type WordPracticeItemProps = {
   onMouseDown?: () => void
   onClick?: () => void
   isShowTop?: boolean
-  isHover?: boolean
-  isFocus?: boolean
+  isShow?: boolean
 }
 export type WordPracticeItemActionProps = {
   word: Word

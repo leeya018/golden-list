@@ -5,7 +5,7 @@ import TopBoardItem from "../topBoardItem"
 import useWordBoardItem from "../wordBoard/hooks/useWordBoardItem"
 
 const WordPracticeItem: FC<WordPracticeItemProps> = observer(
-  ({ word, isShowTop = true, isHover, ...rest }) => {
+  ({ word, isShowTop = true, isShow, ...rest }) => {
     const { chosenSlice, hints, increaseHint, setIsMyHint, isMyHint } =
       useWordBoardItem(word)
     return (
@@ -23,14 +23,10 @@ const WordPracticeItem: FC<WordPracticeItemProps> = observer(
             isMyHint={isMyHint}
           />
         )}
-        <div
-          className={`${isHover ? "hidden" : "flex"} text-xl font-semibold `}
-        >
+        <div className={`${isShow ? "hidden" : "flex"} text-xl font-semibold `}>
           {word.name}
         </div>
-        <div
-          className={`${isHover ? "flex" : "hidden"} text-xl font-semibold `}
-        >
+        <div className={`${isShow ? "flex" : "hidden"} text-xl font-semibold `}>
           {word.translate}
         </div>
       </div>

@@ -16,7 +16,7 @@ const WordPracticeItemFocus: FC<WordPracticeItemActionProps> = observer(
       <WordPracticeItem
         onMouseDown={() => setIsFocus(true)}
         onMouseUp={() => setIsFocus(false)}
-        isFocus={isFocus}
+        isShow={isFocus}
         word={word}
         isShowTop={true}
       />
