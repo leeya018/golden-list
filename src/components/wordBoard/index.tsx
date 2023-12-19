@@ -222,7 +222,7 @@ const WordBoardItemClick: FC<WordBoardItemProps> = observer(({ word }) => {
   return (
     <div
       onClick={() => setIsShow((prev) => !prev)}
-      className="boardItem flex flex-col"
+      className="boardItem flex flex-col border-2 rounded-md"
     >
       <TopBoardItem
         word={word}

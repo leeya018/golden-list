@@ -7,6 +7,7 @@ import {
   setDoc,
   addDoc,
   arrayUnion,
+  writeBatch,
 } from "firebase/firestore"
 import { db } from "@/firebase"
 import { Word } from "./interfaces"
@@ -34,6 +35,28 @@ export const addWord = async (user: any, categoryId: string, word: Word) => {
     const docRef = await addDoc(wordCollectionRef, word)
     console.log(docRef.id)
     return docRef.id
+  } catch (error) {
+    const e = error as Error
+    console.log(e.message)
+  }
+}
+
+export const addWords = async (
+  user: any,
+  categoryId: string,
+  words: Word[]
+) => {
+  try {
+    const batch = writeBatch(db)
+    const wordCollectionRef = collection(
+      db,
+      `users/${user.uid}/categories/${categoryId}/words`
+    )
+    await words.forEach(async (word) => {
+      const docRef = doc(wordCollectionRef)
+      batch.set(docRef, word)
+    })
+    await batch.commit()
   } catch (error) {
     const e = error as Error
     console.log(e.message)

@@ -249,6 +249,28 @@ class App {
       messageStore.setMessage(error.message, 400)
     }
   }
+  addWords = async (user: any, categoryId: string, words: Word[]) => {
+    try {
+      if (words.length === 0) throw new Error("chosen words gpt are empty")
+      if (!categoryId) throw new Error("category id is required")
+      let newWords: Word[] = []
+      words.map((w) => {
+        let newW: Word = { ...w }
+
+        newW.date = Timestamp.now()
+        newW.knows = 0
+        newWords.push(newW)
+      })
+
+      const docId = await API_WORDS.addWords(user, categoryId, newWords)
+      await this.getWords(user, categoryId)
+
+      console.log(toJS(docId))
+      messageStore.setMessage("words added successfully", 200)
+    } catch (error: any) {
+      messageStore.setMessage(error.message, 400)
+    }
+  }
   removeWord = async (user: any, categoryId: string, wordId: string) => {
     try {
       const docId = await API_WORDS.removeWord(user, categoryId, wordId)

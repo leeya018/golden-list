@@ -56,7 +56,7 @@ const GptPage = observer(() => {
 
   const { mainMode, practiceMode } = selectModeStore
   const { user } = UserAuth()
-  const [gptWords, setGptWords] = useState([...data])
+  const [gptWords, setGptWords] = useState([])
   const [chosenGptWords, setChosenGptWords] = useState([])
   console.log(chosenGptWords)
 
@@ -77,9 +77,21 @@ const GptPage = observer(() => {
     return array
   }
 
+  const addWords = async () => {
+    const categoryId = appStore.chosenCategory?.id || ""
+    await appStore.addWords(user, categoryId, chosenGptWords)
+    const filteredArr = gptWords.filter(
+      (w1) => !appStore.words.some((w2) => w2.name === w1.name)
+    )
+    setGptWords(filteredArr)
+    setChosenGptWords([])
+  }
+
   const askGptApi = async () => {
-    const question = `
-    Here are 3 common Russian words related to the "restaurant" category and put it in array with items :{
+    try {
+      if (!appStore.chosenCategory?.name) throw new Error("categoryId is null")
+      const question = `
+    Here are 5 common portuguese (portugal) words related to the ${appStore.chosenCategory.name} category and put it in array with items :{
     name: (the word),
     translate: (the translation),
     type : (the way you should read it en english)
@@ -87,7 +99,6 @@ const GptPage = observer(() => {
     I want you to return an array in js with those words items 
     (please return only the array)
     `
-    try {
       console.log("url   ", getUrl() + "/gpt")
       const res = await axios.post(
         getUrl() + "/gpt",
@@ -100,6 +111,7 @@ const GptPage = observer(() => {
       )
 
       console.log(res.data.message.content)
+      console.log(typeof res.data.message.content)
 
       const wordsAns: any[] = convertToArr(res.data.message.content)
 
@@ -132,6 +144,11 @@ const GptPage = observer(() => {
           <PrimaryButton onClick={askGptApi} className={`justify-normal`}>
             get words
           </PrimaryButton>
+          {chosenGptWords.length > 0 && (
+            <PrimaryButton onClick={addWords} className={`justify-normal`}>
+              add words
+            </PrimaryButton>
+          )}
           <div className="w-full h-screen flex justify-center  ">
             <ul className="w-full grid grid-cols-6 h-44">
               {gptWords.map((word, key) => (
@@ -140,6 +157,7 @@ const GptPage = observer(() => {
                     word={word}
                     addToChosen={addToChosen}
                     removeFromChosen={removeFromChosen}
+                    gptWords={gptWords}
                   />
                 </li>
               ))}
@@ -154,8 +172,12 @@ const GptPage = observer(() => {
 export default GptPage
 
 const WordGpt: FC<WordGptProps> = observer(
-  ({ word, removeFromChosen, addToChosen }) => {
+  ({ word, removeFromChosen, addToChosen, gptWords }) => {
     const [isChecked, setIsChecked] = useState(false)
+
+    useEffect(() => {
+      setIsChecked(false)
+    }, [gptWords])
 
     const handleChange = (word: any) => {
       const newIsChecked = !isChecked
