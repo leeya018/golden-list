@@ -44,28 +44,29 @@ const HomePage = observer(() => {
       {/* nav */}
 
       <Nav />
+      <div className="flex-1 overflow-auto h-full mb-40">
+        {/* categories */}
+        <CategoryList />
 
-      {/* categories */}
-      <CategoryList />
+        {/* mode */}
+        <ModeChoose />
+        {/* mode practice */}
+        {mainMode === WordsMode.practice && <ModeChoosePractice />}
+        {/*  words in practice */}
+        {mainMode === WordsMode.practice && (
+          <WordBoard practiceMode={practiceMode} />
+        )}
+        {/*  words */}
+        {mainMode !== WordsMode.practice && (
+          <div className="w-full border-2 flex  h-full">
+            <div id="container"></div>
+            <WordList />
 
-      {/* mode */}
-      <ModeChoose />
-      {/* mode practice */}
-      {mainMode === WordsMode.practice && <ModeChoosePractice />}
-      {/*  words in practice */}
-      {mainMode === WordsMode.practice && (
-        <WordBoard practiceMode={practiceMode} />
-      )}
-      {/*  words */}
-      {mainMode !== WordsMode.practice && (
-        <div className="w-full border-2 flex  h-full">
-          <div id="container"></div>
-          <WordList />
-
-          {mainMode === WordsMode.test && appStore.chosenWord && <WordTest />}
-          {mainMode === WordsMode.show && appStore.chosenWord && <WordView />}
-        </div>
-      )}
+            {mainMode === WordsMode.test && appStore.chosenWord && <WordTest />}
+            {mainMode === WordsMode.show && appStore.chosenWord && <WordView />}
+          </div>
+        )}
+      </div>
     </div>
   )
 })

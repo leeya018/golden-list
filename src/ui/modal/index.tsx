@@ -11,13 +11,16 @@ const Modal: FC<ModalProps> = observer(({ children }) => {
   return (
     <div
       onClick={() => ModalStore.closeModal()}
-      className="absolute inset-0 bg-color-black  z-50 h-full w-full border-2 bg-color-text-gray bg-opacity-30
+      className="absolute inset-0
+       bg-color-black  z-50 h-full w-full border-2
+       bg-color-text-gray bg-opacity-30
        flex items-center justify-center
      "
     >
       <div
         className="absolute border-2  
-       bg-color-white p-5 rounded-lg  flex items-center justify-center h-1/2  md:w-1/2 lg:w-1/3 "
+       bg-color-white  rounded-lg  flex items-center justify-center  h-auto p-10 "
+        onClick={(e) => e.stopPropagation()}
       >
         {children}
       </div>

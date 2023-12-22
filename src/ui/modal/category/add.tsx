@@ -56,7 +56,7 @@ const AddModal: FC<ModalProps> = observer(({ onCancel, onClick, title }) => {
           />
         </div>
         {/* buttons */}
-        <div className="relative bottom-0 flex items-center justify-end gap-2 font-semibold mt-auto">
+        <div className="relative bottom-0 flex items-center justify-end gap-2 font-semibold mt-10">
           <button
             onClick={onCancel}
             className="border-color-blue text-color-blue  border-2 rounded-md py-2 px-4 cursor-pointer"

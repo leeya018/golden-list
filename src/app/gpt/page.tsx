@@ -65,13 +65,18 @@ const GptPage = observer(() => {
     setChosenGptWords(newWordsChosen)
   }
   const convertToArr = (jsonString: string) => {
-    const array = JSON.parse(
-      jsonString
-        .replace(/name/g, '"name"')
-        .replace(/translate/g, '"translate"')
-        .replace(/type/g, '"type"')
-    )
-    return array
+    let array
+    try {
+      array = JSON.parse(
+        jsonString
+          .replace(/name/g, '"name"')
+          .replace(/translate/g, '"translate"')
+          .replace(/type/g, '"type"')
+      )
+      return array
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   const addWords = async () => {
@@ -90,7 +95,7 @@ const GptPage = observer(() => {
       if (wordsAmount === 0)
         throw new Error("word amount must be greater than 0")
       const question = `
-    Here are ${wordsAmount} common portuguese (portugal) words related to the ${appStore.chosenCategory.name} category and put it in array with items :{
+    Here are ${wordsAmount} common hebrew words related to the ${appStore.chosenCategory.name} category and put it in array with items :{
     name: (the word),
     translate: (the translation),
     type : (the way you should read it en english)

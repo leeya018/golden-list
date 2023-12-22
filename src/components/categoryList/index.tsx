@@ -8,6 +8,11 @@ import useCategories from "./hooks/useCategories"
 import CategoryItem from "../categoryItem"
 import filterStore from "@/mobx/filterStore"
 import appStore from "@/mobx/appStore"
+import { Timestamp } from "firebase/firestore"
+import { FaPlusSquare } from "react-icons/fa"
+import AddModal from "@/ui/modal/category/add"
+import { ModalStore } from "@/mobx/modalStore"
+import { modals } from "@/util"
 
 const CategoryList: FC = observer(({}) => {
   const { isLoading, setIsLoading, user } = useCategories()
@@ -31,6 +36,17 @@ const CategoryList: FC = observer(({}) => {
   }
   return (
     <div className="w-full flex justify-center items-center">
+      {ModalStore.modalName === modals.addCategory && (
+        <AddModal
+          onCancel={() => {
+            ModalStore.closeModal()
+          }}
+          onClick={(name: string, chosenColor: string) =>
+            appStore.addCategory(user, name, chosenColor)
+          }
+          title={"Add Category"}
+        />
+      )}
       <FaChevronLeft className="cursor-pointer" onClick={scrollLeft} />
       <ul
         // onScroll={handleScroll}
@@ -49,6 +65,11 @@ const CategoryList: FC = observer(({}) => {
           ))}
       </ul>
       <FaChevronRight className="cursor-pointer" onClick={scrollRight} />
+      <FaPlusSquare
+        size={25}
+        onClick={() => ModalStore.openModal(modals.addCategory)}
+        className="cursor-pointer text-color-blue"
+      />
     </div>
   )
 })

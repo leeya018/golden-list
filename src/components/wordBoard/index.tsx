@@ -9,15 +9,16 @@ import WordPracticeItemHover from "../wordPracticeItem/hover"
 
 const WordBoard: FC<WordBoardProps> = observer(({ practiceMode }) => {
   return (
-    <div className="border-2 w-full h-screen p-2 ">
+    <div className="border-2 w-full   p-2 ">
       {appStore.words.length === 0 && (
         <div className="w-full text-center">List is Empty</div>
       )}
 
       <div
-        className="px-2 flex-1 overflow-y-auto w-full
-        h-screen grid grid-cols-6 "
+        className="px-2 w-full
+         grid grid-cols-6 gap-2"
       >
+        {/* {[...appStore.words, ...appStore.words, ...appStore.words].map( */}
         {[...appStore.words].map((word, key) => (
           <>
             {practiceMode === WordsPracticeMode.click && (

@@ -6,9 +6,12 @@ import {
   doc,
   setDoc,
   addDoc,
+  orderBy,
 } from "firebase/firestore"
 import { db } from "@/firebase"
 import { Category } from "./interfaces"
+import { sortCategoriesByDate } from "@/util"
+import { Order } from "@/components/wordsTable/hooks/interfaces"
 
 export const getCategories = async (user: any) => {
   const categoriesCollectionRef = collection(db, `users/${user.uid}/categories`)
@@ -19,7 +22,7 @@ export const getCategories = async (user: any) => {
     categories.push(category)
   })
 
-  return categories
+  return sortCategoriesByDate(categories, Order.desc)
 }
 
 export const editCategory = async (

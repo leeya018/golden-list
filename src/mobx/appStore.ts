@@ -166,6 +166,7 @@ class App {
       const docId = await API.addCategory(user, newCategory)
       const addedCategory = { id: docId, ...newCategory }
       this.categories = [addedCategory, ...this.categories]
+      this.chosenCategory = addedCategory
       console.log(toJS(docId))
       messageStore.setMessage("category added successfully", 200)
     } catch (error: any) {
