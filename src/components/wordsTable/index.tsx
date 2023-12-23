@@ -53,7 +53,7 @@ const WordsTable: FC<StickTableProps> = observer(({ categoryId }) => {
           onCancel={() => {
             ModalStore.closeModal()
           }}
-          onClick={(...rest) => appStore.addWord(user, categoryId, ...rest)}
+          onClick={(word: Word) => appStore.addWord(user, categoryId, word)}
           title={"Add Word"}
         />
       )}
@@ -62,7 +62,7 @@ const WordsTable: FC<StickTableProps> = observer(({ categoryId }) => {
           onCancel={() => {
             ModalStore.closeModal()
           }}
-          onEdit={(...rest) => appStore.editWord(user, categoryId, ...rest)}
+          onEdit={(word: Word) => appStore.editWord(user, categoryId, word)}
           onRemove={() => ModalStore.openModal(modals.confirmDeleteWord)}
           chosenWord={appStore?.chosenWord}
           title={"Edit Word"}

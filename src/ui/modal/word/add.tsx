@@ -31,7 +31,13 @@ const AddModal: FC<ModalProps> = observer(({ onCancel, onClick, title }) => {
   const handleClick = () => {
     if (!name) return
     const typeA = type ? type : name
-    onClick(name, translate, typeA, hint)
+    const newWord = {
+      name,
+      translate,
+      type: typeA,
+      hint,
+    }
+    onClick(newWord)
     onCancel()
   }
   return (

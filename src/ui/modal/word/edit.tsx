@@ -30,8 +30,15 @@ const EditModal: FC<ModalProps> = observer(
     } = useWordModal(chosenWord)
 
     const handleClick = () => {
-      if (!name) return
-      onEdit(chosenWord.id, name, translate, type, hint)
+      if (!name) throw new Error("There is no name")
+      const editedWord = {
+        id: chosenWord.id,
+        name,
+        translate,
+        type,
+        hint,
+      }
+      onEdit(editedWord)
       onCancel()
     }
     const handleRemove = () => {

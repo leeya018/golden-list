@@ -225,21 +225,11 @@ class App {
       messageStore.setMessage(error.message, 400)
     }
   }
-  addWord = async (
-    user: any,
-    categoryId: string,
-    name: string,
-    translate: string,
-    type: string,
-    hint: string
-  ) => {
+  addWord = async (user: any, categoryId: string, word: Word) => {
     try {
       const newWord: Word = {
-        name,
+        ...word,
         date: Timestamp.now(),
-        translate,
-        type,
-        hint,
         knows: 0,
       }
       const docId = await API_WORDS.addWord(user, categoryId, newWord)
