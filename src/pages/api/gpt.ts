@@ -23,7 +23,7 @@ handler.post(async (req: Request, res: Response) => {
         },
       ],
       temperature: 1,
-      max_tokens: 256,
+      max_tokens: 2000,
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0,
@@ -32,11 +32,11 @@ handler.post(async (req: Request, res: Response) => {
     // console.log("choises 1 ", completion)
     // console.log("choises 1 ", completion.choices)
     // console.log("choises 1 ", completion.choices[0])
-    const choice = completion.choices[0]
+    const content = completion.choices[0].message.content
     // const data = choice.message.content
-    console.log({ choice })
+    console.log({ content })
 
-    return res.status(200).json(choice)
+    return res.status(200).json(content)
   } catch (error) {
     return res.status(451).json(error.message)
   }

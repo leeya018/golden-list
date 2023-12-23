@@ -8,10 +8,10 @@ class Exam {
   }
 
   increaseCorrect = () => {
-    this.correct = this.correct + 1
+    this.correct += 1
   }
   increaseMistake = () => {
-    this.mistake = this.mistake + 1
+    this.mistake += 1
   }
   getScore = () => {
     if (this.correct + this.mistake === 0) return 0
