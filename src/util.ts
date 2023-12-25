@@ -132,3 +132,13 @@ export const getUrl = () => {
     ? process.env.NEXT_PUBLIC_BASIC_URL
     : process.env.NEXT_PUBLIC_BASIC_URL_PRODUCTION
 }
+export const parseJSON = (jsonString: string) => {
+  try {
+    return JSON.parse(jsonString)
+  } catch (e) {
+    console.error("Error parsing JSON:", e)
+    return null // or return an empty object/array as a fallback
+  }
+}
+
+export const Language = "filipino (Tagalo)"

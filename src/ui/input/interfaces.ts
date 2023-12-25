@@ -8,4 +8,5 @@ export type InputPropType = {
   value: any
   placeHolder: string
   inputRef?: React.RefObject<HTMLInputElement>
+  onKeyDown?: any
 }

@@ -6,7 +6,7 @@ import Nav from "@/components/nav"
 import CategoryList from "@/components/categoryList"
 import WordList from "@/components/wordList"
 import PrimaryButton from "@/ui/button/primary"
-import { getUrl } from "@/util"
+import { Language, getUrl, parseJSON } from "@/util"
 import appStore from "@/mobx/appStore"
 import { UserAuth } from "@/context/AuthContext"
 import Alerts from "@/ui/Alerts"
@@ -14,82 +14,87 @@ import axios from "axios"
 import WordGpt from "./word"
 import PrimaryInput from "@/ui/input/primary"
 import InputCheckbox from "@/ui/inputBox/checbox"
+import GptChoose from "./choose"
+import useGpt, { Modes } from "./hooks/useGpt"
+import AllWordsGpt from "./allWords"
+import ByWordGpt from "./byWord"
 
-const localGPT = [
-  {
-    name: "Kamusta",
-    translate: "Hello",
-    type: "kam-UH-sta",
-  },
-  {
-    name: "Magandang umaga",
-    translate: "Good morning",
-    type: "ma-gan-DANG oo-MA-ga",
-  },
-  {
-    name: "Magandang tanghali",
-    translate: "Good noon",
-    type: "ma-gan-DANG tang-HA-li",
-  },
-  {
-    name: "Magandang hapon",
-    translate: "Good afternoon",
-    type: "ma-gan-DANG ha-PON",
-  },
-  {
-    name: "Magandang gabi",
-    translate: "Good evening",
-    type: "ma-gan-DANG GA-bi",
-  },
-  {
-    name: "Paalam",
-    translate: "Goodbye",
-    type: "pa-A-LAM",
-  },
-  {
-    name: "Salamat",
-    translate: "Thank you",
-    type: "sa-LA-mat",
-  },
-  {
-    name: "Oo",
-    translate: "Yes",
-    type: "OO",
-  },
-  {
-    name: "Hindi",
-    translate: "No",
-    type: "HIN-di",
-  },
-  {
-    name: "Paki",
-    translate: "Please",
-    type: "PA-ki",
-  },
-  {
-    name: "Pasensiya",
-    translate: "Sorry",
-    type: "pa-SEN-si-ya",
-  },
-  {
-    name: "Ingat",
-    translate: "Take care",
-    type: "in-GAT",
-  },
-  {
-    name: "Tawagan mo ako",
-    translate: "Call me",
-    type: "ta-wa-GAN mo A-KO",
-  },
-  {
-    name: "Paano ka?",
-    translate: "How are you?",
-    type: "PA-an-o ka",
-  },
-]
+// const localGPT = [
+//   {
+//     name: "Kamusta",
+//     translate: "Hello",
+//     type: "kam-UH-sta",
+//   },
+//   {
+//     name: "Magandang umaga",
+//     translate: "Good morning",
+//     type: "ma-gan-DANG oo-MA-ga",
+//   },
+//   {
+//     name: "Magandang tanghali",
+//     translate: "Good noon",
+//     type: "ma-gan-DANG tang-HA-li",
+//   },
+//   {
+//     name: "Magandang hapon",
+//     translate: "Good afternoon",
+//     type: "ma-gan-DANG ha-PON",
+//   },
+//   {
+//     name: "Magandang gabi",
+//     translate: "Good evening",
+//     type: "ma-gan-DANG GA-bi",
+//   },
+//   {
+//     name: "Paalam",
+//     translate: "Goodbye",
+//     type: "pa-A-LAM",
+//   },
+//   {
+//     name: "Salamat",
+//     translate: "Thank you",
+//     type: "sa-LA-mat",
+//   },
+//   {
+//     name: "Oo",
+//     translate: "Yes",
+//     type: "OO",
+//   },
+//   {
+//     name: "Hindi",
+//     translate: "No",
+//     type: "HIN-di",
+//   },
+//   {
+//     name: "Paki",
+//     translate: "Please",
+//     type: "PA-ki",
+//   },
+//   {
+//     name: "Pasensiya",
+//     translate: "Sorry",
+//     type: "pa-SEN-si-ya",
+//   },
+//   {
+//     name: "Ingat",
+//     translate: "Take care",
+//     type: "in-GAT",
+//   },
+//   {
+//     name: "Tawagan mo ako",
+//     translate: "Call me",
+//     type: "ta-wa-GAN mo A-KO",
+//   },
+//   {
+//     name: "Paano ka?",
+//     translate: "How are you?",
+//     type: "PA-an-o ka",
+//   },
+// ]
 const GptPage = observer(() => {
+  const { mode, setMode } = useGpt()
   const { user } = UserAuth()
-  const [gptWords, setGptWords] = useState([...localGPT])
+  const [gptWords, setGptWords] = useState([])
   const [wordsAmount, setWordsAmount] = useState(5)
   // const [chosenGptWords, setChosenGptWords] = useState([])
 
@@ -105,15 +110,6 @@ const GptPage = observer(() => {
 
   const addIsChecked = (arr: any[]) => {
     return arr.map((item) => ({ ...item, isChecked: false }))
-  }
-
-  function parseJSON(jsonString: string) {
-    try {
-      return JSON.parse(jsonString)
-    } catch (e) {
-      console.error("Error parsing JSON:", e)
-      return null // or return an empty object/array as a fallback
-    }
   }
 
   const addWords = async () => {
@@ -144,7 +140,8 @@ const GptPage = observer(() => {
       if (wordsAmount === 0)
         throw new Error("word amount must be greater than 0")
       const question = `
-    Here are ${wordsAmount} common filipino (Tagalo) words related to the ${appStore.chosenCategory.name} category and put it in array with items :{
+    Here are ${wordsAmount} common 
+    ${Language} words related to the ${appStore.chosenCategory.name} category and put it in array with items :{
     name: (the word),
     translate: (the translation),
     type : (the way you should read it en english)
@@ -210,55 +207,24 @@ const GptPage = observer(() => {
       {/* categories */}
       <CategoryList />
       {/* words */}
-
+      <GptChoose mode={mode} setMode={setMode} />
       <div className="w-full h-screen flex justify-between">
         <WordList />
+        {mode === Modes.all && (
+          <AllWordsGpt
+            gptWords={gptWords}
+            setWordsAmount={setWordsAmount}
+            wordsAmount={wordsAmount}
+            getChosenWords={getChosenWords}
+            askGptApi={askGptApi}
+            allChecked={allChecked}
+            handleSelectAll={handleSelectAll}
+            addWords={addWords}
+            handleCheck={handleCheck}
+          />
+        )}
 
-        <div className="flex flex-col items-start gap-2  w-full">
-          <div className="flex gap-2">
-            <PrimaryInput
-              className="w-24"
-              type={"number"}
-              onChange={(e) => setWordsAmount(parseInt(e.target.value))}
-              value={wordsAmount}
-              placeHolder={"wordsAmount"}
-            />
-            <PrimaryButton
-              onClick={askGptApi}
-              className={`justify-normal`}
-              disabled={wordsAmount <= 0}
-            >
-              get words
-            </PrimaryButton>
-            {getChosenWords().length > 0 && (
-              <PrimaryButton onClick={addWords} className={`justify-normal`}>
-                add words
-              </PrimaryButton>
-            )}
-          </div>
-          <div className="w-full h-screen flex flex-col justify-start  ">
-            {gptWords.length > 0 && (
-              <div>
-                <label htmlFor="select all ">select all </label>
-                <InputCheckbox
-                  checked={allChecked}
-                  onChange={handleSelectAll}
-                />
-              </div>
-            )}
-            <ul className="w-full grid grid-cols-6 h-44 gap-2">
-              {gptWords.map((word, key) => (
-                <li key={key}>
-                  <WordGpt
-                    word={word}
-                    checked={word.isChecked}
-                    onChange={() => handleCheck(word.name)}
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        {mode === Modes.byOne && <ByWordGpt />}
       </div>
     </div>
   )

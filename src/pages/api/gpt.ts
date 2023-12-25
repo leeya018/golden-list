@@ -27,6 +27,7 @@ handler.post(async (req: Request, res: Response) => {
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0,
+      response_format: { type: "json_object" },
     })
 
     // console.log("choises 1 ", completion)
@@ -38,7 +39,7 @@ handler.post(async (req: Request, res: Response) => {
 
     return res.status(200).json(content)
   } catch (error) {
-    return res.status(451).json(error.message)
+    return res.status(500).json(error.message)
   }
 })
 

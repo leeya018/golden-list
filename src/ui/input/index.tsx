@@ -9,6 +9,7 @@ const Input: FC<InputPropType> = ({
   value,
   placeHolder,
   inputRef = null,
+  onKeyDown = () => {},
 }) => {
   return (
     <input
@@ -19,6 +20,7 @@ const Input: FC<InputPropType> = ({
       value={value}
       placeholder={placeHolder}
       ref={inputRef}
+      onKeyDown={onKeyDown}
     />
   )
 }
