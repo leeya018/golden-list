@@ -99,6 +99,13 @@ export const sortWordsByDate = (words: Word[], order: string) => {
   return sortedSticks
 }
 
+export const isSameDay = (dateA: Timestamp, dateB: Timestamp) => {
+  return getFullDate(dateA) === getFullDate(dateB)
+}
+export const getFullDate = (date: Timestamp) => {
+  return moment(date).format("MM/DD/YYYY")
+}
+
 export const sleep = (time: number) =>
   new Promise((resolve) =>
     setTimeout(() => {

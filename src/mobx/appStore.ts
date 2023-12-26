@@ -1,12 +1,13 @@
 import { Category } from "@/api/categories/interfaces"
-import { Word } from "@/api/words/interfaces"
+import { Exam, Word } from "@/api/words/interfaces"
 import { Timestamp } from "firebase/firestore"
 import { makeAutoObservable, toJS } from "mobx"
 import * as API from "@/api/categories"
 import * as API_WORDS from "@/api/words"
 import { messageStore } from "./messageStore"
 import Error from "next/error"
-import { UserAuth } from "@/context/AuthContext"
+import { makePersistable } from "mobx-persist-store"
+
 const a = [
   {
     id: "89sl89234lkjt984jkltc8934",
@@ -122,6 +123,7 @@ const a = [
     type: "Napitok",
   },
 ]
+
 class App {
   categories: Category[] = []
   words: Word[] = []
@@ -130,6 +132,11 @@ class App {
 
   constructor() {
     makeAutoObservable(this)
+    makePersistable(this, {
+      name: "AppStore",
+      properties: ["words"],
+      storage: window.localStorage,
+    })
   }
 
   setChosenWord = (w: Word) => {
@@ -231,6 +238,7 @@ class App {
         ...word,
         date: Timestamp.now(),
         knows: 0,
+        examResults: [],
       }
       const docId = await API_WORDS.addWord(user, categoryId, newWord)
       const addedWord = { id: docId, ...newWord }
@@ -251,6 +259,7 @@ class App {
 
         newW.date = Timestamp.now()
         newW.knows = 0
+        newW.examResults = []
         newWords.push(newW)
       })
 
@@ -288,6 +297,60 @@ class App {
       messageStore.setMessage("word edited successfully", 200)
     } catch (error: any) {
       messageStore.setMessage(error.message, 400)
+    }
+  }
+  editLocalWord = async (word: Word, isSuccess: boolean) => {
+    try {
+      this.words = this.words.map((w) => {
+        if (w.id === word.id) {
+          // if (!word.examResults) throw new Error("examResults is missing")
+          let examResults = !word.examResults ? [] : [...word.examResults]
+          const examRes: Exam = { date: Timestamp.now(), isSuccess }
+          examResults.push(examRes)
+          return { ...word, examResults }
+        }
+        return w
+      })
+      messageStore.setMessage("word edited successfully", 200)
+    } catch (error: any) {
+      messageStore.setMessage(error.message, 400)
+    }
+  }
+  // when clicke on the done test button
+  updateWordsExam = async (user: any) => {
+    // const editedWord = { wordId, name, translate, type, hint }
+    try {
+      if (!this.chosenCategory) throw new Error("chosenCategory is missing")
+      const isSuccess = await API_WORDS.updateWords(
+        user,
+        this.chosenCategory.id,
+        this.words
+      )
+      if (isSuccess) {
+        messageStore.setMessage("words updated successfully", 200)
+      } else {
+        messageStore.setMessage("Cannot update the words", 400)
+      }
+    } catch (error: any) {
+      messageStore.setMessage(error.message, 500)
+    }
+  }
+  resetWordsExam = async (user: any) => {
+    // const editedWord = { wordId, name, translate, type, hint }
+    try {
+      if (!this.chosenCategory) throw new Error("chosenCategory is missing")
+      const isSuccess = await API_WORDS.resetWordsExam(
+        user,
+        this.chosenCategory.id,
+        this.words
+      )
+      if (isSuccess) {
+        messageStore.setMessage("words updated successfully", 200)
+      } else {
+        messageStore.setMessage("Cannot update the words", 400)
+      }
+    } catch (error: any) {
+      messageStore.setMessage(error.message, 500)
     }
   }
 }

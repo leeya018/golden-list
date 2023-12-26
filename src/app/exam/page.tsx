@@ -15,7 +15,7 @@ import WordList from "@/components/wordList"
 import PrimaryButton from "@/ui/button/primary"
 import WordTest from "@/components/wordTest"
 import ModeChoose from "@/components/modeChoose"
-import { ExamQuestionsAmount, WordsMode, modals } from "@/util"
+import { ExamQuestionsAmount, WordsMode, isSameDay, modals } from "@/util"
 import WordView from "@/components/wordView"
 import WordExam from "@/components/wordExam"
 import appStore from "@/mobx/appStore"
@@ -23,15 +23,50 @@ import examStore from "@/mobx/examStore"
 import { ModalStore } from "@/mobx/modalStore"
 import SuccessModal from "@/ui/modal/success"
 import useSound from "@/hooks/useSound"
+import { UserAuth } from "@/context/AuthContext"
+import Title from "@/ui/title"
 
 const ExamPage = observer(() => {
   const { playSound, stopSound } = useSound("/sounds/win.wav")
+  const { user } = UserAuth()
+
   useEffect(() => {
     if (examStore.correct + examStore.mistake === appStore.words.length) {
       ModalStore.openModal(modals.success)
-      playSound()
+      // playSound()
     }
   }, [examStore.correct, examStore.mistake])
+
+  const isExamDone = () => {
+    const doneWords = appStore.words.filter((word) => {
+      if (!word.examResults) throw new Error("ExamResults array is empty")
+      const len = word.examResults?.length
+      if (len !== 0) {
+        if (isSameDay(word.examResults[len - 1].date, Timestamp.now())) {
+          return word
+        }
+      }
+    })
+    return appStore.words.length === doneWords.length
+  }
+  const getDayNum = () => {
+    const firstWord = appStore.words[0]
+    if (!firstWord) return 1
+    if (!firstWord.examResults) return 1
+    const len = (firstWord.examResults || []).length
+    return len + 1
+  }
+  const getWordsByDay = (dayNum: number) => {
+    return appStore.words.filter((word) => {
+      if (!word.examResults) return 1 === dayNum
+      const len = word.examResults.length
+      if (len === 0) return true
+      const lastItem = word.examResults[len - 1]
+      return (len < dayNum && !lastItem.isSuccess) || len === dayNum
+    })
+  }
+
+  const dayNum = getDayNum()
 
   return (
     <div className="w-full h-[100vh] ">
@@ -52,12 +87,29 @@ const ExamPage = observer(() => {
       <CategoryList />
 
       {/*  words */}
-      <div className="w-full border-2 flex  mx-auto h-full">
+      <div className="w-full border-2 flex  mx-auto h-full flex-col">
+        {/* {isExamDone() && ( */}
+        <PrimaryButton
+          onClick={() => appStore.updateWordsExam(user)}
+          className={`justify-normal`}
+        >
+          Save Exam results
+        </PrimaryButton>
+        {/* )} */}
+        <PrimaryButton
+          onClick={() => appStore.resetWordsExam(user)}
+          className={`justify-normal bg-color-red`}
+        >
+          reset Exam results
+        </PrimaryButton>
+        <Title>Day Num: {dayNum}</Title>
+
         <ul
           className="overflow-y-auto  flex 
             flex-wrap items-start justify-center gap-2"
         >
-          {appStore.words.map((word, key) => (
+          {getWordsByDay(dayNum).map((word, key) => (
+            // {appStore.words.map((word, key) => (
             <WordExam key={key} word={word} />
           ))}
         </ul>

@@ -8,4 +8,10 @@ export type Word = {
   hint: string
   knows: number
   date?: Timestamp
+  examResults?: Exam[]
+}
+
+export type Exam = {
+  date: Timestamp
+  isSuccess: boolean
 }

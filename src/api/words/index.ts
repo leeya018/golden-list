@@ -89,20 +89,46 @@ export const removeWord = async (
   return docRef.id
 }
 
-//   export const editStickAnswer = async (
-//     user: any,
-//     categoryId: string,
-//     chosenStick: Word,
-//     isKnow: boolean
-//   ) => {
-//     const docRef = doc(
-//       db,
-//       `users/${user.uid}/categories/${categoryId}/words`,
-//       chosenStick.id
-//     )
-//     await setDoc(
-//       docRef,
-//       { answers: arrayUnion({ date: new Date(), isKnow }) },
-//       { merge: true }
-//     )
-//   }
+export const updateWords = async (
+  user: any,
+  categoryId: string,
+  words: Word[]
+) => {
+  const batch = writeBatch(db)
+
+  if (words.length === 0) throw new Error("No words")
+  words.forEach((word) => {
+    const docRef = doc(
+      db,
+      `users/${user.uid}/categories/${categoryId}/words`,
+      word.id
+    )
+    batch.update(docRef, {
+      examResults: word.examResults ? word.examResults : [],
+    })
+  })
+  await batch.commit()
+  return true
+}
+
+export const resetWordsExam = async (
+  user: any,
+  categoryId: string,
+  words: Word[]
+) => {
+  const batch = writeBatch(db)
+
+  if (words.length === 0) throw new Error("No words")
+  words.forEach((word) => {
+    const docRef = doc(
+      db,
+      `users/${user.uid}/categories/${categoryId}/words`,
+      word.id
+    )
+    batch.update(docRef, {
+      examResults: [],
+    })
+  })
+  await batch.commit()
+  return true
+}

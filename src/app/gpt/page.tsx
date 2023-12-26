@@ -98,16 +98,6 @@ const GptPage = observer(() => {
   const [wordsAmount, setWordsAmount] = useState(5)
   // const [chosenGptWords, setChosenGptWords] = useState([])
 
-  useEffect(() => {
-    const a = addIsChecked(gptWords)
-    console.log(a)
-    setGptWords(a)
-  }, [])
-
-  useEffect(() => {
-    console.log(gptWords)
-  }, [gptWords])
-
   const addIsChecked = (arr: any[]) => {
     return arr.map((item) => ({ ...item, isChecked: false }))
   }
@@ -147,7 +137,7 @@ const GptPage = observer(() => {
     type : (the way you should read it en english)
     }
     I want you to return an array in js with those words items 
-    (please return only the array)
+    (please return only the array without any other explanation)
     `
       console.log("url   ", getUrl() + "/gpt")
       const res = await axios.post(
