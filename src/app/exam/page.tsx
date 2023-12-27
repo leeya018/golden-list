@@ -25,10 +25,12 @@ import SuccessModal from "@/ui/modal/success"
 import useSound from "@/hooks/useSound"
 import { UserAuth } from "@/context/AuthContext"
 import Title from "@/ui/title"
+import SavedScoreModal from "@/ui/modal/savedScore"
 
 const ExamPage = observer(() => {
   const { playSound, stopSound } = useSound("/sounds/win.wav")
   const { user } = UserAuth()
+  const [isSaved, setIsSaved] = useState(true)
 
   useEffect(() => {
     if (examStore.correct + examStore.mistake === appStore.words.length) {
@@ -81,6 +83,15 @@ const ExamPage = observer(() => {
           message={"your score is : " + examStore.getScore()}
         />
       )}
+      {modals.examSaved === ModalStore.modalName && (
+        <SavedScoreModal
+          onClose={() => {
+            ModalStore.closeModal()
+          }}
+          title={"Exam score saved"}
+          message={"saved"}
+        />
+      )}
       {/* nav */}
       <Nav />
       {/* categories */}
@@ -90,8 +101,15 @@ const ExamPage = observer(() => {
       <div className="w-full border-2 flex  mx-auto h-full flex-col">
         {/* {isExamDone() && ( */}
         <PrimaryButton
-          onClick={() => appStore.updateWordsExam(user)}
-          className={`justify-normal`}
+          onClick={async () => {
+            await appStore.updateWordsExam(user)
+            ModalStore.openModal(modals.examSaved)
+            setIsSaved(true)
+          }}
+          disabled={isSaved}
+          className={`justify-normal ${
+            isSaved ? "bg-color-disabled-gray" : "bg-color-blue"
+          }`}
         >
           Save Exam results
         </PrimaryButton>
@@ -110,7 +128,7 @@ const ExamPage = observer(() => {
         >
           {getWordsByDay(dayNum).map((word, key) => (
             // {appStore.words.map((word, key) => (
-            <WordExam key={key} word={word} />
+            <WordExam key={key} word={word} setIsSaved={setIsSaved} />
           ))}
         </ul>
       </div>

@@ -6,6 +6,7 @@ import {
 import { Category } from "./api/categories/interfaces"
 import moment from "moment"
 import { Word } from "./api/words/interfaces"
+import { toJS } from "mobx"
 
 export const modals = {
   addCategory: "addCategory",
@@ -16,6 +17,7 @@ export const modals = {
   success: "success",
   confirmDeleteCategory: "confirmDeleteCategory",
   confirmDeleteWord: "confirmDeleteWord",
+  examSaved: "examSaved",
 }
 
 export const getResponse = (message: string, data = "") => {
@@ -102,8 +104,21 @@ export const sortWordsByDate = (words: Word[], order: string) => {
 export const isSameDay = (dateA: Timestamp, dateB: Timestamp) => {
   return getFullDate(dateA) === getFullDate(dateB)
 }
+export const convertPlainToTimestamp = (plainTimestamp: Timestamp) => {
+  const firebaseTimestamp = new Timestamp(
+    plainTimestamp.seconds,
+    plainTimestamp.nanoseconds
+  )
+  return firebaseTimestamp
+}
 export const getFullDate = (date: Timestamp) => {
-  return moment(date).format("MM/DD/YYYY")
+  // console.log(toJS(date))
+
+  // console.log(Timestamp.now())
+  // console.log(Timestamp.now().toDate())
+  const momentDate = moment(convertPlainToTimestamp(date).toDate())
+  const strDate = momentDate.format("MM/DD/YYYY")
+  return strDate
 }
 
 export const sleep = (time: number) =>

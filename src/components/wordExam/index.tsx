@@ -9,10 +9,8 @@ import { Word } from "@/api/words/interfaces"
 import { Timestamp } from "firebase/firestore"
 import { isSameDay } from "@/util"
 
-const WordExam: FC<WordExamProps> = observer(({ word }) => {
+const WordExam: FC<WordExamProps> = observer(({ word, setIsSaved }) => {
   const [myGuess, setMyGuess] = useState<string>("")
-
-  const [success, setSuccess] = useState<number>(0) // 0- none  1 - success -1 - fail
 
   const isEqual = (trans1: string, trans2: string) => {
     return trans1.toLowerCase() === trans2.toLowerCase()
@@ -32,12 +30,11 @@ const WordExam: FC<WordExamProps> = observer(({ word }) => {
     if (isEqual(myGuess, word.translate)) {
       examStore.increaseCorrect()
       appStore.editLocalWord(word, true)
-      setSuccess(1)
     } else {
       examStore.increaseMistake()
       appStore.editLocalWord(word, false)
-      setSuccess(-1)
     }
+    setIsSaved(false)
   }
   const isLock = (word: Word) => {
     if (!word.examResults) return false
