@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react"
 import { UserAuth } from "@/context/AuthContext"
 import { NavNames } from "@/util"
 import { useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
+import navStore from "@/mobx/navStore"
 
 const useNav = () => {
-  const [navName, setNavName] = useState<string>(NavNames.home)
   const router = useRouter()
   const { user, logOut } = UserAuth()
   const [isLoading, setIsLoading] = useState<Boolean>(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     if (!user) {
@@ -15,7 +17,15 @@ const useNav = () => {
     }
   }, [user])
 
-  return { navName, setNavName, router, user, logOut, isLoading, setIsLoading }
+  useEffect(() => {
+    console.log("pathname", pathname)
+    const path = pathname?.slice(1)
+    if (path) {
+      navStore.setNav(path)
+    }
+  }, [pathname])
+
+  return { router, user, logOut, isLoading, setIsLoading }
 }
 
 export default useNav
