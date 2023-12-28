@@ -11,26 +11,30 @@ import Title from "@/ui/title"
 import appStore from "@/mobx/appStore"
 import { Language, getUrl, parseJSON } from "@/util"
 import axios from "axios"
+import WordGpt from "../word"
+import useGpt from "../hooks/useGpt"
 
-const ByWordGpt: FC<ByWordGptProps> = observer(({}) => {
-  const [translate, setTranslate] = useState("")
-  const [translateList, setTranslateList] = useState([])
+const ByWordGpt: FC<ByWordGptProps> = observer(
+  ({ chosenWords, addWords, setGptWords, addIsChecked }) => {
+    const [translate, setTranslate] = useState("")
+    const [translateList, setTranslateList] = useState([])
 
-  const addWord = () => {
-    setTranslateList((prev) => [...prev, translate])
-    setTranslate("")
-  }
-  const removeItem = (trans: string) => {
-    const newList = translateList.filter((t) => t !== trans)
-    setTranslateList(newList)
-  }
-  const askGptApi = async () => {
-    try {
-      if (!appStore.chosenCategory?.name) throw new Error("categoryId is null")
-      if (translateList.length === 0)
-        throw new Error("translateList amount must be greater than 0")
-      const translateListStr = translateList.join(",")
-      const question = ` take this translateList : ${translateListStr} .
+    const addWord = () => {
+      setTranslateList((prev) => [...prev, translate])
+      setTranslate("")
+    }
+    const removeItem = (trans: string) => {
+      const newList = translateList.filter((t) => t !== trans)
+      setTranslateList(newList)
+    }
+    const askGptApi = async () => {
+      try {
+        if (!appStore.chosenCategory?.name)
+          throw new Error("categoryId is null")
+        if (translateList.length === 0)
+          throw new Error("translateList amount must be greater than 0")
+        const translateListStr = translateList.join(",")
+        const question = ` take this translateList : ${translateListStr} .
          from that translateList create a new array of wordsItems.
         each wordItem will have those fields:
             translate: (a word from the translateList ),
@@ -38,74 +42,89 @@ const ByWordGpt: FC<ByWordGptProps> = observer(({}) => {
             type : (the way you should read the wordName in  english)
     I want you to return an array in js with those words items 
     (please return only the array - no code)
-        `
-      console.log("url   ", getUrl() + "/gpt")
-      const res = await axios.post(
-        getUrl() + "/gpt",
-        { question },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+    (please return only the array without any other explanation, and return the field names with double brackets. example: 
+      [{
+        "name": "...",
+        "translate": "...",
+        "type": "..."
+        },...]
       )
+        `
+        console.log("url   ", getUrl() + "/gpt")
+        const res = await axios.post(
+          getUrl() + "/gpt",
+          { question },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
 
-      console.log(res.data)
-      console.log(typeof res.data)
+        console.log(res.data)
+        console.log(typeof res.data)
 
-      const wordsAns: any[] = parseJSON(res.data)
+        const wordsAns: any[] = parseJSON(res.data)
 
-      console.log(typeof wordsAns)
-      console.log({ wordsAns })
-    } catch (error) {
-      console.error("Error fetching user:", error)
+        console.log(typeof wordsAns)
+        const wordsAnsWithChecked = addIsChecked(wordsAns)
+        setGptWords(wordsAnsWithChecked)
+      } catch (error) {
+        console.error("Error fetching user:", error)
+      }
     }
-  }
 
-  const handleKeyDown = (e) => {
-    if (e.code === "Enter") {
-      addWord()
+    const handleKeyDown = (e) => {
+      if (e.code === "Enter") {
+        addWord()
+      }
     }
-  }
-  return (
-    <div className="flex flex-col items-start gap-2  w-full">
-      <Title>just choose the translation in English</Title>
-      <PrimaryInput
-        onKeyDown={handleKeyDown}
-        className="w-24"
-        type={"string"}
-        onChange={(e) => setTranslate(e.target.value)}
-        value={translate}
-        placeHolder={"add word translate (english)"}
-      />
-      <PrimaryButton
-        onClick={addWord}
-        className={`justify-normal`}
-        disabled={translate === ""}
-      >
-        add word
-      </PrimaryButton>
-      <PrimaryButton
-        onClick={askGptApi}
-        className={`justify-normal`}
-        disabled={translateList.length === 0}
-      >
-        Generate full words
-      </PrimaryButton>
+    return (
+      <div className="flex flex-col items-start gap-2  w-full">
+        <Title>just choose the translation in English</Title>
+        <button onClick={() => setWordsAmount(11)}>change num </button>
+        <PrimaryInput
+          onKeyDown={handleKeyDown}
+          className="w-24"
+          type={"string"}
+          onChange={(e) => setTranslate(e.target.value)}
+          value={translate}
+          placeHolder={"add word translate (english)"}
+        />
+        <PrimaryButton
+          onClick={addWord}
+          className={`justify-normal`}
+          disabled={translate === ""}
+        >
+          add word
+        </PrimaryButton>
+        <PrimaryButton
+          onClick={askGptApi}
+          className={`justify-normal`}
+          disabled={translateList.length === 0}
+        >
+          Generate full words
+        </PrimaryButton>
+        {chosenWords.length > 0 && (
+          <PrimaryButton onClick={addWords} className={`justify-normal`}>
+            add words
+          </PrimaryButton>
+        )}
 
-      <ul>
-        {translateList.map((t) => (
-          <li key={t} className="flex items-center gap-2">
-            <FaRegTrashAlt
-              className="cursor-pointer hover:scale-105"
-              onClick={() => removeItem(t)}
-            />{" "}
-            <div>{t}</div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-})
+        <ul>
+          {translateList.map((t) => (
+            <li key={t} className="flex items-center gap-2">
+              <FaRegTrashAlt
+                className="cursor-pointer hover:scale-105"
+                onClick={() => removeItem(t)}
+              />{" "}
+              <div>{t}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+)
 
 export default ByWordGpt

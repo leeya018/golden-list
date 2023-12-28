@@ -22,6 +22,7 @@ handler.post(async (req: Request, res: Response) => {
           content: `${question}`,
         },
       ],
+
       temperature: 1,
       max_tokens: 2000,
       top_p: 1,

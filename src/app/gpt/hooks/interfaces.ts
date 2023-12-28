@@ -1,4 +1,5 @@
 import { Word } from "@/api/words/interfaces"
+import React from "react"
 
 export type WordGptProps = {
   word: any
@@ -11,10 +12,23 @@ export type GptChooseProps = {
   setMode: (mode: boolean) => void
 }
 export type AllWordsGptProps = {
-  // mode: string
-  // setMode: (mode: string) => void
+  addIsChecked: (words: Word[]) => any
+  getChosenWords: () => any
+  addWords: () => void
+  chosenWords: Word[]
+  setGptWords: React.Dispatch<React.SetStateAction<Word[]>>
+  wordsAmount: number
+  setWordsAmount: React.Dispatch<React.SetStateAction<number>>
 }
 export type ByWordGptProps = {
-  // mode: string
-  // setMode: (mode: string) => void
+  addIsChecked: () => any
+  addWords: () => void
+  chosenWords: Word[]
+  setGptWords: React.Dispatch<React.SetStateAction<Word[]>>
+}
+export type GptWordsProps = {
+  gptWords: Word[]
+  handleCheck: (name: string) => void
+  handleSelectAll: () => void
+  allChecked: boolean
 }

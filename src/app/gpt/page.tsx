@@ -18,85 +18,31 @@ import GptChoose from "./choose"
 import useGpt, { Modes } from "./hooks/useGpt"
 import AllWordsGpt from "./allWords"
 import ByWordGpt from "./byWord"
+import GptWords from "./words"
+import { Word } from "@/api/words/interfaces"
 
-// const localGPT = [
-//   {
-//     name: "Kamusta",
-//     translate: "Hello",
-//     type: "kam-UH-sta",
-//   },
-//   {
-//     name: "Magandang umaga",
-//     translate: "Good morning",
-//     type: "ma-gan-DANG oo-MA-ga",
-//   },
-//   {
-//     name: "Magandang tanghali",
-//     translate: "Good noon",
-//     type: "ma-gan-DANG tang-HA-li",
-//   },
-//   {
-//     name: "Magandang hapon",
-//     translate: "Good afternoon",
-//     type: "ma-gan-DANG ha-PON",
-//   },
-//   {
-//     name: "Magandang gabi",
-//     translate: "Good evening",
-//     type: "ma-gan-DANG GA-bi",
-//   },
-//   {
-//     name: "Paalam",
-//     translate: "Goodbye",
-//     type: "pa-A-LAM",
-//   },
-//   {
-//     name: "Salamat",
-//     translate: "Thank you",
-//     type: "sa-LA-mat",
-//   },
-//   {
-//     name: "Oo",
-//     translate: "Yes",
-//     type: "OO",
-//   },
-//   {
-//     name: "Hindi",
-//     translate: "No",
-//     type: "HIN-di",
-//   },
-//   {
-//     name: "Paki",
-//     translate: "Please",
-//     type: "PA-ki",
-//   },
-//   {
-//     name: "Pasensiya",
-//     translate: "Sorry",
-//     type: "pa-SEN-si-ya",
-//   },
-//   {
-//     name: "Ingat",
-//     translate: "Take care",
-//     type: "in-GAT",
-//   },
-//   {
-//     name: "Tawagan mo ako",
-//     translate: "Call me",
-//     type: "ta-wa-GAN mo A-KO",
-//   },
-//   {
-//     name: "Paano ka?",
-//     translate: "How are you?",
-//     type: "PA-an-o ka",
-//   },
-// ]
 const GptPage = observer(() => {
-  const { mode, setMode } = useGpt()
-  const { user } = UserAuth()
-  const [gptWords, setGptWords] = useState([])
-  const [wordsAmount, setWordsAmount] = useState(5)
+  const {
+    mode,
+    setMode,
+    user,
+    gptWords,
+    setGptWords,
+    setWordsAmount,
+    wordsAmount,
+  } = useGpt()
+
   // const [chosenGptWords, setChosenGptWords] = useState([])
+
+  // useEffect(() => {
+  //   console.log({ mode })
+  //   const ans = addIsChecked(gptWords)
+  //   console.log(ans)
+  //   setGptWords(ans)
+  // }, [])
+  // useEffect(() => {
+  //   console.log({ gptWords })
+  // }, [gptWords])
 
   const addIsChecked = (arr: any[]) => {
     return arr.map((item) => ({ ...item, isChecked: false }))
@@ -118,52 +64,11 @@ const GptPage = observer(() => {
   const getNonChosenWords = () => {
     return gptWords.filter((word) => word.isChecked === false)
   }
-  const removeIsChecked = () => {
-    return gptWords.map((word) => {
+  const removeIsChecked = (arr: any[]) => {
+    return arr.map((word) => {
       delete word.isChecked
       return word
     })
-  }
-  const askGptApi = async () => {
-    try {
-      if (!appStore.chosenCategory?.name) throw new Error("categoryId is null")
-      if (wordsAmount === 0)
-        throw new Error("word amount must be greater than 0")
-      const question = `
-    Here are ${wordsAmount} common 
-    ${Language} words related to the ${appStore.chosenCategory.name} category and put it in array with items :{
-    name: (the word),
-    translate: (the translation),
-    type : (the way you should read it en english)
-    }
-    I want you to return an array in js with those words items 
-    (please return only the array without any other explanation)
-    `
-      console.log("url   ", getUrl() + "/gpt")
-      const res = await axios.post(
-        getUrl() + "/gpt",
-        { question },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-
-      console.log(res.data)
-      console.log(typeof res.data)
-
-      const wordsAns: any[] = parseJSON(res.data)
-
-      console.log(typeof wordsAns)
-      console.log({ wordsAns })
-      const wordsAnsWithChecked = addIsChecked(wordsAns)
-      setGptWords(wordsAnsWithChecked)
-
-      return res
-    } catch (error) {
-      console.error("Error fetching user:", error)
-    }
   }
 
   const handleCheck = (name: string) => {
@@ -186,6 +91,7 @@ const GptPage = observer(() => {
 
   const allChecked = gptWords.every((item) => item.isChecked)
 
+  const chosenWords = getChosenWords()
   return (
     <div className="w-full h-[100vh] ">
       {/* alerts */}
@@ -197,24 +103,38 @@ const GptPage = observer(() => {
       {/* categories */}
       <CategoryList />
       {/* words */}
-      <GptChoose mode={mode} setMode={setMode} />
-      <div className="w-full h-screen flex justify-between">
-        <WordList />
-        {mode === Modes.all && (
-          <AllWordsGpt
-            gptWords={gptWords}
-            setWordsAmount={setWordsAmount}
-            wordsAmount={wordsAmount}
-            getChosenWords={getChosenWords}
-            askGptApi={askGptApi}
-            allChecked={allChecked}
-            handleSelectAll={handleSelectAll}
-            addWords={addWords}
-            handleCheck={handleCheck}
-          />
-        )}
 
-        {mode === Modes.byOne && <ByWordGpt />}
+      <GptChoose mode={mode} setMode={setMode} />
+      <div className="w-full h-screen flex justify-between ">
+        <WordList />
+        <div className="flex flex-col w-full h-full">
+          {mode === Modes.all && (
+            <AllWordsGpt
+              chosenWords={chosenWords}
+              addIsChecked={addIsChecked}
+              addWords={addWords}
+              setGptWords={setGptWords}
+              wordsAmount={wordsAmount}
+              setWordsAmount={setWordsAmount}
+            />
+          )}
+          {mode === Modes.byOne && (
+            <ByWordGpt
+              chosenWords={chosenWords}
+              addIsChecked={addIsChecked}
+              addWords={addWords}
+              setGptWords={setGptWords}
+            />
+          )}
+          <div className=" border-2 h-full w-full">
+            <GptWords
+              gptWords={gptWords}
+              allChecked={allChecked}
+              handleSelectAll={handleSelectAll}
+              handleCheck={handleCheck}
+            />
+          </div>
+        </div>
       </div>
     </div>
   )

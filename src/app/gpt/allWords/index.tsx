@@ -8,19 +8,68 @@ import { FC } from "react"
 import WordGpt from "../word"
 import { AllWordsGptProps } from "../hooks/interfaces"
 import { observer } from "mobx-react-lite"
+import useGpt from "../hooks/useGpt"
+import axios from "axios"
+import { Language, getUrl, parseJSON } from "@/util"
+import appStore from "@/mobx/appStore"
 
 const AllWordsGpt: FC<AllWordsGptProps> = observer(
   ({
-    gptWords,
-    setWordsAmount,
-    wordsAmount,
-    getChosenWords,
-    askGptApi,
-    allChecked,
-    handleSelectAll,
+    chosenWords,
+    addIsChecked,
     addWords,
-    handleCheck,
+    setGptWords,
+    wordsAmount,
+    setWordsAmount,
   }) => {
+    const askGptApi = async () => {
+      try {
+        if (!appStore.chosenCategory?.name)
+          throw new Error("categoryId is null")
+        if (wordsAmount === 0)
+          throw new Error("word amount must be greater than 0")
+        const question = `
+    Here are ${wordsAmount} common 
+    ${Language} words related to the ${appStore.chosenCategory.name} category and put it in array with items :{
+    name: (the word),
+    translate: (the translation),
+    type : (the way you should read it en english)
+    }
+    I want you to return an array in js with those words items 
+    (please return only the array without any other explanation, and return the field names with double brackets. example: 
+      [{
+        "name": "...",
+        "translate": "...",
+        "type": "..."
+        },...]
+      )
+    `
+        console.log("url   ", getUrl() + "/gpt")
+        const res = await axios.post(
+          getUrl() + "/gpt",
+          { question },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+
+        console.log(res.data)
+        console.log(typeof res.data)
+
+        const wordsAns: any[] = parseJSON(res.data)
+
+        console.log(typeof wordsAns)
+        console.log({ wordsAns })
+        const wordsAnsWithChecked = addIsChecked(wordsAns)
+        setGptWords(wordsAnsWithChecked)
+
+        return res
+      } catch (error) {
+        console.error("Error fetching user:", error)
+      }
+    }
     return (
       <div className="flex flex-col items-start gap-2  w-full">
         <div className="flex gap-2">
@@ -38,30 +87,11 @@ const AllWordsGpt: FC<AllWordsGptProps> = observer(
           >
             get words
           </PrimaryButton>
-          {getChosenWords().length > 0 && (
+          {chosenWords.length > 0 && (
             <PrimaryButton onClick={addWords} className={`justify-normal`}>
               add words
             </PrimaryButton>
           )}
-        </div>
-        <div className="w-full h-screen flex flex-col justify-start  ">
-          {gptWords.length > 0 && (
-            <div>
-              <label htmlFor="select all ">select all </label>
-              <InputCheckbox checked={allChecked} onChange={handleSelectAll} />
-            </div>
-          )}
-          <ul className="w-full grid grid-cols-6 h-44 gap-2">
-            {gptWords.map((word, key) => (
-              <li key={key}>
-                <WordGpt
-                  word={word}
-                  checked={word.isChecked}
-                  onChange={() => handleCheck(word.name)}
-                />
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     )
