@@ -19,12 +19,14 @@ export type AllWordsGptProps = {
   setGptWords: React.Dispatch<React.SetStateAction<Word[]>>
   wordsAmount: number
   setWordsAmount: React.Dispatch<React.SetStateAction<number>>
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 export type ByWordGptProps = {
   addIsChecked: () => any
   addWords: () => void
   chosenWords: Word[]
   setGptWords: React.Dispatch<React.SetStateAction<Word[]>>
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 export type GptWordsProps = {
   gptWords: Word[]

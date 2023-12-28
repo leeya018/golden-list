@@ -10,7 +10,7 @@ import { BiEditAlt } from "react-icons/bi"
 import { FaPlusSquare } from "react-icons/fa"
 import filterStore from "@/mobx/filterStore"
 import { ModalStore } from "@/mobx/modalStore"
-import { modals, sortWordsByDate, sortWordsByName } from "@/util"
+import { getFullDate, modals, sortWordsByDate, sortWordsByName } from "@/util"
 import AddModal from "@/ui/modal/word/add"
 import EditModal from "@/ui/modal/word/edit"
 import ViewModal from "@/ui/modal/word/view"
@@ -23,8 +23,7 @@ import appStore from "@/mobx/appStore"
 import ConfirmDeleteModal from "@/ui/modal/word/confirmDelete"
 
 const WordsTable: FC<StickTableProps> = observer(({ categoryId }) => {
-  const { user, setIsLoading, router, sortingObj, isLoading, setSortingObj } =
-    useWordTable(categoryId)
+  const { user, router, sortingObj, setSortingObj } = useWordTable(categoryId)
 
   const getAbbreviations = (name: string) => {
     return name
@@ -92,7 +91,7 @@ const WordsTable: FC<StickTableProps> = observer(({ categoryId }) => {
         className="flex-1 max-h-full table-auto 
        w-full font-medium m-7"
       >
-        {isLoading && (
+        {appStore.isLoading && (
           <Box
             sx={{ display: "flex" }}
             className="absolute top-1/2 left-1/2 -translate-y-20"
@@ -162,9 +161,7 @@ const WordsTable: FC<StickTableProps> = observer(({ categoryId }) => {
                           : word.name.slice(0, 30) + "..."}
                       </div>
                     </td>
-                    <td className="py-4">
-                      {moment(word.date?.toDate()).format("DD-MM-YYYY")}
-                    </td>
+                    <td className="py-4">{getFullDate(word.date)}</td>
                     {/* edit section */}
                     <td>
                       <BiEditAlt

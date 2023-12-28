@@ -129,6 +129,7 @@ class App {
   words: Word[] = []
   chosenWord: Word | null = null
   chosenCategory: Category | null = null
+  isLoading: boolean = false
 
   constructor() {
     makeAutoObservable(this)
@@ -139,6 +140,9 @@ class App {
     })
   }
 
+  setIsLoading = (isLoading: boolean) => {
+    this.isLoading = isLoading
+  }
   setChosenWord = (w: Word) => {
     this.chosenWord = w
   }
@@ -158,16 +162,21 @@ class App {
   }
   getCategories = async (user: any) => {
     try {
+      this.isLoading = true
       this.categories = await API.getCategories(user)
       console.log(toJS(this.categories))
+      this.isLoading = false
 
       messageStore.setMessage("Get categories successfully", 200)
     } catch (error: any) {
+      this.isLoading = false
       messageStore.setMessage(error.message, 400)
     }
   }
   addCategory = async (user: any, name: string, bgColor: string) => {
     try {
+      this.isLoading = true
+
       const newCategory = { name, date: Timestamp.now(), bgColor }
 
       const docId = await API.addCategory(user, newCategory)
@@ -175,13 +184,18 @@ class App {
       this.categories = [addedCategory, ...this.categories]
       this.chosenCategory = addedCategory
       console.log(toJS(docId))
+      this.isLoading = false
+
       messageStore.setMessage("category added successfully", 200)
     } catch (error: any) {
+      this.isLoading = false
       messageStore.setMessage(error.message, 400)
     }
   }
   removeCategory = async (user: any, categoryId: string) => {
     try {
+      this.isLoading = true
+
       const docId = await API.removeCategory(user, categoryId)
       if (!docId) {
         messageStore.setMessage("Cannot remove the category " + categoryId, 400)
@@ -189,7 +203,9 @@ class App {
       messageStore.setMessage("category removed successfully", 200)
 
       this.categories = this.categories.filter((c) => c.id !== categoryId)
+      this.isLoading = false
     } catch (error: any) {
+      this.isLoading = false
       messageStore.setMessage(error.message, 400)
     }
   }
@@ -200,6 +216,8 @@ class App {
     bgColor: string
   ) => {
     try {
+      this.isLoading = true
+
       const docId = await API.editCategory(
         user,
         categoryId,
@@ -214,7 +232,9 @@ class App {
       this.categories = this.categories.map((c) =>
         c.id === docId ? { ...c, name: categoryName, bgColor } : c
       )
+      this.isLoading = false
     } catch (error: any) {
+      this.isLoading = false
       messageStore.setMessage(error.message, 400)
     }
   }
@@ -222,18 +242,24 @@ class App {
   // WORDS
   getWords = async (user: any, categoryId: string) => {
     try {
+      this.isLoading = true
       this.words = await API_WORDS.getWords(user, categoryId)
       if (this.words.length > 0) {
         this.chosenWord = this.words[0]
       }
       console.log(toJS(this.words))
+      this.isLoading = false
+
       messageStore.setMessage("Get words successfully", 200)
     } catch (error: any) {
+      this.isLoading = false
       messageStore.setMessage(error.message, 400)
     }
   }
   addWord = async (user: any, categoryId: string, word: Word) => {
     try {
+      this.isLoading = true
+
       const newWord: Word = {
         ...word,
         date: Timestamp.now(),
@@ -244,13 +270,18 @@ class App {
       const addedWord = { id: docId, ...newWord }
       this.words = [addedWord, ...this.words]
       console.log(toJS(docId))
+      this.isLoading = false
+
       messageStore.setMessage("word added successfully", 200)
     } catch (error: any) {
+      this.isLoading = false
       messageStore.setMessage(error.message, 400)
     }
   }
   addWords = async (user: any, categoryId: string, words: Word[]) => {
     try {
+      this.isLoading = true
+
       if (words.length === 0) throw new Error("chosen words gpt are empty")
       if (!categoryId) throw new Error("category id is required")
       let newWords: Word[] = []
@@ -265,15 +296,18 @@ class App {
 
       const docId = await API_WORDS.addWords(user, categoryId, newWords)
       await this.getWords(user, categoryId)
+      this.isLoading = false
 
       console.log(toJS(docId))
       messageStore.setMessage("words added successfully", 200)
     } catch (error: any) {
+      this.isLoading = false
       messageStore.setMessage(error.message, 400)
     }
   }
   removeWord = async (user: any, categoryId: string, wordId: string) => {
     try {
+      this.isLoading = true
       const docId = await API_WORDS.removeWord(user, categoryId, wordId)
       if (!docId) {
         messageStore.setMessage("Cannot remove the word " + wordId, 400)
@@ -281,21 +315,28 @@ class App {
       messageStore.setMessage("word removed successfully", 200)
 
       this.words = this.words.filter((c) => c.id !== wordId)
+      this.isLoading = false
     } catch (error: any) {
+      this.isLoading = false
       messageStore.setMessage(error.message, 400)
     }
   }
   editWord = async (user: any, categoryId: string, word: Word) => {
     // const editedWord = { wordId, name, translate, type, hint }
     try {
+      this.isLoading = true
+
       const docId = await API_WORDS.editWord(user, categoryId, word)
       if (!docId) {
         messageStore.setMessage("Cannot edit the word " + word.id, 400)
       }
 
       this.words = this.words.map((w) => (w.id === word.id ? word : w))
+      this.isLoading = false
+
       messageStore.setMessage("word edited successfully", 200)
     } catch (error: any) {
+      this.isLoading = false
       messageStore.setMessage(error.message, 400)
     }
   }
@@ -320,6 +361,8 @@ class App {
   updateWordsExam = async (user: any) => {
     // const editedWord = { wordId, name, translate, type, hint }
     try {
+      this.isLoading = true
+
       if (!this.chosenCategory) throw new Error("chosenCategory is missing")
       const isSuccess = await API_WORDS.updateWords(
         user,
@@ -331,13 +374,17 @@ class App {
       } else {
         messageStore.setMessage("Cannot update the words", 400)
       }
+      this.isLoading = false
     } catch (error: any) {
+      this.isLoading = false
       messageStore.setMessage(error.message, 500)
     }
   }
   resetWordsExam = async (user: any) => {
     // const editedWord = { wordId, name, translate, type, hint }
     try {
+      this.isLoading = true
+
       if (!this.chosenCategory) throw new Error("chosenCategory is missing")
       const isSuccess = await API_WORDS.resetWordsExam(
         user,
@@ -349,7 +396,10 @@ class App {
       } else {
         messageStore.setMessage("Cannot update the words", 400)
       }
+
+      this.isLoading = false
     } catch (error: any) {
+      this.isLoading = false
       messageStore.setMessage(error.message, 500)
     }
   }

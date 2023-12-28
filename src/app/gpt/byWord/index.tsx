@@ -15,7 +15,7 @@ import WordGpt from "../word"
 import useGpt from "../hooks/useGpt"
 
 const ByWordGpt: FC<ByWordGptProps> = observer(
-  ({ chosenWords, addWords, setGptWords, addIsChecked }) => {
+  ({ chosenWords, addWords, setGptWords, addIsChecked, setIsLoading }) => {
     const [translate, setTranslate] = useState("")
     const [translateList, setTranslateList] = useState([])
 
@@ -29,6 +29,8 @@ const ByWordGpt: FC<ByWordGptProps> = observer(
     }
     const askGptApi = async () => {
       try {
+        setIsLoading(true)
+
         if (!appStore.chosenCategory?.name)
           throw new Error("categoryId is null")
         if (translateList.length === 0)
@@ -69,7 +71,10 @@ const ByWordGpt: FC<ByWordGptProps> = observer(
         console.log(typeof wordsAns)
         const wordsAnsWithChecked = addIsChecked(wordsAns)
         setGptWords(wordsAnsWithChecked)
+        setIsLoading(false)
       } catch (error) {
+        setIsLoading(false)
+
         console.error("Error fetching user:", error)
       }
     }
@@ -82,7 +87,6 @@ const ByWordGpt: FC<ByWordGptProps> = observer(
     return (
       <div className="flex flex-col items-start gap-2  w-full">
         <Title>just choose the translation in English</Title>
-        <button onClick={() => setWordsAmount(11)}>change num </button>
         <PrimaryInput
           onKeyDown={handleKeyDown}
           className="w-24"

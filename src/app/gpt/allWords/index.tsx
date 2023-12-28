@@ -21,9 +21,11 @@ const AllWordsGpt: FC<AllWordsGptProps> = observer(
     setGptWords,
     wordsAmount,
     setWordsAmount,
+    setIsLoading,
   }) => {
     const askGptApi = async () => {
       try {
+        setIsLoading(true)
         if (!appStore.chosenCategory?.name)
           throw new Error("categoryId is null")
         if (wordsAmount === 0)
@@ -64,9 +66,11 @@ const AllWordsGpt: FC<AllWordsGptProps> = observer(
         console.log({ wordsAns })
         const wordsAnsWithChecked = addIsChecked(wordsAns)
         setGptWords(wordsAnsWithChecked)
+        setIsLoading(false)
 
         return res
       } catch (error) {
+        setIsLoading(false)
         console.error("Error fetching user:", error)
       }
     }

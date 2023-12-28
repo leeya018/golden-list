@@ -20,6 +20,8 @@ import AllWordsGpt from "./allWords"
 import ByWordGpt from "./byWord"
 import GptWords from "./words"
 import { Word } from "@/api/words/interfaces"
+import Box from "@mui/material/Box"
+import CircularProgress from "@mui/material/CircularProgress"
 
 const GptPage = observer(() => {
   const {
@@ -30,19 +32,9 @@ const GptPage = observer(() => {
     setGptWords,
     setWordsAmount,
     wordsAmount,
+    isLoading,
+    setIsLoading,
   } = useGpt()
-
-  // const [chosenGptWords, setChosenGptWords] = useState([])
-
-  // useEffect(() => {
-  //   console.log({ mode })
-  //   const ans = addIsChecked(gptWords)
-  //   console.log(ans)
-  //   setGptWords(ans)
-  // }, [])
-  // useEffect(() => {
-  //   console.log({ gptWords })
-  // }, [gptWords])
 
   const addIsChecked = (arr: any[]) => {
     return arr.map((item) => ({ ...item, isChecked: false }))
@@ -104,6 +96,15 @@ const GptPage = observer(() => {
       <CategoryList />
       {/* words */}
 
+      {/* loading */}
+      {isLoading && (
+        <Box
+          sx={{ display: "flex" }}
+          className="absolute top-1/2 left-1/2 -translate-y-20"
+        >
+          <CircularProgress />
+        </Box>
+      )}
       <GptChoose mode={mode} setMode={setMode} />
       <div className="w-full h-screen flex justify-between ">
         <WordList />
@@ -116,6 +117,7 @@ const GptPage = observer(() => {
               setGptWords={setGptWords}
               wordsAmount={wordsAmount}
               setWordsAmount={setWordsAmount}
+              setIsLoading={setIsLoading}
             />
           )}
           {mode === Modes.byOne && (
@@ -124,6 +126,7 @@ const GptPage = observer(() => {
               addIsChecked={addIsChecked}
               addWords={addWords}
               setGptWords={setGptWords}
+              setIsLoading={setIsLoading}
             />
           )}
           <div className=" border-2 h-full w-full">

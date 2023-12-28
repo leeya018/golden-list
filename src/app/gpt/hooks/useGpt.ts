@@ -1,4 +1,5 @@
 import { UserAuth } from "@/context/AuthContext"
+import appStore from "@/mobx/appStore"
 import React, { useState, useEffect } from "react"
 
 export const Modes: any = {
@@ -82,8 +83,11 @@ const useGpt = () => {
   const { user } = UserAuth()
   const [gptWords, setGptWords] = useState([])
   const [wordsAmount, setWordsAmount] = useState(5)
+  const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    setGptWords([])
+  }, [appStore.chosenCategory])
 
   return {
     mode,
@@ -93,6 +97,8 @@ const useGpt = () => {
     setGptWords,
     wordsAmount,
     setWordsAmount,
+    isLoading,
+    setIsLoading,
   }
 }
 

@@ -27,7 +27,7 @@ import ConfirmDeleteModal from "@/ui/modal/category/confirmDelete"
 import appStore from "@/mobx/appStore"
 
 const CategoriesTable: FC = observer(() => {
-  const { router, user, sortingObj, setSortingObj, setIsLoading, isLoading } =
+  const { router, user, sortingObj, setSortingObj, isLoading } =
     useCategoriesTable()
 
   const getAbbreviations = (name: string) => {
@@ -139,7 +139,6 @@ const CategoriesTable: FC = observer(() => {
                    hover:bg-color-hover-gray hover:ease-in-out duration-200"
                   key={category.id}
                   onClick={() => {
-                    setIsLoading(true)
                     router.push(`/${NavNames.settings}/${category.id}/words`)
                   }}
                 >

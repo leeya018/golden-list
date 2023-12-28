@@ -14,7 +14,7 @@ const useCategoriesTable = () => {
   })
   const { user } = UserAuth()
 
-  const [isLoading, setIsLoading] = useState<Boolean>(true)
+  // const [isLoading, setIsLoading] = useState<Boolean>(true)
   const router = useRouter()
 
   useEffect(() => {
@@ -22,13 +22,12 @@ const useCategoriesTable = () => {
       console.log("object")
       console.log(user)
       appStore.getCategories(user)
-      setIsLoading(true)
     }
   }, [user])
+
   return {
     router,
-    isLoading,
-    setIsLoading,
+
     user,
     sortingObj,
     setSortingObj,
