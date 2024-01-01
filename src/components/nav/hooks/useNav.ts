@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { UserAuth } from "@/context/AuthContext"
-import { NavNames } from "@/util"
-import { useRouter } from "next/navigation"
-import { usePathname } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import navStore from "@/mobx/navStore"
 
 const useNav = () => {
