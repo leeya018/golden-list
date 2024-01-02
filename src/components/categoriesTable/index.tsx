@@ -35,18 +35,18 @@ const CategoriesTable: FC = observer(() => {
       .map((word) => word[0]?.toUpperCase())
       .join(" ")
   }
-  if (!appStore.chosenCategory) return null
 
   return (
     <div className="h-full px-5">
-      {ModalStore.modalName === modals.confirmDeleteCategory && (
-        <ConfirmDeleteModal
-          onCancel={ModalStore.closeModal}
-          onClick={(id: string) => appStore.removeCategory(user, id)}
-          title={"Remove Category"}
-          chosenCategory={appStore.chosenCategory}
-        />
-      )}
+      {ModalStore.modalName === modals.confirmDeleteCategory &&
+        appStore.chosenCategory && (
+          <ConfirmDeleteModal
+            onCancel={ModalStore.closeModal}
+            onClick={(id: string) => appStore.removeCategory(user, id)}
+            title={"Remove Category"}
+            chosenCategory={appStore.chosenCategory}
+          />
+        )}
       {ModalStore.modalName === modals.addCategory && (
         <AddModal
           onCancel={() => {
@@ -58,20 +58,21 @@ const CategoriesTable: FC = observer(() => {
           title={"Add Category"}
         />
       )}
-      {ModalStore.modalName === modals.editCategory && (
-        <EditModal
-          onCancel={() => {
-            ModalStore.closeModal()
-          }}
-          onEdit={(id: string, name: string, chosenColor: string) => {
-            console.log(id, name, chosenColor)
-            appStore.editCategory(user, id, name, chosenColor)
-          }}
-          onRemove={() => ModalStore.openModal(modals.confirmDeleteCategory)}
-          chosenCategory={appStore.chosenCategory}
-          title={"Edit Category"}
-        />
-      )}
+      {ModalStore.modalName === modals.editCategory &&
+        appStore.chosenCategory && (
+          <EditModal
+            onCancel={() => {
+              ModalStore.closeModal()
+            }}
+            onEdit={(id: string, name: string, chosenColor: string) => {
+              console.log(id, name, chosenColor)
+              appStore.editCategory(user, id, name, chosenColor)
+            }}
+            onRemove={() => ModalStore.openModal(modals.confirmDeleteCategory)}
+            chosenCategory={appStore.chosenCategory}
+            title={"Edit Category"}
+          />
+        )}
       <div className="flex items-center gap-2 ml-2 mb-5">
         <h1 className="font-bold   text-2xl  flex items-center">Categories </h1>
         <FaPlusSquare
