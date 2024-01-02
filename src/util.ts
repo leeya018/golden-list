@@ -164,3 +164,4 @@ export const parseJSON = (jsonString: string) => {
 }
 
 export const Language = "filipino (Tagalo)"
+export const isDev = () => process.env.NODE_ENV === "development"

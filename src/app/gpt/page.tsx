@@ -36,6 +36,19 @@ const GptPage = observer(() => {
     setIsLoading,
   } = useGpt()
 
+  useEffect(() => {
+    ;(async () => {
+      const res = await axios.get(
+        getUrl() + "/speak",
+
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+    })()
+  }, [])
   const addIsChecked = (arr: any[]) => {
     return arr.map((item) => ({ ...item, isChecked: false }))
   }

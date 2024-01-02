@@ -1,11 +1,13 @@
 import nc from "next-connect"
 import OpenAI from "openai"
+import { corsMiddleware } from "./validate"
 
 const openai = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_GPT,
   dangerouslyAllowBrowser: true,
 })
 const handler = nc({ attachParams: true })
+handler.use(corsMiddleware)
 
 handler.post(async (req: Request, res: Response) => {
   const { question } = req.body
