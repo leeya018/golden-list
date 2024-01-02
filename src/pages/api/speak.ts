@@ -13,8 +13,6 @@ handler.use(corsMiddleware)
 const client = new textToSpeech.TextToSpeechClient()
 
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log("req.body")
-  console.log(req.body)
   try {
     // The text to synthesize
     const text = "hello, world!"
