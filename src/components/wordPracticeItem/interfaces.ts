@@ -3,11 +3,11 @@ import React from "react"
 
 export type WordPracticeItemProps = {
   word: Word
-  onMouseLeave?: (e) => void
-  onMouseEnter?: (e) => void
-  onMouseUp?: (e) => void
-  onMouseDown?: (e) => void
-  onClick?: (e) => void
+  onMouseLeave?: (e: any) => void
+  onMouseEnter?: (e: any) => void
+  onMouseUp?: (e: any) => void
+  onMouseDown?: (e: any) => void
+  onClick?: (e: any) => void
   isShowTop?: boolean
   isShow?: boolean
 }

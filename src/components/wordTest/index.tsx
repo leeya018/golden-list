@@ -7,7 +7,7 @@ import { FcApproval } from "react-icons/fc"
 import appStore from "@/mobx/appStore"
 
 const LIM_HINTS = 2
-const WordTest: FC = observer(({}) => {
+const WordTest: FC = observer(() => {
   const [hints, setHints] = useState(0)
   const [isShowTranslate, setIsShowTranslate] = useState(false)
   const [myGuess, setMyGuess] = useState("")

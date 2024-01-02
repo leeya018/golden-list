@@ -4,7 +4,7 @@ import { FC } from "react"
 import { WordViewProps } from "./hooks/interfaces"
 import appStore from "@/mobx/appStore"
 
-const WordView: FC = observer(({}) => {
+const WordView: FC = observer(() => {
   return (
     <div className="w-3/4  flex justify-center ">
       <div

@@ -13,7 +13,7 @@ import { modals } from "@/util"
 import AddModal from "@/ui/modal/category/add"
 import { MdEdit } from "react-icons/md"
 
-const CategoryListSettings: FC = observer(({}) => {
+const CategoryListSettings: FC = observer(() => {
   return (
     <div className="w-full flex items-center ">
       {ModalStore.modalName === modals.addCategory && (

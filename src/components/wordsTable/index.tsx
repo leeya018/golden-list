@@ -35,18 +35,19 @@ const WordsTable: FC<StickTableProps> = observer(({ categoryId }) => {
 
   return (
     <div className=" h-full ">
-      {ModalStore.modalName === modals.confirmDeleteWord && (
-        <ConfirmDeleteModal
-          onCancel={() => {
-            ModalStore.closeModal()
-          }}
-          onClick={(wordId: string) =>
-            appStore.removeWord(user, categoryId, wordId)
-          }
-          title="Remove Word"
-          chosenWord={appStore.chosenWord}
-        />
-      )}
+      {ModalStore.modalName === modals.confirmDeleteWord &&
+        appStore?.chosenWord && (
+          <ConfirmDeleteModal
+            onCancel={() => {
+              ModalStore.closeModal()
+            }}
+            onClick={(wordId: string) =>
+              appStore.removeWord(user, categoryId, wordId)
+            }
+            title="Remove Word"
+            chosenWord={appStore.chosenWord}
+          />
+        )}
       {ModalStore.modalName === modals.addWord && (
         <AddModal
           onCancel={() => {
@@ -56,7 +57,7 @@ const WordsTable: FC<StickTableProps> = observer(({ categoryId }) => {
           title={"Add Word"}
         />
       )}
-      {ModalStore.modalName === modals.editWord && (
+      {ModalStore.modalName === modals.editWord && appStore?.chosenWord && (
         <EditModal
           onCancel={() => {
             ModalStore.closeModal()
@@ -67,7 +68,7 @@ const WordsTable: FC<StickTableProps> = observer(({ categoryId }) => {
           title={"Edit Word"}
         />
       )}
-      {ModalStore.modalName === modals.viewWord && (
+      {ModalStore.modalName === modals.viewWord && appStore?.chosenWord && (
         <ViewModal
           onCancel={() => {
             ModalStore.closeModal()

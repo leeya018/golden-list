@@ -17,7 +17,7 @@ import useGpt from "../hooks/useGpt"
 const ByWordGpt: FC<ByWordGptProps> = observer(
   ({ chosenWords, addWords, setGptWords, addIsChecked, setIsLoading }) => {
     const [translate, setTranslate] = useState("")
-    const [translateList, setTranslateList] = useState([])
+    const [translateList, setTranslateList] = useState<string[]>([])
 
     const addWord = () => {
       setTranslateList((prev) => [...prev, translate])
@@ -79,7 +79,7 @@ const ByWordGpt: FC<ByWordGptProps> = observer(
       }
     }
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: any) => {
       if (e.code === "Enter") {
         addWord()
       }
@@ -91,7 +91,7 @@ const ByWordGpt: FC<ByWordGptProps> = observer(
           onKeyDown={handleKeyDown}
           className="w-24"
           type={"string"}
-          onChange={(e) => setTranslate(e.target.value)}
+          onChange={(e: any) => setTranslate(e.target.value)}
           value={translate}
           placeHolder={"add word translate (english)"}
         />

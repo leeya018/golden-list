@@ -1,6 +1,8 @@
 import nc from "next-connect"
 import { corsMiddleware } from "./validate"
+import { NextResponse, NextRequest } from "next/server"
 const textToSpeech = require("@google-cloud/text-to-speech")
+import type { NextApiRequest, NextApiResponse } from "next"
 
 // Import other required libraries
 const fs = require("fs")
@@ -10,7 +12,7 @@ handler.use(corsMiddleware)
 
 const client = new textToSpeech.TextToSpeechClient()
 
-handler.get(async (req: Request, res: Response) => {
+handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   console.log("req.body")
   console.log(req.body)
   try {
@@ -32,9 +34,10 @@ handler.get(async (req: Request, res: Response) => {
     const writeFile = util.promisify(fs.writeFile)
     await writeFile("output.mp3", response.audioContent, "binary")
     console.log("Audio content written to file: output.mp3")
-    return res.status(200).json("speakc")
-  } catch (error) {
-    return res.status(500).json(error.message)
+
+    res.status(200).json({ message: "success" })
+  } catch (error: any) {
+    res.status(500).json(error.message)
   }
 })
 

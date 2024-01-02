@@ -5,7 +5,7 @@ import { makeAutoObservable, toJS } from "mobx"
 import * as API from "@/api/categories"
 import * as API_WORDS from "@/api/words"
 import { messageStore } from "./messageStore"
-import Error from "next/error"
+
 import { makePersistable } from "mobx-persist-store"
 
 const a = [
@@ -133,11 +133,13 @@ class App {
 
   constructor() {
     makeAutoObservable(this)
-    makePersistable(this, {
-      name: "AppStore",
-      properties: ["words"],
-      storage: window.localStorage,
-    })
+    if (typeof window !== "undefined") {
+      makePersistable(this, {
+        name: "AppStore",
+        properties: ["words"],
+        storage: window.localStorage,
+      })
+    }
   }
 
   setIsLoading = (isLoading: boolean) => {

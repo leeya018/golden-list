@@ -42,7 +42,7 @@ const AddModal: FC<ModalProps> = observer(({ onCancel, onClick, title }) => {
               Name
             </label>
             <input
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e: any) => setName(e.target.value)}
               value={name}
               type="text"
               className="rounded-md p-2 border-2 border-color-text-gray pl-2 placeholder:text-color-hover-gray font-semibold placeholder:pl-2"

@@ -9,6 +9,7 @@ export type Word = {
   knows: number
   date?: Timestamp
   examResults?: Exam[]
+  isChecked?: boolean
 }
 
 export type Exam = {

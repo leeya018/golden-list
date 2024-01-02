@@ -80,7 +80,7 @@ const AllWordsGpt: FC<AllWordsGptProps> = observer(
           <PrimaryInput
             className="w-24"
             type={"number"}
-            onChange={(e) => setWordsAmount(parseInt(e.target.value))}
+            onChange={(e: any) => setWordsAmount(parseInt(e.target.value))}
             value={wordsAmount}
             placeHolder={"wordsAmount"}
           />

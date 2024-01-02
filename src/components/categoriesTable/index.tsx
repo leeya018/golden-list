@@ -27,8 +27,7 @@ import ConfirmDeleteModal from "@/ui/modal/category/confirmDelete"
 import appStore from "@/mobx/appStore"
 
 const CategoriesTable: FC = observer(() => {
-  const { router, user, sortingObj, setSortingObj, isLoading } =
-    useCategoriesTable()
+  const { router, user, sortingObj, setSortingObj } = useCategoriesTable()
 
   const getAbbreviations = (name: string) => {
     return name
@@ -36,6 +35,7 @@ const CategoriesTable: FC = observer(() => {
       .map((word) => word[0]?.toUpperCase())
       .join(" ")
   }
+  if (!appStore.chosenCategory) return null
 
   return (
     <div className="h-full px-5">
@@ -52,7 +52,7 @@ const CategoriesTable: FC = observer(() => {
           onCancel={() => {
             ModalStore.closeModal()
           }}
-          onClick={(name, chosenColor) =>
+          onClick={(name: string, chosenColor: string) =>
             appStore.addCategory(user, name, chosenColor)
           }
           title={"Add Category"}
@@ -82,7 +82,7 @@ const CategoriesTable: FC = observer(() => {
       </div>
 
       <table className="relative table-auto w-full font-medium m-7 ">
-        {isLoading && (
+        {appStore.isLoading && (
           <Box
             sx={{ display: "flex" }}
             className="absolute top-1/2 left-1/2 -translate-y-20"

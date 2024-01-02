@@ -6,7 +6,6 @@ import {
 import { Category } from "./api/categories/interfaces"
 import moment from "moment"
 import { Word } from "./api/words/interfaces"
-import { toJS } from "mobx"
 
 export const modals = {
   addCategory: "addCategory",
@@ -92,6 +91,7 @@ export const sortWordsByName = (words: Word[], order: string) => {
 }
 export const sortWordsByDate = (words: Word[], order: string) => {
   const sortedSticks = words.sort((c1: Word, c2: Word) => {
+    if (!c1.date || !c2.date) return 1
     if (order == Order.asc) {
       return moment(c1.date.toDate()).diff(moment(c2.date.toDate()))
     }
@@ -111,11 +111,12 @@ export const convertPlainToTimestamp = (plainTimestamp: Timestamp) => {
   )
   return firebaseTimestamp
 }
-export const getFullDate = (date: Timestamp) => {
+export const getFullDate = (date: Timestamp | undefined) => {
   // console.log(toJS(date))
 
   // console.log(Timestamp.now())
   // console.log(Timestamp.now().toDate())
+  if (!date) throw new Error("no date supply")
   const momentDate = moment(convertPlainToTimestamp(date).toDate())
   const strDate = momentDate.format("MM/DD/YYYY")
   return strDate

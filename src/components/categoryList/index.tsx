@@ -14,10 +14,10 @@ import AddModal from "@/ui/modal/category/add"
 import { ModalStore } from "@/mobx/modalStore"
 import { modals } from "@/util"
 
-const CategoryList: FC = observer(({}) => {
+const CategoryList: FC = observer(() => {
   const { isLoading, setIsLoading, user } = useCategories()
 
-  const elRef = useRef()
+  const elRef = useRef<any>()
 
   // const handleScroll = (event) => {
   //   event.current.scrollLeft - 40

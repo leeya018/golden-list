@@ -8,7 +8,7 @@ import InputRadio from "@/ui/inputBox/radio"
 import LabelInputRadio from "@/ui/labelInput/radio"
 import selectModeStore from "@/mobx/selectModeStore"
 
-const ModeChoose: FC<ModeChooseProps> = observer(({}) => {
+const ModeChoose: FC<ModeChooseProps> = observer(() => {
   const { mainMode, practiceMode, setMainMode } = selectModeStore
 
   return (

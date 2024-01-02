@@ -16,7 +16,7 @@ const Settings: FC<SettingsProps> = observer(() => {
             Repetition practice amount:
           </label>
           <input
-            onChange={(e) =>
+            onChange={(e: any) =>
               SettingsStore.setPracticeRepetition(e.target.value)
             }
             value={SettingsStore.practiceRepetition}

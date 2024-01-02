@@ -20,7 +20,7 @@ const Modal: FC<ModalProps> = observer(({ children }) => {
       <div
         className="absolute border-2  
        bg-color-white  rounded-lg  flex items-center justify-center  h-auto p-10 "
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e: any) => e.stopPropagation()}
       >
         {children}
       </div>

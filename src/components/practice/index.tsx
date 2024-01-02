@@ -22,13 +22,13 @@ import moment from "moment"
 import { FcApproval, FcDisapprove } from "react-icons/fc"
 import { PracticeProps, TitleProps } from "./hooks/interfaces"
 import usePractice from "./hooks/usePractice"
-import useSound from "./hooks/useSound"
 import * as API from "@/api/sticks"
 import { Stick } from "@/api/sticks/interfaces"
 import Image from "next/image"
 import ImageShow from "@/ui/ImageShow"
 import { IoMdArrowRoundBack } from "react-icons/io"
 import { SettingsStore } from "@/mobx/settingsStore"
+import useSound from "@/hooks/useSound"
 
 const isAnsweredToday = (stick: Stick) => {
   if (stick.answers.length === 0) return false

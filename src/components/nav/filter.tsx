@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { useState } from "react"
 import { HiMagnifyingGlass } from "react-icons/hi2"
 
-const NavFilter = observer(({}) => {
+const NavFilter = observer(() => {
   const [showMagnify, setShowMagnify] = useState(true)
 
   return (
@@ -17,7 +17,7 @@ const NavFilter = observer(({}) => {
       <input
         onFocus={() => setShowMagnify(false)}
         onBlur={() => setShowMagnify(true)}
-        onChange={(e) => filterStore.setFilter(e.target.value)}
+        onChange={(e: any) => filterStore.setFilter(e.target.value)}
         value={filterStore.search}
         type="text"
         className="rounded-full w-72  pl-14 bg-color-gray-nav outline-none

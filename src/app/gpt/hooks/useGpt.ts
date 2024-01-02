@@ -1,3 +1,4 @@
+import { Word } from "@/api/words/interfaces"
 import { UserAuth } from "@/context/AuthContext"
 import appStore from "@/mobx/appStore"
 import React, { useState, useEffect } from "react"
@@ -81,7 +82,7 @@ const localGPT = [
 const useGpt = () => {
   const [mode, setMode] = useState(Modes.all)
   const { user } = UserAuth()
-  const [gptWords, setGptWords] = useState([])
+  const [gptWords, setGptWords] = useState<Word[]>([])
   const [wordsAmount, setWordsAmount] = useState(5)
   const [isLoading, setIsLoading] = useState(false)
 

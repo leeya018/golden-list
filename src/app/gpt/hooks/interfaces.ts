@@ -3,26 +3,24 @@ import React from "react"
 
 export type WordGptProps = {
   word: any
-  removeFromChosen: any
-  addToChosen: any
-  gptWords: Word[]
+  checked: boolean
+  onChange: (e: any) => void
 }
 export type GptChooseProps = {
   mode: boolean
   setMode: (mode: boolean) => void
 }
 export type AllWordsGptProps = {
-  addIsChecked: (words: Word[]) => any
-  getChosenWords: () => any
-  addWords: () => void
   chosenWords: Word[]
+  addIsChecked: (words: Word[]) => any
+  addWords: () => void
   setGptWords: React.Dispatch<React.SetStateAction<Word[]>>
   wordsAmount: number
   setWordsAmount: React.Dispatch<React.SetStateAction<number>>
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 export type ByWordGptProps = {
-  addIsChecked: () => any
+  addIsChecked: (words: Word[]) => any
   addWords: () => void
   chosenWords: Word[]
   setGptWords: React.Dispatch<React.SetStateAction<Word[]>>

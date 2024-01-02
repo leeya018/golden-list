@@ -17,7 +17,7 @@ const Filter: FC = observer(() => {
         className="pl-5 w-full py-6  outline-none  border-color-text-gray
          placeholder:text-color-text-gray placeholder:pl-10 "
         placeholder="Search"
-        onChange={(e) => filterStore.setFilter(e.target.value)}
+        onChange={(e: any) => filterStore.setFilter(e.target.value)}
         value={filterStore.search}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}

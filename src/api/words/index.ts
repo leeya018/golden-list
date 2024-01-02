@@ -97,12 +97,9 @@ export const updateWords = async (
   const batch = writeBatch(db)
 
   if (words.length === 0) throw new Error("No words")
+
   words.forEach((word) => {
-    const docRef = doc(
-      db,
-      `users/${user.uid}/categories/${categoryId}/words`,
-      word.id
-    )
+    const docRef = doc(db, `users/${user.uid}/categories/${categoryId}/words`)
     batch.update(docRef, {
       examResults: word.examResults ? word.examResults : [],
     })
@@ -120,11 +117,7 @@ export const resetWordsExam = async (
 
   if (words.length === 0) throw new Error("No words")
   words.forEach((word) => {
-    const docRef = doc(
-      db,
-      `users/${user.uid}/categories/${categoryId}/words`,
-      word.id
-    )
+    const docRef = doc(db, `users/${user.uid}/categories/${categoryId}/words`)
     batch.update(docRef, {
       examResults: [],
     })

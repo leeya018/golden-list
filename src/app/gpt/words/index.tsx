@@ -27,7 +27,7 @@ const GptWords: FC<GptWordsProps> = observer(
             <li key={key}>
               <WordGpt
                 word={word}
-                checked={word.isChecked}
+                checked={word.isChecked || false}
                 onChange={() => handleCheck(word.name)}
               />
             </li>

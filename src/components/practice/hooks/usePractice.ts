@@ -1,12 +1,12 @@
 import * as API from "@/api/sticks"
 import { Stick } from "@/api/sticks/interfaces"
 import { UserAuth } from "@/context/AuthContext"
+import useSound from "@/hooks/useSound"
 import { ModalStore } from "@/mobx/modalStore"
 import { modals } from "@/util"
 import { useRouter } from "next/navigation"
 
 import { useEffect, useState } from "react"
-import useSound from "./useSound"
 
 const usePractice = (categoryId: string, isAnsweredToday: any) => {
   const { sound, stopSound, playSound } = useSound("/sounds/win.wav")

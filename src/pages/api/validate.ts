@@ -1,5 +1,5 @@
 import { getUrl } from "@/util"
-import cors from "cors"
+var cors = require("cors")
 
 const corsMiddleware = cors({
   origin: [getUrl()], // match with your client application's origin

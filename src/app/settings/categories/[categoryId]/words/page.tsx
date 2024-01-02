@@ -28,7 +28,9 @@ export default function WordsPage() {
           }}
         />
         <Filter />
-        <WordsTable categoryId={params.categoryId as string} />
+        {params?.categoryId && (
+          <WordsTable categoryId={params.categoryId as string} />
+        )}
       </div>
     </div>
   )

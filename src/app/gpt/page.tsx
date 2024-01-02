@@ -36,20 +36,20 @@ const GptPage = observer(() => {
     setIsLoading,
   } = useGpt()
 
-  useEffect(() => {
-    ;(async () => {
-      const res = await axios.get(
-        getUrl() + "/speak",
+  // useEffect(() => {
+  //   ;(async () => {
+  //     const res = await axios.get(
+  //       getUrl() + "/speak",
 
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-    })()
-  }, [])
-  const addIsChecked = (arr: any[]) => {
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     )
+  //   })()
+  // }, [])
+  const addIsChecked = (arr: Word[]) => {
     return arr.map((item) => ({ ...item, isChecked: false }))
   }
 
@@ -64,7 +64,10 @@ const GptPage = observer(() => {
   }
 
   const getChosenWords = () => {
-    return gptWords.filter((word) => word.isChecked === true)
+    return gptWords.filter((word) => {
+      if (!word.isChecked) return false
+      word.isChecked === true
+    })
   }
   const getNonChosenWords = () => {
     return gptWords.filter((word) => word.isChecked === false)
@@ -96,7 +99,7 @@ const GptPage = observer(() => {
 
   const allChecked = gptWords.every((item) => item.isChecked)
 
-  const chosenWords = getChosenWords()
+  const chosenWords: Word[] = getChosenWords()
   return (
     <div className="w-full h-[100vh] ">
       {/* alerts */}

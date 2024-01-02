@@ -1,6 +1,7 @@
 import nc from "next-connect"
 import OpenAI from "openai"
 import { corsMiddleware } from "./validate"
+import type { NextApiRequest, NextApiResponse } from "next"
 
 const openai = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_GPT,
@@ -9,7 +10,7 @@ const openai = new OpenAI({
 const handler = nc({ attachParams: true })
 handler.use(corsMiddleware)
 
-handler.post(async (req: Request, res: Response) => {
+handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
   const { question } = req.body
   console.log("req.body")
   console.log(req.body)
@@ -39,9 +40,9 @@ handler.post(async (req: Request, res: Response) => {
     // const data = choice.message.content
     console.log({ content })
 
-    return res.status(200).json(content)
-  } catch (error) {
-    return res.status(500).json(error.message)
+    res.status(200).json(content)
+  } catch (error: any) {
+    res.status(500).json(error.message)
   }
 })
 

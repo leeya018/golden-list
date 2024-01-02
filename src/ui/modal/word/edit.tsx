@@ -56,22 +56,22 @@ const EditModal: FC<ModalProps> = observer(
           <div className="flex flex-col items-center justify-center mt-5">
             <div className="flex flex-col items-center mt-5">
               <LabelInputItem
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e: any) => setName(e.target.value)}
                 value={name}
                 title="Name"
               />
               <LabelInputItem
-                onChange={(e) => setTranslate(e.target.value)}
+                onChange={(e: any) => setTranslate(e.target.value)}
                 value={translate}
                 title="Translate"
               />
               <LabelInputItem
-                onChange={(e) => setType(e.target.value)}
+                onChange={(e: any) => setType(e.target.value)}
                 value={type}
                 title="Hint"
               />
               <LabelInputItem
-                onChange={(e) => setHint(e.target.value)}
+                onChange={(e: any) => setHint(e.target.value)}
                 value={hint}
                 title="Hint"
               />

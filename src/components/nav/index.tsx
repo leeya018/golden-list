@@ -6,7 +6,7 @@ import useNav from "./hooks/useNav"
 import NavItem from "./item"
 import NavFilter from "./filter"
 // nav
-const Nav = observer(({}) => {
+const Nav = observer(() => {
   const { user, logOut } = useNav()
   return (
     <div className="sticky w-full py-5 flex items-center justify-between ">
@@ -37,8 +37,8 @@ const Nav = observer(({}) => {
             alt="me image"
             width={70}
             height={70}
-            className="rounded-full "
-            src={user?.photoURL}
+            className="rounded-full"
+            src={user?.photoURL || ""}
           />
           <button onClick={logOut}>logout</button>
         </div>
