@@ -64,10 +64,11 @@ const GptPage = observer(() => {
   }
 
   const getChosenWords = () => {
-    return gptWords.filter((word) => {
+    const chosenW = gptWords.filter((word) => {
       if (!word.isChecked) return false
-      word.isChecked === true
+      return word.isChecked
     })
+    return chosenW
   }
   const getNonChosenWords = () => {
     return gptWords.filter((word) => word.isChecked === false)
@@ -100,6 +101,8 @@ const GptPage = observer(() => {
   const allChecked = gptWords.every((item) => item.isChecked)
 
   const chosenWords: Word[] = getChosenWords()
+  console.log({ gptWords })
+  console.log({ chosenWords })
   return (
     <div className="w-full h-[100vh] ">
       {/* alerts */}
