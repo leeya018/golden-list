@@ -382,6 +382,18 @@ class App {
       messageStore.setMessage(error.message, 500)
     }
   }
+
+  shuffleWords = () => {
+    let dupWords = [...this.words]
+    for (let i = dupWords.length - 1; i > 0; i--) {
+      // Generate random number
+      let j = Math.floor(Math.random() * (i + 1))
+
+      // Swap elements at indices i and j
+      ;[dupWords[i], dupWords[j]] = [dupWords[j], dupWords[i]]
+    }
+    this.words = dupWords
+  }
   resetWordsExam = async (user: any) => {
     // const editedWord = { wordId, name, translate, type, hint }
     try {

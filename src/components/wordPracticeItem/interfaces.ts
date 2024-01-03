@@ -13,4 +13,5 @@ export type WordPracticeItemProps = {
 }
 export type WordPracticeItemActionProps = {
   word: Word
+  isFlipped: boolean
 }

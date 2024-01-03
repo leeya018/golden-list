@@ -36,6 +36,7 @@ const HomePage = observer(() => {
 
   const { mainMode, practiceMode } = selectModeStore
   const { user } = UserAuth()
+  const [isFlipped, setIsFlipped] = useState<boolean>(false)
 
   return (
     <div className="w-full h-[100vh] ">
@@ -52,9 +53,25 @@ const HomePage = observer(() => {
         <ModeChoose />
         {/* mode practice */}
         {mainMode === WordsMode.practice && <ModeChoosePractice />}
+        {/* buttons sections */}
+
+        <div className="flex gap-2 m-2">
+          <PrimaryButton
+            onClick={appStore.shuffleWords}
+            className="justify-normal bg-color-blue"
+          >
+            Shuffle
+          </PrimaryButton>
+          <PrimaryButton
+            onClick={() => setIsFlipped((prev) => !prev)}
+            className="justify-normal bg-color-blue"
+          >
+            Flip Cards
+          </PrimaryButton>
+        </div>
         {/*  words in practice */}
         {mainMode === WordsMode.practice && (
-          <WordBoard practiceMode={practiceMode} />
+          <WordBoard practiceMode={practiceMode} isFlipped={isFlipped} />
         )}
         {/*  words */}
         {mainMode !== WordsMode.practice && (

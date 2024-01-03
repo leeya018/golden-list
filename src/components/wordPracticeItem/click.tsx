@@ -1,13 +1,17 @@
 import { Word } from "@/api/words/interfaces"
 import { WordsPracticeMode } from "@/util"
 import { observer } from "mobx-react-lite"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { WordPracticeItemActionProps } from "./interfaces"
 import WordPracticeItem from "."
 
 const WordPracticeItemClick: FC<WordPracticeItemActionProps> = observer(
-  ({ word }) => {
+  ({ word, isFlipped }) => {
     const [isShow, setIsShow] = useState(false)
+
+    useEffect(() => {
+      setIsShow(isFlipped)
+    }, [isFlipped])
 
     return (
       <WordPracticeItem

@@ -3,4 +3,5 @@ import React from "react"
 
 export type WordBoardProps = {
   practiceMode: string
+  isFlipped: boolean
 }

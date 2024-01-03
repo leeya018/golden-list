@@ -1,7 +1,7 @@
 import { Word } from "@/api/words/interfaces"
 import { WordsPracticeMode } from "@/util"
 import { observer } from "mobx-react-lite"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import {
   WordPracticeItemActionProps,
   WordPracticeItemProps,
@@ -9,15 +9,23 @@ import {
 import WordPracticeItem from "."
 
 const WordPracticeItemFocus: FC<WordPracticeItemActionProps> = observer(
-  ({ word }) => {
+  ({ word, isFlipped }) => {
     const [isFocus, setIsFocus] = useState(false)
 
+    useEffect(() => {
+      setIsFocus(isFlipped)
+    }, [isFlipped])
+
+    const getOnMouseUp = () => {
+      return isFlipped ? () => setIsFocus(true) : () => setIsFocus(false)
+    }
+    const getOnMouseDown = () => {
+      return isFlipped ? () => setIsFocus(false) : () => setIsFocus(true)
+    }
     return (
       <WordPracticeItem
-        onMouseDown={(e: any) => {
-          setIsFocus(true)
-        }}
-        onMouseUp={() => setIsFocus(false)}
+        onMouseDown={getOnMouseDown()}
+        onMouseUp={getOnMouseUp()}
         isShow={isFocus}
         word={word}
         isShowTop={true}
