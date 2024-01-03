@@ -8,6 +8,7 @@ import { ModalStore } from "@/mobx/modalStore"
 import LabelInputItem from "@/ui/labelInputItem"
 import { Word } from "@/api/words/interfaces"
 import useWordModal from "./hooks/useWordModal"
+import { Timestamp } from "firebase/firestore"
 
 type ModalProps = {
   onCancel: any
@@ -33,10 +34,11 @@ const EditModal: FC<ModalProps> = observer(
       if (!name) throw new Error("There is no name")
       const editedWord = {
         id: chosenWord.id,
-        name,
-        translate,
-        type,
-        hint,
+        name: name || "",
+        translate: translate || "",
+        type: type || "",
+        hint: hint || "",
+        date: Timestamp.now(),
       }
       onEdit(editedWord)
       onCancel()
@@ -68,7 +70,7 @@ const EditModal: FC<ModalProps> = observer(
               <LabelInputItem
                 onChange={(e: any) => setType(e.target.value)}
                 value={type}
-                title="Hint"
+                title="Type"
               />
               <LabelInputItem
                 onChange={(e: any) => setHint(e.target.value)}
