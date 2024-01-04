@@ -3,6 +3,9 @@ import { WordPracticeItemProps } from "./interfaces"
 import { FC, useState } from "react"
 import TopBoardItem from "../topBoardItem"
 import useWordBoardItem from "../wordBoard/hooks/useWordBoardItem"
+import { ModalStore } from "@/mobx/modalStore"
+import { modals } from "@/util"
+import appStore from "@/mobx/appStore"
 
 const WordPracticeItem: FC<WordPracticeItemProps> = observer(
   ({ word, isShowTop = true, isShow, ...rest }) => {
@@ -46,6 +49,16 @@ const WordPracticeItem: FC<WordPracticeItemProps> = observer(
         {isMyHint && (
           <div className={` text-md font-semibold `}>{word.hint}</div>
         )}
+        <div
+          className={`absolute bottom-0 right-0 text-md font-semibold m-1`}
+          onClick={(e: any) => {
+            e.stopPropagation()
+            appStore.setChosenWord(word)
+            ModalStore.openModal(modals.editWord)
+          }}
+        >
+          edit
+        </div>
       </div>
     )
   }

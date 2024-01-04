@@ -25,16 +25,19 @@ const TopBoardItem: FC<TopBoardItemProps> = observer(
     }
     return (
       <>
-        <IoAddOutline
-          onMouseEnter={(e: any) => e.stopPropagation()}
-          className="absolute top-1 right-1 hover:scale-105"
-          size={25}
-          onClick={(e: any) => {
-            e.stopPropagation()
-            editWord(word, 1)
-          }}
-        />
-        <div className="absolute top-1 left-1">{word.knows}</div>
+        <div className="absolute top-1 right-1 flex items-center gap-1 ">
+          <IoAddOutline
+            onMouseEnter={(e: any) => e.stopPropagation()}
+            className="hover:scale-105"
+            size={25}
+            onClick={(e: any) => {
+              e.stopPropagation()
+              editWord(word, 1)
+            }}
+          />
+          <div className="">({word.knows})</div>
+        </div>
+
         {practiceMode !== WordsPracticeMode.hover && (
           <div
             className="absolute bottom-1 left-1"
@@ -49,7 +52,7 @@ const TopBoardItem: FC<TopBoardItemProps> = observer(
         )}
         {practiceMode !== WordsPracticeMode.hover && word.hint && !isMyHint && (
           <div
-            className="absolute bottom-1 right-1"
+            className="absolute top-1 left-1"
             onClick={(e: any) => {
               e.stopPropagation()
               setIsMyHint(true)

@@ -39,6 +39,7 @@ const EditModal: FC<ModalProps> = observer(
         type: type || "",
         hint: hint || "",
         date: Timestamp.now(),
+        knows: chosenWord.knows || 0,
       }
       onEdit(editedWord)
       onCancel()

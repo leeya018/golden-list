@@ -27,6 +27,7 @@ import Confetti from "@/ui/confetti"
 import ModeChoosePractice from "@/components/modeChoose/practice"
 import WordBoard from "@/components/wordBoard"
 import selectModeStore from "@/mobx/selectModeStore"
+import EditModal from "@/ui/modal/word/edit"
 
 const HomePage = observer(() => {
   // const [mode, setMode] = useState<string>(WordsMode.practice)
@@ -46,6 +47,21 @@ const HomePage = observer(() => {
 
       <Nav />
       <div className="flex-1 overflow-auto h-full mb-40">
+        {ModalStore.modalName === modals.editWord &&
+          appStore.chosenCategory.id &&
+          appStore?.chosenWord && (
+            <EditModal
+              onCancel={() => {
+                ModalStore.closeModal()
+              }}
+              onEdit={(word: Word) =>
+                appStore.editWord(user, appStore.chosenCategory.id, word)
+              }
+              onRemove={() => ModalStore.openModal(modals.confirmDeleteWord)}
+              chosenWord={appStore?.chosenWord}
+              title={"Edit Word"}
+            />
+          )}
         {/* categories */}
         <CategoryList />
 
