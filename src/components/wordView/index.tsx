@@ -3,6 +3,9 @@ import { observer } from "mobx-react-lite"
 import { FC } from "react"
 import { WordViewProps } from "./hooks/interfaces"
 import appStore from "@/mobx/appStore"
+import { ModalStore } from "@/mobx/modalStore"
+import EditWordButton from "@/ui/button/editWord"
+import { modals } from "@/util"
 
 const WordView: FC = observer(() => {
   return (
@@ -12,6 +15,11 @@ const WordView: FC = observer(() => {
      flex flex-col items-center  justify-start gap-5
   border-2 rounded-md shadow-sm p-5 m-5"
       >
+        <EditWordButton
+          word={appStore.chosenWord}
+          className="absolute top-0 right-0 m-1"
+        />
+
         <div
           className="flex items-center justify-center  
         w-full  border-b-2 py-3 mb-2  font-bold text-2xl"
@@ -24,7 +32,7 @@ const WordView: FC = observer(() => {
         placeholder:text-color-hover-gray 
         font-semibold placeholder:pl-2"
         >
-          <span className="pr-2">Tranlation</span>:{" "}
+          <span className="pr-2">Translation</span>:{" "}
           {appStore.chosenWord?.translate}
         </div>
         <div

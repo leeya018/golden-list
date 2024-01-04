@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite"
 import { WordPracticeItemProps } from "./interfaces"
 import { FC, useState } from "react"
 import TopBoardItem from "../topBoardItem"
+import EditWordButton from "@/ui/button/editWord"
 import useWordBoardItem from "../wordBoard/hooks/useWordBoardItem"
 import { ModalStore } from "@/mobx/modalStore"
 import { modals } from "@/util"
@@ -49,16 +50,10 @@ const WordPracticeItem: FC<WordPracticeItemProps> = observer(
         {isMyHint && (
           <div className={` text-md font-semibold `}>{word.hint}</div>
         )}
-        <div
-          className={`absolute bottom-0 right-0 text-md font-semibold m-1`}
-          onClick={(e: any) => {
-            e.stopPropagation()
-            appStore.setChosenWord(word)
-            ModalStore.openModal(modals.editWord)
-          }}
-        >
-          edit
-        </div>
+        <EditWordButton
+          className={`absolute bottom-0 right-0 m-1`}
+          word={word}
+        />
       </div>
     )
   }

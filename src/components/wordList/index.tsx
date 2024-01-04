@@ -14,10 +14,10 @@ const WordList: FC = observer(() => {
         {appStore.words.length === 0 && (
           <div className="w-full text-center">List is Empty</div>
         )}
+
         <ul
-          className="px-2 flex-1 overflow-y-auto
-   overflow-x-hidden w-full flex flex-col 
-  items-center justify-start gap-2 "
+          className="px-2 flex-1 overflow-y-auto  flex flex-col 
+                    items-center justify-start gap-2 "
         >
           {[...appStore.words]
             .sort((w1, w2) => w1.knows - w2.knows)

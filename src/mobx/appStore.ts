@@ -333,7 +333,15 @@ class App {
         messageStore.setMessage("Cannot edit the word " + word.id, 400)
       }
 
-      this.words = this.words.map((w) => (w.id === word.id ? word : w))
+      this.words = this.words.map((w) => {
+        if (w.id === word.id) {
+          if (this.chosenWord && this.chosenWord.id === w.id) {
+            this.chosenWord = word
+          }
+          return word
+        }
+        return w
+      })
       this.isLoading = false
 
       messageStore.setMessage("word edited successfully", 200)

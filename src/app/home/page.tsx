@@ -48,7 +48,7 @@ const HomePage = observer(() => {
       <Nav />
       <div className="flex-1 overflow-auto h-full mb-40">
         {ModalStore.modalName === modals.editWord &&
-          appStore.chosenCategory.id &&
+          appStore.chosenCategory?.id &&
           appStore?.chosenWord && (
             <EditModal
               onCancel={() => {
