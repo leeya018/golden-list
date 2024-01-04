@@ -19,6 +19,7 @@ const EditWord: FC<ButtonPropType> = ({ className, word }) => {
     hover:scale-150 ease-in-out duration-200 ${className}`}
       onClick={(e: any) => {
         e.stopPropagation()
+        if (!word) throw new Error("cannot set word which is null")
         appStore.setChosenWord(word)
         ModalStore.openModal(modals.editWord)
       }}

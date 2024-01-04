@@ -127,6 +127,7 @@ const GptPage = observer(() => {
       <GptChoose mode={mode} setMode={setMode} />
       <div className="w-full h-screen flex justify-between ">
         <WordList />
+
         <div className="flex flex-col w-full h-full">
           {mode === Modes.all && (
             <AllWordsGpt

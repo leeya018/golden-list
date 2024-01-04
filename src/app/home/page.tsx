@@ -54,9 +54,11 @@ const HomePage = observer(() => {
               onCancel={() => {
                 ModalStore.closeModal()
               }}
-              onEdit={(word: Word) =>
+              onEdit={(word: Word) => {
+                if (!appStore.chosenCategory?.id)
+                  throw new Error("chosenCategory is undefined")
                 appStore.editWord(user, appStore.chosenCategory.id, word)
-              }
+              }}
               onRemove={() => ModalStore.openModal(modals.confirmDeleteWord)}
               chosenWord={appStore?.chosenWord}
               title={"Edit Word"}

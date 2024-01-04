@@ -1,12 +1,13 @@
 import { observer } from "mobx-react-lite"
 import { FC, useState, useEffect } from "react"
-import { WordItemProps, WordListItemProps } from "./hooks/interfaces"
+import {
+  WordItemProps,
+  WordListItemProps,
+  WordListProps,
+} from "./hooks/interfaces"
 import { Word } from "@/api/words/interfaces"
 import appStore from "@/mobx/appStore"
 
-type WordListProps = {
-  isFlipped: boolean
-}
 const WordList: FC<WordListProps> = observer(({ isFlipped }) => {
   return (
     <div className="border-2 w-1/4 p-2">
