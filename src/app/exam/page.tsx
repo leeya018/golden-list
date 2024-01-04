@@ -56,16 +56,7 @@ const ExamPage = observer(() => {
     if (!firstWord) return 1
     if (!firstWord.examResults) return 1
     const len = (firstWord.examResults || []).length
-    return len + 1
-  }
-  const getWordsByDay = (dayNum: number) => {
-    return appStore.words.filter((word) => {
-      if (!word.examResults) return 1 === dayNum
-      const len = word.examResults.length
-      if (len === 0) return true
-      const lastItem = word.examResults[len - 1]
-      return (len < dayNum && !lastItem.isSuccess) || len === dayNum
-    })
+    return len
   }
 
   const dayNum = getDayNum()
@@ -74,10 +65,11 @@ const ExamPage = observer(() => {
     <div className="w-full h-[100vh] ">
       {modals.success === ModalStore.modalName && (
         <SuccessModal
-          onClose={() => {
-            stopSound()
-
-            ModalStore.closeModal()
+          onClose={async () => {
+            // stopSound()
+            await appStore.updateWordsExam(user)
+            ModalStore.openModal(modals.examSaved)
+            setIsSaved(true)
           }}
           title={"Good Exam"}
           message={"your score is : " + examStore.getScore()}
@@ -126,8 +118,7 @@ const ExamPage = observer(() => {
           className="overflow-y-auto  flex 
             flex-wrap items-start justify-center gap-2"
         >
-          {getWordsByDay(dayNum).map((word, key) => (
-            // {appStore.words.map((word, key) => (
+          {appStore.words.map((word, key) => (
             <WordExam key={key} word={word} setIsSaved={setIsSaved} />
           ))}
         </ul>

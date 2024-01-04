@@ -65,7 +65,7 @@ const WordExam: FC<WordExamProps> = observer(({ word, setIsSaved }) => {
   const statusAns = getStatusAns(word)
 
   return (
-    <div className="flex justify-center  ">
+    <div className="flex justify-center  w-96 h-96 ">
       <div
         className="relative  w-full
         flex flex-col items-center  justify-start
@@ -100,7 +100,7 @@ const WordExam: FC<WordExamProps> = observer(({ word, setIsSaved }) => {
               onKeyDown={handleKeyDown}
               placeholder="Enter Translation"
               className={`border-2
-            rounded-md outline-none py-3  focus:border-color-blue  pl-2 ${
+            rounded-md outline-none py-3 w-full  focus:border-color-blue  pl-2 ${
               isLocked ? "bg-color-gray select-none" : ""
             }`}
             />

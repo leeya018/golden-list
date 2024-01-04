@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore"
 import { db } from "@/firebase"
 import { Word } from "./interfaces"
+import { toJS } from "mobx"
 
 export const getWords = async (user: any, categoryId: string) => {
   const wordsCollectionRef = collection(
@@ -97,9 +98,12 @@ export const updateWords = async (
   const batch = writeBatch(db)
 
   if (words.length === 0) throw new Error("No words")
-
+  console.log(toJS(words))
   words.forEach((word) => {
-    const docRef = doc(db, `users/${user.uid}/categories/${categoryId}/words`)
+    const docRef = doc(
+      db,
+      `users/${user.uid}/categories/${categoryId}/words/${word.id}`
+    )
     batch.update(docRef, {
       examResults: word.examResults ? word.examResults : [],
     })
