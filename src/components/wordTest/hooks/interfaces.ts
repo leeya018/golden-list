@@ -1,5 +1,6 @@
 import { Word } from "@/api/words/interfaces"
 
 export type WordTestProps = {
-  word: Word
+  word?: Word
+  isFlipped: boolean
 }

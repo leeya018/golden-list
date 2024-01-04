@@ -93,9 +93,11 @@ const HomePage = observer(() => {
         {mainMode !== WordsMode.practice && (
           <div className="w-full border-2 flex  h-full">
             <div id="container"></div>
-            <WordList />
+            <WordList isFlipped={isFlipped} />
 
-            {mainMode === WordsMode.test && appStore.chosenWord && <WordTest />}
+            {mainMode === WordsMode.test && appStore.chosenWord && (
+              <WordTest isFlipped={isFlipped} />
+            )}
             {mainMode === WordsMode.show && appStore.chosenWord && <WordView />}
           </div>
         )}

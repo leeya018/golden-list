@@ -8,4 +8,5 @@ export type WordItemProps = {
 }
 export type WordListItemProps = {
   word: Word
+  isFlipped: boolean
 }

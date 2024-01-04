@@ -4,7 +4,10 @@ import { WordItemProps, WordListItemProps } from "./hooks/interfaces"
 import { Word } from "@/api/words/interfaces"
 import appStore from "@/mobx/appStore"
 
-const WordList: FC = observer(() => {
+type WordListProps = {
+  isFlipped: boolean
+}
+const WordList: FC<WordListProps> = observer(({ isFlipped }) => {
   return (
     <div className="border-2 w-1/4 p-2">
       <div className="flex flex-col min-w-full h-screen">
@@ -22,7 +25,7 @@ const WordList: FC = observer(() => {
           {[...appStore.words]
             .sort((w1, w2) => w1.knows - w2.knows)
             .map((word, key) => (
-              <WordListItem key={key} word={word} />
+              <WordListItem key={key} word={word} isFlipped={isFlipped} />
             ))}
         </ul>
       </div>
@@ -32,7 +35,7 @@ const WordList: FC = observer(() => {
 
 export default WordList
 
-const WordListItem: FC<WordListItemProps> = observer(({ word }) => {
+const WordListItem: FC<WordListItemProps> = observer(({ word, isFlipped }) => {
   const handleWordClick = (w: Word) => {
     appStore.setChosenWord(w)
   }
@@ -47,7 +50,11 @@ const WordListItem: FC<WordListItemProps> = observer(({ word }) => {
               : "bg-opacity-0"
           }`}
     >
-      <div className="text-xl font-semibold">{word.name}</div>
+      {!isFlipped && <div className="text-xl font-semibold">{word.name}</div>}
+      {isFlipped && (
+        <div className="text-xl font-semibold">{word.translate}</div>
+      )}
+
       <div>knows: {word.knows}</div>
     </li>
   )

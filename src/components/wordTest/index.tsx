@@ -7,7 +7,8 @@ import { FcApproval } from "react-icons/fc"
 import appStore from "@/mobx/appStore"
 
 const LIM_HINTS = 2
-const WordTest: FC = observer(() => {
+
+const WordTest: FC<WordTestProps> = observer(({ isFlipped }) => {
   const [hints, setHints] = useState(0)
   const [isShowTranslate, setIsShowTranslate] = useState(false)
   const [myGuess, setMyGuess] = useState("")
@@ -74,7 +75,17 @@ const WordTest: FC = observer(() => {
             Hint me
           </PrimaryButton>
 
-          <div className="font-bold text-2xl">{appStore.chosenWord?.name}</div>
+          {!isFlipped && (
+            <div className="font-bold text-2xl">
+              {appStore.chosenWord?.name}
+            </div>
+          )}
+          {isFlipped && (
+            <div className="font-bold text-2xl">
+              {appStore.chosenWord?.translate}
+            </div>
+          )}
+
           <div className=" top-1 left-1">hints:({hints})</div>
         </div>
         <div
@@ -99,7 +110,9 @@ const WordTest: FC = observer(() => {
           </PrimaryButton>
           {isShowTranslate && (
             <div className="text-xl font-semibold text-color-green w-full  flex justify-center items-center ">
-              {appStore.chosenWord?.translate}{" "}
+              {isFlipped
+                ? appStore.chosenWord?.name
+                : appStore.chosenWord?.translate}{" "}
             </div>
           )}
         </div>
