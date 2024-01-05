@@ -3,7 +3,11 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: false,
   images: {
-    domains: ["lh3.googleusercontent.com", "golden-list.netlify.app"],
+    domains: [
+      "lh3.googleusercontent.com",
+      "oaidalleapiprodscus.blob.core.windows.net",
+      "golden-list.netlify.app",
+    ],
   },
   async headers() {
     return [

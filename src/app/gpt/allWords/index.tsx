@@ -12,6 +12,7 @@ import useGpt from "../hooks/useGpt"
 import axios from "axios"
 import { Language, getUrl, parseJSON } from "@/util"
 import appStore from "@/mobx/appStore"
+import gptStore from "@/mobx/gptStore"
 
 const AllWordsGpt: FC<AllWordsGptProps> = observer(
   ({
@@ -21,59 +22,13 @@ const AllWordsGpt: FC<AllWordsGptProps> = observer(
     setGptWords,
     wordsAmount,
     setWordsAmount,
-    setIsLoading,
   }) => {
-    const askGptApi = async () => {
-      try {
-        setIsLoading(true)
-        if (!appStore.chosenCategory?.name)
-          throw new Error("categoryId is null")
-        if (wordsAmount === 0)
-          throw new Error("word amount must be greater than 0")
-        const question = `
-    Here are ${wordsAmount} common 
-    ${Language} words related to the ${appStore.chosenCategory.name} category and put it in array with items :{
-    name: (the word),
-    translate: (the translation),
-    type : (the way you should read it en english)
+    const askGpt = async () => {
+      const wordsAns = await gptStore.askGptAllWordsApi(wordsAmount)
+      const wordsAnsWithChecked = addIsChecked(wordsAns)
+      setGptWords(wordsAnsWithChecked)
     }
-    I want you to return an array in js with those words items 
-    (please return only the array without any other explanation, and return the field names with double brackets. example: 
-      [{
-        "name": "...",
-        "translate": "...",
-        "type": "..."
-        },...]
-      )
-    `
-        console.log("url   ", getUrl() + "/gpt")
-        const res = await axios.post(
-          getUrl() + "/gpt",
-          { question },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
 
-        console.log(res.data)
-        console.log(typeof res.data)
-
-        const wordsAns: any[] = parseJSON(res.data)
-
-        console.log(typeof wordsAns)
-        console.log({ wordsAns })
-        const wordsAnsWithChecked = addIsChecked(wordsAns)
-        setGptWords(wordsAnsWithChecked)
-        setIsLoading(false)
-
-        return res
-      } catch (error) {
-        setIsLoading(false)
-        console.error("Error fetching user:", error)
-      }
-    }
     return (
       <div className="flex flex-col items-start gap-2  w-full">
         <div className="flex gap-2">
@@ -85,7 +40,7 @@ const AllWordsGpt: FC<AllWordsGptProps> = observer(
             placeHolder={"wordsAmount"}
           />
           <PrimaryButton
-            onClick={askGptApi}
+            onClick={askGpt}
             className={`justify-normal`}
             disabled={wordsAmount <= 0}
           >

@@ -1,6 +1,6 @@
 "use client"
 
-import { FC, useEffect } from "react"
+import { FC, useEffect, useState } from "react"
 import PrimaryButton from "@/ui/button/primary"
 
 import InputCheckbox from "@/ui/inputBox/checbox"
@@ -9,8 +9,11 @@ import { GptWordsProps } from "../hooks/interfaces"
 import { observer } from "mobx-react-lite"
 import useGpt from "../hooks/useGpt"
 
+import Image from "next/image"
+import gptStore from "@/mobx/gptStore"
+
 const GptWords: FC<GptWordsProps> = observer(
-  ({ gptWords, allChecked, handleSelectAll, handleCheck }) => {
+  ({ gptWords, allChecked, handleSelectAll, handleCheck, setGptWords }) => {
     console.log("gptWords")
 
     console.log("gptWords", gptWords)
@@ -30,6 +33,34 @@ const GptWords: FC<GptWordsProps> = observer(
                 checked={word.isChecked || false}
                 onChange={() => handleCheck(word.name)}
               />
+
+              <PrimaryButton
+                className=""
+                onClick={async () => {
+                  const url = await gptStore.getArticleImagesApi(word.translate)
+                  if (!url) throw new Error("no url from iamge api")
+
+                  const dupGptWords = gptWords.map((w) => {
+                    if (word.name === w.name) {
+                      word.imageUrl = url
+                    }
+                    return word
+                  })
+
+                  setGptWords(dupGptWords)
+                }}
+              >
+                add Image
+              </PrimaryButton>
+              {word.imageUrl && (
+                <Image
+                  alt={`${word.translate} Image`}
+                  width={100}
+                  height={100}
+                  className="rounded-lg "
+                  src={word.imageUrl}
+                />
+              )}
             </li>
           ))}
         </ul>

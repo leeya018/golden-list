@@ -15,7 +15,7 @@ import WordList from "@/components/wordList"
 import PrimaryButton from "@/ui/button/primary"
 import WordTest from "@/components/wordTest"
 import ModeChoose from "@/components/modeChoose"
-import { WordsMode, WordsPracticeMode, modals } from "@/util"
+import { WordsMode, WordsPracticeMode, getUrl, modals } from "@/util"
 import WordView from "@/components/wordView"
 import appStore from "@/mobx/appStore"
 import { UserAuth } from "@/context/AuthContext"
@@ -28,6 +28,7 @@ import ModeChoosePractice from "@/components/modeChoose/practice"
 import WordBoard from "@/components/wordBoard"
 import selectModeStore from "@/mobx/selectModeStore"
 import EditModal from "@/ui/modal/word/edit"
+import axios from "axios"
 
 const HomePage = observer(() => {
   // const [mode, setMode] = useState<string>(WordsMode.practice)

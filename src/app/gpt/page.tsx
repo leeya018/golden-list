@@ -22,6 +22,8 @@ import GptWords from "./words"
 import { Word } from "@/api/words/interfaces"
 import Box from "@mui/material/Box"
 import CircularProgress from "@mui/material/CircularProgress"
+import { getArticleImagesApi } from "@/api/images"
+import gptStore from "@/mobx/gptStore"
 
 const GptPage = observer(() => {
   const {
@@ -32,23 +34,8 @@ const GptPage = observer(() => {
     setGptWords,
     setWordsAmount,
     wordsAmount,
-    isLoading,
-    setIsLoading,
   } = useGpt()
 
-  // useEffect(() => {
-  //   ;(async () => {
-  //     const res = await axios.get(
-  //       getUrl() + "/speak",
-
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     )
-  //   })()
-  // }, [])
   const addIsChecked = (arr: Word[]) => {
     return arr.map((item) => ({ ...item, isChecked: false }))
   }
@@ -116,7 +103,7 @@ const GptPage = observer(() => {
       {/* words */}
 
       {/* loading */}
-      {isLoading && (
+      {gptStore.isLoading && (
         <Box
           sx={{ display: "flex" }}
           className="absolute top-1/2 left-1/2 -translate-y-20"
@@ -137,7 +124,6 @@ const GptPage = observer(() => {
               setGptWords={setGptWords}
               wordsAmount={wordsAmount}
               setWordsAmount={setWordsAmount}
-              setIsLoading={setIsLoading}
             />
           )}
           {mode === Modes.byOne && (
@@ -146,7 +132,6 @@ const GptPage = observer(() => {
               addIsChecked={addIsChecked}
               addWords={addWords}
               setGptWords={setGptWords}
-              setIsLoading={setIsLoading}
             />
           )}
           <div className=" border-2 h-full w-full">
@@ -155,6 +140,7 @@ const GptPage = observer(() => {
               allChecked={allChecked}
               handleSelectAll={handleSelectAll}
               handleCheck={handleCheck}
+              setGptWords={setGptWords}
             />
           </div>
         </div>

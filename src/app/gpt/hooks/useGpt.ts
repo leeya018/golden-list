@@ -84,7 +84,6 @@ const useGpt = () => {
   const { user } = UserAuth()
   const [gptWords, setGptWords] = useState<Word[]>([])
   const [wordsAmount, setWordsAmount] = useState(5)
-  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     setGptWords([])
@@ -98,8 +97,6 @@ const useGpt = () => {
     setGptWords,
     wordsAmount,
     setWordsAmount,
-    isLoading,
-    setIsLoading,
   }
 }
 
