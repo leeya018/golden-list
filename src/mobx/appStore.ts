@@ -266,6 +266,7 @@ class App {
         ...word,
         date: Timestamp.now(),
         knows: 0,
+        imageUrl: word.imageUrl || "",
         examResults: [],
       }
       const docId = await API_WORDS.addWord(user, categoryId, newWord)

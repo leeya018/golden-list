@@ -10,6 +10,7 @@ export type Word = {
   date?: Timestamp
   examResults?: Exam[]
   isChecked?: boolean
+  imageUrl: string
 }
 
 export type Exam = {

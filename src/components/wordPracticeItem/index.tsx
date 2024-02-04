@@ -7,18 +7,20 @@ import useWordBoardItem from "../wordBoard/hooks/useWordBoardItem"
 import { ModalStore } from "@/mobx/modalStore"
 import { modals } from "@/util"
 import appStore from "@/mobx/appStore"
+import Image from "next/image"
 
 const WordPracticeItem: FC<WordPracticeItemProps> = observer(
   ({ word, isShowTop = true, isShow, ...rest }) => {
     const { chosenSlice, hints, increaseHint, setIsMyHint, isMyHint } =
       useWordBoardItem(word)
+
     return (
       <div
         {...rest}
         className={`${
           isShow && "bg-color-disabled-gray"
         } relative cursor-pointer flex flex-col items-center
-         h-44 border-2 rounded-md  `}
+         h-48   border-2 rounded-md  `}
       >
         {isShowTop && (
           <TopBoardItem
@@ -54,6 +56,15 @@ const WordPracticeItem: FC<WordPracticeItemProps> = observer(
           className={`absolute bottom-0 right-0 m-1`}
           word={word}
         />
+        {word.imageUrl && (
+          <Image
+            alt={`${word.translate} Image`}
+            width={100}
+            height={100}
+            className="rounded-lg  "
+            src={word.imageUrl}
+          />
+        )}
       </div>
     )
   }
